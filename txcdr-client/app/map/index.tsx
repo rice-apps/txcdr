@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Page() {
   return (
     <SafeAreaView>
-      <Text>Map page</Text>
+      <Text className="text-2xl">Map page</Text>
       <Link href="/">Go back to home page</Link>
     </SafeAreaView>
   );
