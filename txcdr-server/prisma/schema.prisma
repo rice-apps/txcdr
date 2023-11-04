@@ -25,3 +25,14 @@ model Event {
   title        String
   nHouses      Int
 }
+
+model Event {
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  isActive     Boolean     @default(true)
+  location     String
+  description  String
+  title        String
+  nHouses      Int
+}
