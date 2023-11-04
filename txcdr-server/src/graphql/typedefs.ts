@@ -16,57 +16,8 @@ export const typeDefs = `
         nHouses: Int!
     }
 
-    type Event {
-        id: ID!,
-        isActive: Boolean!,
-        location: String!,
-        description: String,
-        title: String!,
-        nHouses: Int!
-    }
-
-    type Event {
-        id: ID!,
-        isActive: Boolean!,
-        location: String!,
-        description: String,
-        title: String!,
-        nHouses: Int!
-    }
-
-    type Event {
-        id: ID!,
-        isActive: Boolean!,
-        location: String!,
-        description: String,
-        title: String!,
-        nHouses: Int!
-    }
-
     type Query {
         getUsers: [User!]!
-    }
-
-    type Mutation {
-        createEvent(input: EventInputCreation!): Event!,
-        updateEvent(input: EventInput!): Event!
-    }
-
-    input EventInputCreation {
-        isActive: Boolean!,
-        location: String!,
-        description: String,
-        title: String!,
-        nHouses: Int!
-    }
-
-    input EventInput {
-        id: ID!,
-        isActive: Boolean!,
-        location: String!,
-        description: String,
-        title: String!,
-        nHouses: Int!
     }
 
     input CreateUserInput {
@@ -84,7 +35,8 @@ export const typeDefs = `
         count: Integer,
     }
 
-    input EventInputCreation {
+    input EventInput {
+        id: ID!,
         isActive: Boolean!,
         location: String!,
         description: String,
@@ -92,8 +44,7 @@ export const typeDefs = `
         nHouses: Int!
     }
 
-    input EventInput {
-        id: ID!,
+    input EventInputCreation {
         isActive: Boolean!,
         location: String!,
         description: String,
