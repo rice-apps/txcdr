@@ -5,7 +5,12 @@ import MapView, { Region } from "react-native-maps";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+/**
+ * Main page component for the map page
+ * @returns React map page component
+ */
 export default function Page() {
+  // Keep track of selected region (based on ZIP code state)
   const [region, setRegion] = useState<Region>({
     latitude: 0,
     longitude: 0,
@@ -13,9 +18,12 @@ export default function Page() {
     longitudeDelta: 0,
   });
 
+  // Keep track of ZIP code input
   const [zipCode, setZipCode] = useState("77005");
 
+  // Update the selected region when ZIP code state is changed
   useEffect(() => {
+    // Use Google Maps Geocoding API (https://developers.google.com/maps/documentation/geocoding/overview)
     axios
       .get(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=${process.env.EXPO_PUBLIC_MAPS_KEY}`,
@@ -33,6 +41,7 @@ export default function Page() {
       .catch(() => console.log("Invalid ZIP code provided"));
   }, [zipCode]);
 
+  // ZIP code text input handler
   const onInputChange = (code: string) => {
     if (code.length == 5 && /^[0-9]+$/.test(code)) {
       setZipCode(code);
