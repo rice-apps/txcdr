@@ -18,6 +18,8 @@ export const typeDefs = `
 
     type Query {
         getUsers: [User!]!
+        getEvents: [Event!]!
+        getEvent(id: ID!): Event
     }
 
     input CreateUserInput {
@@ -52,11 +54,16 @@ export const typeDefs = `
         nHouses: Int!
     }
 
+    input RemoveEventInput {
+        id: ID!,
+    }
+
     type Mutation {
         createUser(input: CreateUserInput!): User!,
         removeUser(input: RemoveUserInput!): User!,
         removeAll: BatchPayload!,
         createEvent(input: CreateEventInput!): Event!,
         updateEvent(input: UpdateEventInput!): Event!
+        removeEvent(input: RemoveEventInput!): Event!,
     }
 `;

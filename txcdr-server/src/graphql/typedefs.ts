@@ -18,6 +18,8 @@ export const typeDefs = `
 
     type Query {
         getUsers: [User!]!
+        getEvents: [Event!]!
+        getEvent(id: ID!): Event
     }
 
     input CreateUserInput {
@@ -62,6 +64,7 @@ export const typeDefs = `
         removeAll: BatchPayload!,
         createEvent(input: CreateEventInput!): Event!,
         updateEvent(input: UpdateEventInput!): Event!
+        removeEvent(input: RemoveEventInput!): Event!,
     }
 `;
 

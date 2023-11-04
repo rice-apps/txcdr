@@ -17,6 +17,10 @@ export const resolvers = {
     },
     Mutation: {
         createUser: async (_: any, { input }: CreateUserInput) => {
+            const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+            if (!emailRegex.test(input.email)) {
+                throw new Error('Invalid email address');
+            }
             return await prisma.user.create({ data: input });
         }, 
 
