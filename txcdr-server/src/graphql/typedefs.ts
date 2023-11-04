@@ -52,6 +52,10 @@ export const typeDefs = `
         nHouses: Int!
     }
 
+    input RemoveEventInput {
+        id: ID!,
+    }
+
     type Mutation {
         createUser(input: CreateUserInput!): User!,
         removeUser(input: RemoveUserInput!): User!,

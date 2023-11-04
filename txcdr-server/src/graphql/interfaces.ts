@@ -9,7 +9,7 @@ interface CreateUserInput {
 
 interface RemoveUserInput {
     input: {
-        id: number
+        id: string
     }
 }
 
@@ -31,5 +31,11 @@ interface UpdateEventInput {
         description: string,
         title: string,
         nHouses: number
+    }
+}
+
+interface RemoveEventInput {
+    input: {
+        id: string
     }
 }
