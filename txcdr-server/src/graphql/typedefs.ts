@@ -21,18 +21,18 @@ export const typeDefs = `
     }
 
     input CreateUserInput {
-        email: String,
+        email: String!,
         name: String,
         phone: String,
         address: String,
     }
 
     input RemoveUserInput {
-        id: Integer,
+        id: ID!,
     }
 
     type BatchPayload {
-        count: Integer,
+        count: Int!,
     }
 
     input EventInput {

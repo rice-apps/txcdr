@@ -1,5 +1,21 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
+
+interface CreateUserInput {
+    input: {
+        email: string,
+        name: string,
+        phone: string,
+        address: string
+    }
+}
+
+interface RemoveUserInput {
+    input: {
+        id: number
+    }
+}
+
 export const resolvers = {
     Query: {
         getUsers: () => {
@@ -7,12 +23,13 @@ export const resolvers = {
         }
     },
     Mutation: {
-        createUser: async (_: any, args: {email: string, name: string, phone: string, address: string}) => {
-            return await prisma.user.create({ data: args, });
+        createUser: async (_: any, { input }: CreateUserInput) => {
+            console.log(input);
+            return await prisma.user.create({ data: input, });
         }, 
 
-        removeUser: async (_: any, args: {id: number}) => {
-            return await prisma.user.delete({ where: args, });
+        removeUser: async (_: any, { input }: RemoveUserInput) => {
+            return await prisma.user.delete({ where: input, });
         },
 
         removeAll: async () => {
