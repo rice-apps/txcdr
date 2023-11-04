@@ -23,7 +23,6 @@ export default function Page() {
       .then((res) => {
         const { lat, lng }: { lat: number; lng: number } =
           res.data.results[0].geometry.location;
-        console.log(lat, lng);
         setRegion({
           latitude: lat,
           longitude: lng,
