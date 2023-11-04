@@ -4,6 +4,12 @@ export const resolvers = {
     Query: {
         getUsers: () => {
             return prisma.user.findMany();
+        },
+        getEvents: () => {
+            return prisma.event.findMany();
+        },
+        getEvent: (_, { id }) => {
+            return prisma.event.findUnique({ where: { id: parseInt(id) } });
         }
     },
     Mutation: {
@@ -11,7 +17,7 @@ export const resolvers = {
             return await prisma.user.create({ data: input });
         },
         removeUser: async (_, { input }) => {
-            return await prisma.user.delete({ where: input });
+            return await prisma.user.delete({ where: { id: parseInt(input.id) } });
         },
         removeAll: async () => {
             return await prisma.user.deleteMany();
@@ -24,6 +30,9 @@ export const resolvers = {
                 where: { id: parseInt(input.id) },
                 data: { ...input, id: parseInt(input.id) }
             });
-        }
+        },
+        removeEvent: async (_, { input }) => {
+            return await prisma.event.delete({ where: { id: parseInt(input.id) } });
+        },
     }
 };
