@@ -41,15 +41,19 @@ export default function Page() {
   return (
     <SafeAreaView>
       <Text className="text-2xl">Map page</Text>
-      <Link href="/">Go back to home page</Link>
+      <Link href="/" className="py-1">
+        Go back to home page
+      </Link>
 
       <MapView className="w-full h-full" region={region} />
       <SafeAreaView className="w-full top-20 absolute mx-auto flex items-center justify-center">
         <TextInput
           placeholder="Enter a ZIP code"
-          keyboardType="numbers-and-punctuation"
-          className="w-3/5 bg-gray-300 rounded-full px-5 py-2 mx-auto shadow-sm shadow-gray-600 text-xl text-center "
+          inputMode="numeric"
+          className="w-1/2 bg-gray-200 rounded-full py-2 mx-auto shadow-sm shadow-gray-600 text-lg text-center items-center text-gray-500 "
           onChangeText={(e) => onInputChange(e)}
+          returnKeyType="done"
+          defaultValue={zipCode}
         />
       </SafeAreaView>
     </SafeAreaView>
