@@ -35,19 +35,19 @@ export const typeDefs = `
         count: Int!,
     }
 
-    input EventInput {
+    input UpdateEventInput {
         id: ID!,
         isActive: Boolean!,
         location: String!,
-        description: String,
+        description: String!,
         title: String!,
         nHouses: Int!
     }
 
-    input EventInputCreation {
+    input CreateEventInput {
         isActive: Boolean!,
         location: String!,
-        description: String,
+        description: String!,
         title: String!,
         nHouses: Int!
     }
@@ -56,8 +56,8 @@ export const typeDefs = `
         createUser(input: CreateUserInput!): User!,
         removeUser(input: RemoveUserInput!): User!,
         removeAll: BatchPayload!,
-        createEvent(input: EventInputCreation!): Event!,
-        updateEvent(input: EventInput!): Event!
+        createEvent(input: CreateEventInput!): Event!,
+        updateEvent(input: UpdateEventInput!): Event!
     }
 `;
 
