@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { Text, TextInput } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Region } from "react-native-maps";
 import axios from "axios";
@@ -42,13 +42,16 @@ export default function Page() {
     <SafeAreaView>
       <Text className="text-2xl">Map page</Text>
       <Link href="/">Go back to home page</Link>
-      <TextInput
-        placeholder="Enter a ZIP code"
-        keyboardType="numbers-and-punctuation"
-        className="w-1/2 mx-auto bg-gray-300 rounded-full px-5 py-2"
-        onChangeText={(e) => onInputChange(e)}
-      />
+
       <MapView className="w-full h-full" region={region} />
+      <SafeAreaView className="w-full top-20 absolute mx-auto flex items-center justify-center">
+        <TextInput
+          placeholder="Enter a ZIP code"
+          keyboardType="numbers-and-punctuation"
+          className="w-3/5 bg-gray-300 rounded-full px-5 py-2 mx-auto shadow-sm shadow-gray-600 text-xl text-center "
+          onChangeText={(e) => onInputChange(e)}
+        />
+      </SafeAreaView>
     </SafeAreaView>
   );
 }
