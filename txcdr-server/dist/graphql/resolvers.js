@@ -14,9 +14,9 @@ export const resolvers = {
                         ...input
                     }
                 });
-
                 return event;
-            } catch (error) {
+            }
+            catch (error) {
                 throw new Error(`Failed to create event: ${error.message}`);
             }
         },
@@ -30,9 +30,9 @@ export const resolvers = {
                         ...input
                     }
                 });
-
                 return event;
-            } catch (error) {
+            }
+            catch (error) {
                 throw new Error(`Failed to create event: ${error.message}`);
             }
         }
