@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, Button, Text} from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -40,7 +40,7 @@ const MyForm = ({ onSubmit }) => {
   });
 
   return (
-    <View>
+    <View style={styles.container}>
       <Picker
         selectedValue={formikProps.values.impacted}
         onValueChange={(value) => formikProps.setFieldValue('impacted', value)}
@@ -50,7 +50,8 @@ const MyForm = ({ onSubmit }) => {
         <Picker.Item label="No" value="no" />
       </Picker>
 
-      <TextInput
+      <TextInput 
+        style={styles.input}
         placeholder="Enter your name"
         onChangeText={formikProps.handleChange('name')}
         onBlur={formikProps.handleBlur('name')}
@@ -61,6 +62,7 @@ const MyForm = ({ onSubmit }) => {
     }
 
     <TextInput
+      style={styles.input}
       placeholder="Enter your phone"
       onChangeText={formikProps.handleChange('phone')}
       onBlur={formikProps.handleBlur('phone')}
@@ -72,6 +74,7 @@ const MyForm = ({ onSubmit }) => {
     }
 
     <TextInput
+      style={styles.input}
       placeholder="Enter your email"
       onChangeText={formikProps.handleChange('email')}
       onBlur={formikProps.handleBlur('email')}
@@ -93,6 +96,7 @@ const MyForm = ({ onSubmit }) => {
       </Picker>
 
     <TextInput
+      style={styles.input}
       placeholder='Primary Language'
       onChangeText = {formikProps.handleChange('primaryLanguage')}
       onBlur = {formikProps.handleBlur('primaryLanguage')}
@@ -118,6 +122,7 @@ const MyForm = ({ onSubmit }) => {
       </Picker>
 
       <TextInput
+      style={styles.input}
       placeholder='How high were the flood waters? (inches)'
       onChangeText = {formikProps.handleChange('floodHeight')}
       onBlur = {formikProps.handleBlur('floodHeight')}
@@ -151,13 +156,48 @@ const MyForm = ({ onSubmit }) => {
         <Picker.Item label="No" value="no" />
       </Picker>
 
-      
-
 
     <Button title="Submit" onPress={formikProps.handleSubmit} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  input: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+  },
+  picker: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+  },
+  button: {
+    backgroundColor: '#007bff',
+    color: 'white',
+    padding: 15,
+    borderRadius: 5,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+  }
+});
+
 
 
 export default MyForm;
