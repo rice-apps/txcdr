@@ -1,8 +1,7 @@
 import axios from "axios";
-import { Link } from "expo-router";
 import { useState, useEffect } from "react";
 import { SafeAreaView, TextInput } from "react-native";
-import MapView, { Region } from "react-native-maps";
+import MapView, { Region, Marker } from "react-native-maps";
 
 export function Map() {
   // Keep track of selected region (based on ZIP code state)
@@ -45,7 +44,9 @@ export function Map() {
 
   return (
     <SafeAreaView>
-      <MapView className="w-full h-full" region={region} />
+      <MapView className="w-full h-full" region={region}>
+        <Marker coordinate={{ latitude: 29.717154, longitude: -95.404182 }} />
+      </MapView>
       <SafeAreaView className="w-full top-7 absolute mx-auto flex items-center justify-center">
         <TextInput
           placeholder="Enter a ZIP code"
