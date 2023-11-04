@@ -14,13 +14,13 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.8.9",
-    "prisma": "^5.4.2",
+    "prisma": "^5.5.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
-    "@prisma/client": "^5.4.2",
+    "@prisma/client": "^5.5.2",
     "graphql": "^16.8.1"
   }
 }
