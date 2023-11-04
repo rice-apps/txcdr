@@ -10,16 +10,16 @@ export const resolvers = {
     },
 
     Mutation: {
-        createUser: (_: any, args: {email: string, name: string, phone: string, address: string}) => {
-            return prisma.user.create({ data: args, });
+        createUser: async (_: any, args: {email: string, name: string, phone: string, address: string}) => {
+            return await prisma.user.create({ data: args, });
         }, 
 
-        removeUser: (_: any, args: {id: number}) => {
-            return prisma.user.delete({ where: args, });
+        removeUser: async (_: any, args: {id: number}) => {
+            return await prisma.user.delete({ where: args, });
         },
 
-        removeAll: () => {
-            return prisma.user.deleteMany();
+        removeAll: async () => {
+            return await prisma.user.deleteMany();
         } 
     }
 };
