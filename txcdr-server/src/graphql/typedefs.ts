@@ -63,7 +63,7 @@ export const typeDefs = `
         removeUser(input: RemoveUserInput!): User!,
         removeAll: BatchPayload!,
         createEvent(input: CreateEventInput!): Event!,
-        updateEvent(input: UpdateEventInput!): Event!
+        updateEvent(input: UpdateEventInput!): Event!,
         removeEvent(input: RemoveEventInput!): Event!,
     }
 `;
