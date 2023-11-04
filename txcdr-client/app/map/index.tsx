@@ -29,7 +29,8 @@ export default function Page() {
           latitudeDelta: 0.1,
           longitudeDelta: 0.1,
         });
-      });
+      })
+      .catch(() => console.log("Invalid ZIP code provided"));
   }, [zipCode]);
 
   const onInputChange = (code: string) => {
