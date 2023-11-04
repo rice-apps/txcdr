@@ -23,9 +23,12 @@ export const resolvers = {
         createEvent: async (_: any, { input }: CreateEventInput) => {
             return await prisma.event.create({ data: input });
         },
-        
+
         updateEvent: async (_: any, { input }: UpdateEventInput) => {
-            return await prisma.event.update({ where: { id: input.id }, data: input });
+            return await prisma.event.update({ 
+                where: { id: parseInt(input.id) }, 
+                data: { ...input, id: parseInt(input.id) }
+            });
         }
     }
 };

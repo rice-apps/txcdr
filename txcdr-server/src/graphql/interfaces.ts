@@ -25,7 +25,7 @@ interface CreateEventInput {
 
 interface UpdateEventInput {
     input: {
-        id: number,
+        id: string,
         isActive: boolean,
         location: string,
         description: string,
