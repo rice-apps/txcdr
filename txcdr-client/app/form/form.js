@@ -182,12 +182,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 5,
   },
-  button: {
-    backgroundColor: '#007bff',
-    color: 'white',
-    padding: 15,
-    borderRadius: 5,
-  },
   errorText: {
     color: 'red',
     marginBottom: 20,
