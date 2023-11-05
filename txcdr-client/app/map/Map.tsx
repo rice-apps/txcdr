@@ -5,6 +5,10 @@ import MapView, { Region, Marker } from "react-native-maps";
 import { EventMarker } from "../../types/types";
 import { EventCallout } from "./EventCallout";
 
+/**
+ * MapView component with ZIP code searching, markers, and callouts
+ * @returns MapView component
+ */
 export function Map() {
   // Keep track of selected region (based on ZIP code state)
   const [region, setRegion] = useState<Region>({

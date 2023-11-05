@@ -6,6 +6,11 @@ interface Props {
   eventData: EventMarker;
 }
 
+/**
+ * Custom callout that displays a small event card on top of its annotation pin
+ * @param param0 Event data
+ * @returns React component
+ */
 export function EventCallout({ eventData }: Props) {
   return (
     <Callout className="w-[300px] h-[100px] flex-1 relative">
