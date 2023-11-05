@@ -1,5 +1,5 @@
 /**
- * Data for an annotation pin's event card
+ * Data for event markers on the map
  */
 export interface EventMarker {
   latlng: {

@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { SafeAreaView, TextInput } from "react-native";
 import MapView, { Region, Marker } from "react-native-maps";
+import { EventMarker } from "../../types/types";
+import { EventCallout } from "./EventCallout";
 
 export function Map() {
   // Keep track of selected region (based on ZIP code state)
@@ -42,10 +44,27 @@ export function Map() {
     }
   };
 
+  // Hard-coded markers (TODO: replace with actual data)
+  const markers: EventMarker[] = [
+    {
+      latlng: {
+        latitude: 29.717154,
+        longitude: -95.404182,
+      },
+      title: "Rice University",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    },
+  ];
+
   return (
     <SafeAreaView>
       <MapView className="w-full h-full" region={region}>
-        <Marker coordinate={{ latitude: 29.717154, longitude: -95.404182 }} />
+        {markers.map((marker, index) => (
+          <Marker key={index} coordinate={marker.latlng}>
+            <EventCallout eventData={marker} />
+          </Marker>
+        ))}
       </MapView>
       <SafeAreaView className="w-full top-7 absolute mx-auto flex items-center justify-center">
         <TextInput

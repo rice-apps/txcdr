@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <SafeAreaView>
       <Text className="text-2xl">Map page</Text>
-      <Link href="/" className="py-1">
+      <Link href="/" className="py-3">
         Go back to home page
       </Link>
       <Map />
