@@ -7,6 +7,7 @@ export default function Page() {
     <SafeAreaView>
       <Text>Home page</Text>
       <Link href="/map">Go to map page</Link>
+      <Link href="/form">Go to form page</Link>
     </SafeAreaView>
   );
 }
