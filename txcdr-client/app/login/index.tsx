@@ -2,15 +2,16 @@ import { Link } from "expo-router";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+/**
+ * Main page component for the map page
+ * @returns React map page component
+ */
 export default function Page() {
   return (
     <SafeAreaView>
-      <Text className="text-2xl font-bold">Home page</Text>
-      <Link href="/volunteer/map" className="py-2">
-        Go to map page
-      </Link>
-      <Link href="/login" className="py-2">
-        Go to login page
+      <Text className="text-2xl">Map page</Text>
+      <Link href="/" className="py-3">
+        Go back to home page
       </Link>
     </SafeAreaView>
   );

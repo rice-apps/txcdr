@@ -1,6 +1,6 @@
 import { SafeAreaView, Text } from "react-native";
 import { Callout } from "react-native-maps";
-import { EventMarker } from "../../types/types";
+import { EventMarker } from "../../../types/types";
 
 interface Props {
   eventData: EventMarker;

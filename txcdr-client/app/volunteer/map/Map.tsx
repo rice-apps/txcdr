@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { SafeAreaView, TextInput } from "react-native";
 import MapView, { Region, Marker } from "react-native-maps";
-import { EventMarker } from "../../types/types";
+import { EventMarker } from "../../../types/types";
 import { EventCallout } from "./EventCallout";
 
 /**
@@ -62,7 +62,7 @@ export function Map() {
   ];
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className="h-fit">
       <MapView className="w-full h-full" region={region}>
         {markers.map((marker, index) => (
           <Marker key={index} coordinate={marker.latlng}>
