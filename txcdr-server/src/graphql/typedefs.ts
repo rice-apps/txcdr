@@ -16,6 +16,21 @@ export const typeDefs = `
         nHouses: Int!
     }
 
+    type Form {
+        id: ID!,
+        userId: ID!,
+        eventId: ID!,
+        impacted: Boolean!,
+        residentName: String,
+        residentPhone: String,
+        residentEmail: String,
+        residentLanguage: String,
+        needHelp: Boolean,
+        roofDamaged: Boolean,
+        floodWaterHeight: String,
+        ableToStayHome: Boolean,
+    }
+
     type Query {
         getUsers: [User!]!,
         getEvent: Event!,
