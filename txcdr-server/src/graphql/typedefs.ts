@@ -35,6 +35,8 @@ export const typeDefs = `
         getUsers: [User!]!,
         getEvent: Event!,
         getEvents: [Event!]!,
+        getForms: [Form!]!,
+        getForm: Form!
     }
 
     input CreateUserInput {
