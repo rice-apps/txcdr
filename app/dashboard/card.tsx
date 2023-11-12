@@ -5,17 +5,21 @@ import {
   StyleSheet,
   Text,
   Image,
-  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type CardProps = {
   title: string;
   id: string;
+  status: boolean;
+  maxHouse: string;
+  house: string;
+
 };
 
 export default function Card(props: CardProps) {
   const id = props.id;
+  const status = props.status;
 
   function onPressFunction(event: GestureResponderEvent): void {}
   return (
@@ -23,21 +27,20 @@ export default function Card(props: CardProps) {
       <Pressable onPress={onPressFunction}>
         <SafeAreaView style={styles.container}>
           <Image
-            style={styles.map}
+            style={styles.mapIcon}
             source={require("txcdr-client/assets/map.png")}
           ></Image>
           <SafeAreaView style={styles.primary}>
             <Image
-              style={styles.pin}
+              style={styles.pinIcon}
               source={require("txcdr-client/assets/pin.png")}
             ></Image>
             <Text style={styles.title}>{props.title}</Text>
-            <SafeAreaView style={styles.primarySpacer}></SafeAreaView>
             <Image
-              style={styles.home}
+              style={styles.homeIcon}
               source={require("txcdr-client/assets/house.png")}
             ></Image>
-            <Text style={styles.caption}>0/30</Text>
+            <Text style={styles.caption}>{props.house}/{props.maxHouse}</Text>
           </SafeAreaView>
           <SafeAreaView style={styles.secondary}>
             <SafeAreaView style={styles.status}>
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingTop: -5,
   },
-  map: {
+  mapIcon: {
     backgroundColor: "white",
     width: 300,
     height: 70,
@@ -67,17 +70,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   primary: {
-    paddingTop: -17,
+    paddingTop: -15,
     paddingLeft: 10,
     paddingRight: 10,
     flexDirection: "row",
     flexWrap: "wrap",
   },
-  pin: {
+  inline: {
+    
+  },
+  pinIcon: {
     width: 25,
     height: 25,
   },
-  home: {
+  homeIcon: {
     width: 25,
     height: 25,
   },
@@ -87,10 +93,8 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     textAlign: "left",
     fontWeight: "bold",
+    width: 200,
     fontSize: 16,
-  },
-  primarySpacer: {
-    paddingLeft: 80
   },
   secondary: {
     paddingTop: -15,
@@ -104,6 +108,7 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingRight: 10,
     paddingLeft: 5,
+    width: 60,
     textAlign: "left",
     fontWeight: "bold",
   },
@@ -131,6 +136,7 @@ const styles = StyleSheet.create({
   progressBarFilled: {
     backgroundColor: "red",
     borderRadius: 10,
+    height: 1,
     paddingTop: -15,
   },
 });
