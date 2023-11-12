@@ -9,8 +9,7 @@ export default function RootLayout() {
   const insets = useSafeAreaInsets();
   return (
     <View className="flex-1">
-      <View style={{ backgroundColor: "#f5f5f5", height: insets.top }} />
-      <SafeAreaView className="flex-1 bg-gray-200" edges={["bottom"]}>
+      <SafeAreaView className="flex-1 bg-gray-100" edges={["top"]}>
         <Slot />
       </SafeAreaView>
     </View>
