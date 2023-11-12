@@ -1,13 +1,13 @@
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 import { NavBarButton } from "./NavBarButton";
 
 export function NavBar() {
   return (
-    <SafeAreaView className="flex flex-row gap-2 justify-around bg-gray-200 items-center align-middle">
+    <View className="flex-row gap-2 justify-evenly bg-gray-200 items-center align-middle">
       <NavBarButton />
       <NavBarButton />
       <NavBarButton />
       <NavBarButton />
-    </SafeAreaView>
+    </View>
   );
 }
