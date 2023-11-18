@@ -36,7 +36,7 @@ export function NavBarButton(props: Props) {
     <Pressable className="p-5" hitSlop={20}>
       <Link href={props.href}>
         <View className="flex-col justify-center items-center gap-1">
-          <View className="w-9 h-9 items-center">
+          <View className="w-9 h-9 items-center justify-center">
             {props.href == currPath ? <props.activeSvg /> : <props.idleSvg />}
           </View>
           <Text>{props.label}</Text>
