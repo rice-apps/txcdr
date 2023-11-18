@@ -2,6 +2,10 @@ import { Link } from "expo-router";
 import { Text } from "react-native";
 import { View } from "react-native";
 
+/**
+ * App home page that is unprotected by auth
+ * @returns App home page
+ */
 export default function Page() {
   return (
     <View>

@@ -11,6 +11,10 @@ import {
   ProfileFilled,
 } from "../../assets/svgs/NavBarIcons";
 
+/**
+ * Bottom navigation bar
+ * @returns Nav bar component
+ */
 export function NavBar() {
   return (
     <View className="flex-row gap-2 justify-evenly bg-gray-200 items-center align-middle">

@@ -2,6 +2,11 @@ import * as React from "react";
 import Svg, { Path } from "react-native-svg";
 import { ISvgProps } from "../../types/utils";
 
+/**
+ * SVG component for idle Home icon in bottom nav bar
+ * @param props More SVG props for customization
+ * @returns Unfilled Home icon
+ */
 export const HomeNormal = (props: ISvgProps) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
@@ -18,6 +23,11 @@ export const HomeNormal = (props: ISvgProps) => (
   </Svg>
 );
 
+/**
+ * SVG component for active Home icon in bottom nav bar
+ * @param props More SVG props for customization
+ * @returns Filled Home icon
+ */
 export const HomeFilled = (props: ISvgProps) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
@@ -33,6 +43,11 @@ export const HomeFilled = (props: ISvgProps) => (
   </Svg>
 );
 
+/**
+ * SVG component for idle List icon in bottom nav bar
+ * @param props More SVG props for customization
+ * @returns Unfilled List icon
+ */
 export const ListNormal = (props: ISvgProps) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
@@ -48,6 +63,11 @@ export const ListNormal = (props: ISvgProps) => (
   </Svg>
 );
 
+/**
+ * SVG component for active List icon in bottom nav bar
+ * @param props More SVG props for customization
+ * @returns Filled List icon
+ */
 export const ListFilled = (props: ISvgProps) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
@@ -65,6 +85,11 @@ export const ListFilled = (props: ISvgProps) => (
   </Svg>
 );
 
+/**
+ * SVG component for idle Map icon in bottom nav bar
+ * @param props More SVG props for customization
+ * @returns Unfilled Map icon
+ */
 export const MapNormal = (props: ISvgProps) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
@@ -83,39 +108,11 @@ export const MapNormal = (props: ISvgProps) => (
   </Svg>
 );
 
-export const ProfileNormal = (props: ISvgProps) => (
-  <Svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={29}
-    height={29}
-    fill="none"
-    {...props}
-  >
-    <Path
-      stroke="#000"
-      strokeWidth={2.713}
-      d="M14.725 17.965h.001c1.84 0 3.652.216 5.435.648a25.028 25.028 0 0 1 5.283 1.949c.627.326 1.13.793 1.52 1.428.383.624.573 1.3.572 2.054V27.648H1.916v-3.602c0-.757.191-1.434.575-2.058a3.803 3.803 0 0 1 1.517-1.426 24.97 24.97 0 0 1 5.282-1.95 22.92 22.92 0 0 1 5.435-.647Zm.001-4.484c-1.585 0-2.909-.549-4.044-1.684C9.548 10.663 9 9.34 9 7.754s.549-2.909 1.683-4.044c1.135-1.134 2.459-1.683 4.044-1.683 1.585 0 2.909.549 4.043 1.683 1.135 1.135 1.684 2.459 1.684 4.044 0 1.585-.549 2.909-1.683 4.043-1.135 1.135-2.459 1.684-4.044 1.684Z"
-    />
-  </Svg>
-);
-
-export const ProfileFilled = (props: ISvgProps) => (
-  <Svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={29}
-    height={29}
-    fill="none"
-    {...props}
-  >
-    <Path
-      fill="#000"
-      stroke="#000"
-      strokeWidth={2.713}
-      d="M14.725 17.964h.001c1.84 0 3.652.217 5.436.65a25.02 25.02 0 0 1 5.283 1.948c.627.326 1.129.793 1.518 1.427.384.625.574 1.3.573 2.055V27.647H1.916v-3.602c0-.757.191-1.433.575-2.057a3.803 3.803 0 0 1 1.517-1.426 24.965 24.965 0 0 1 5.283-1.95 22.913 22.913 0 0 1 5.434-.648Zm.001-4.483c-1.585 0-2.908-.549-4.043-1.684-1.135-1.135-1.684-2.458-1.684-4.043 0-1.586.549-2.909 1.684-4.044 1.135-1.135 2.458-1.683 4.043-1.683 1.586 0 2.909.548 4.044 1.683 1.134 1.135 1.683 2.458 1.683 4.044 0 1.585-.549 2.908-1.683 4.043-1.135 1.135-2.458 1.684-4.044 1.684Z"
-    />
-  </Svg>
-);
-
+/**
+ * SVG component for active Map icon in bottom nav bar
+ * @param props More SVG props for customization
+ * @returns Filled Map icon
+ */
 export const MapFilled = (props: ISvgProps) => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
@@ -134,6 +131,49 @@ export const MapFilled = (props: ISvgProps) => (
       strokeLinejoin="round"
       strokeWidth={3.217}
       d="M18.786 5.837v19.167m0-19.167L27 2.004V21.17l-8.214 3.833m0-19.167L10.57 2.004m8.215 23L10.57 21.17m0-19.167L2.357 5.837v19.167l8.215-3.833m0-19.167V21.17"
+    />
+  </Svg>
+);
+
+/**
+ * SVG component for idle Profile icon in bottom nav bar
+ * @param props More SVG props for customization
+ * @returns Unfilled Profile icon
+ */
+export const ProfileNormal = (props: ISvgProps) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={29}
+    height={29}
+    fill="none"
+    {...props}
+  >
+    <Path
+      stroke="#000"
+      strokeWidth={2.713}
+      d="M14.725 17.965h.001c1.84 0 3.652.216 5.435.648a25.028 25.028 0 0 1 5.283 1.949c.627.326 1.13.793 1.52 1.428.383.624.573 1.3.572 2.054V27.648H1.916v-3.602c0-.757.191-1.434.575-2.058a3.803 3.803 0 0 1 1.517-1.426 24.97 24.97 0 0 1 5.282-1.95 22.92 22.92 0 0 1 5.435-.647Zm.001-4.484c-1.585 0-2.909-.549-4.044-1.684C9.548 10.663 9 9.34 9 7.754s.549-2.909 1.683-4.044c1.135-1.134 2.459-1.683 4.044-1.683 1.585 0 2.909.549 4.043 1.683 1.135 1.135 1.684 2.459 1.684 4.044 0 1.585-.549 2.909-1.683 4.043-1.135 1.135-2.459 1.684-4.044 1.684Z"
+    />
+  </Svg>
+);
+
+/**
+ * SVG component for active Profile icon in bottom nav bar
+ * @param props More SVG props for customization
+ * @returns Filled Profile icon
+ */
+export const ProfileFilled = (props: ISvgProps) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={29}
+    height={29}
+    fill="none"
+    {...props}
+  >
+    <Path
+      fill="#000"
+      stroke="#000"
+      strokeWidth={2.713}
+      d="M14.725 17.964h.001c1.84 0 3.652.217 5.436.65a25.02 25.02 0 0 1 5.283 1.948c.627.326 1.129.793 1.518 1.427.384.625.574 1.3.573 2.055V27.647H1.916v-3.602c0-.757.191-1.433.575-2.057a3.803 3.803 0 0 1 1.517-1.426 24.965 24.965 0 0 1 5.283-1.95 22.913 22.913 0 0 1 5.434-.648Zm.001-4.483c-1.585 0-2.908-.549-4.043-1.684-1.135-1.135-1.684-2.458-1.684-4.043 0-1.586.549-2.909 1.684-4.044 1.135-1.135 2.458-1.683 4.043-1.683 1.586 0 2.909.548 4.044 1.683 1.134 1.135 1.683 2.458 1.683 4.044 0 1.585-.549 2.908-1.683 4.043-1.135 1.135-2.458 1.684-4.044 1.684Z"
     />
   </Svg>
 );
