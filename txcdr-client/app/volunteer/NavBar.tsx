@@ -14,12 +14,28 @@ import {
 export function NavBar() {
   return (
     <View className="flex-row gap-2 justify-evenly bg-gray-200 items-center align-middle">
-      <NavBarButton svg={HomeNormal} href="/volunteer/home" label="HOME" />
-      <NavBarButton svg={MapNormal} href="/volunteer/map" label="MAP" />
-      <NavBarButton svg={ListNormal} href="/volunteer/home" label="LIST" />
       <NavBarButton
-        svg={ProfileNormal}
+        idleSvg={HomeNormal}
+        activeSvg={HomeFilled}
         href="/volunteer/home"
+        label="HOME"
+      />
+      <NavBarButton
+        idleSvg={MapNormal}
+        activeSvg={MapFilled}
+        href="/volunteer/map"
+        label="MAP"
+      />
+      <NavBarButton
+        idleSvg={ListNormal}
+        activeSvg={ListFilled}
+        href="/volunteer/list"
+        label="LIST"
+      />
+      <NavBarButton
+        idleSvg={ProfileNormal}
+        activeSvg={ProfileFilled}
+        href="/volunteer/profile"
         label="PROFILE"
       />
     </View>
