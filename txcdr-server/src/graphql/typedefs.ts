@@ -13,7 +13,7 @@ export const typeDefs = `
         location: String!,
         description: String,
         title: String!,
-        nHouses: Int!
+        nHouses: Int
     }
 
     type Form {
@@ -25,18 +25,25 @@ export const typeDefs = `
         residentPhone: String,
         residentEmail: String,
         residentLanguage: String,
+        primaryLanguage: String,
         needHelp: Boolean,
         roofDamaged: Boolean,
         floodWaterHeight: String,
         ableToStayHome: Boolean,
     }
 
-    type Query {
-        getUsers: [User!]!,
-        getEvent: Event!,
-        getEvents: [Event!]!,
-        getForms: [Form!]!,
-        getForm: Form!
+    input CreateFormInput {
+        userId: Int!,
+        eventId: Int!,
+        impacted: Boolean!,
+        residentName: String,
+        residentPhone: String,
+        residentEmail: String,
+        primaryLanguage: String,
+        needHelp: Boolean,
+        roofDamaged: Boolean,
+        floodWaterHeight: String,
+        ableToStayHome: Boolean,
     }
 
     input CreateUserInput {
@@ -55,24 +62,32 @@ export const typeDefs = `
     }
 
     input UpdateEventInput {
-        id: ID!,
-        isActive: Boolean!,
-        location: String!,
-        description: String!,
-        title: String!,
-        nHouses: Int!
+        id: ID,
+        isActive: Boolean,
+        location: String,
+        description: String,
+        title: String,
+        nHouses: Int
     }
 
     input CreateEventInput {
-        isActive: Boolean!,
+        isActive: Boolean,
         location: String!,
-        description: String!,
+        description: String,
         title: String!,
-        nHouses: Int!
+        nHouses: Int
     }
 
     input RemoveEventInput {
         id: ID!,
+    }
+
+    type Query {
+        getUsers: [User!]!,
+        getEvent: Event!,
+        getEvents: [Event!]!,
+        getForms: [Form!]!,
+        getForm: Form!
     }
 
     type Mutation {
@@ -82,6 +97,7 @@ export const typeDefs = `
         createEvent(input: CreateEventInput!): Event!,
         updateEvent(input: UpdateEventInput!): Event!,
         removeEvent(input: RemoveEventInput!): Event!,
+        createForm(input: CreateFormInput!): Form!
     }
 `;
 

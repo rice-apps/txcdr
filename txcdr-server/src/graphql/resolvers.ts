@@ -50,6 +50,10 @@ export const resolvers = {
         removeEvent: async (_: any, { input }: RemoveEventInput) => {
             return await prisma.event.delete({ where: { id: parseInt(input.id) } });
         },
+        createForm: async (_: any, { input }: CreateFormInput) => {
+            
+            return await prisma.form.create({ data: input });
+        }
     }
 };
 
