@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { TextInput } from "react-native";
 import { View } from "react-native";
 import MapView, { Region, Marker } from "react-native-maps";
-import { EventMarker } from "../../../types/types";
+import { EventMarker } from "../../../types/map";
 import { EventCallout } from "./EventCallout";
 
 /**

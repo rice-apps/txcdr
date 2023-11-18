@@ -9,7 +9,9 @@ export default function VolunteerLayout() {
       <View className="flex-1">
         <Slot />
       </View>
-      <NavBar />
+      <View className="ml-4">
+        <NavBar />
+      </View>
     </View>
   );
 }
