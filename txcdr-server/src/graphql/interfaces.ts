@@ -20,6 +20,10 @@ interface LoginUserInput {
     }
 }
 
+interface LogoutUserInput {
+    token: string
+}
+
 interface RemoveUserInput {
     input: {
         id: string

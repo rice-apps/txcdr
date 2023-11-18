@@ -7,9 +7,13 @@ const PORT = parseInt(process.env.PORT) || 4000;
 const server = new ApolloServer({ typeDefs, resolvers });
 startStandaloneServer(server, {
     context: async ({ req }) => {
-        const token = req.headers.authorization || '';
-        const isAuthenticated = await authToken(token);
-        return { token: req.headers.token, isAuthenticated: isAuthenticated };
+        const token = req.headers.authorization;
+        if (token == undefined || token == '') {
+            return { token: req.headers.token, isAuthenticated: false };
+        }
+        else {
+            return { token: req.headers.token, isAuthenticated: await authToken(token) };
+        }
     },
     listen: { port: PORT }
 }).then((resp) => {

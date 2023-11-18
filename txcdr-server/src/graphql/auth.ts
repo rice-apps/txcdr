@@ -6,6 +6,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 type AuthTokenFunction = (token: string) => Promise<boolean>;
 const authToken: AuthTokenFunction = async (token: string) => {
+    console.log(token);
     const response = await supabase.auth.getUser(token);
     const user = response.data.user;
     

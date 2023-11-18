@@ -20,11 +20,14 @@ export const resolvers = {
                 email: input.email,
                 password: input.password
             });
-            console.log(res);
             return res.data.session?.access_token;
         },
+        logout: async (_, { token }) => {
+            const result = await supabase.auth.admin.signOut(token, 'global');
+            return result.error !== null;
+        },
         createUser: async (_, { input, password }) => {
-            await supabase.auth.signUp({
+            await supabase.auth.admin.createUser({
                 email: input.email,
                 password: password
             });
@@ -37,7 +40,6 @@ export const resolvers = {
             return await prisma.user.deleteMany();
         },
         createEvent: async (_, { input }, context) => {
-            console.log(context);
             if (context.isAuthenticated) {
                 return await prisma.event.create({ data: input });
             }

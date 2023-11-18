@@ -28,8 +28,13 @@ export const resolvers = {
             return res.data.session?.access_token;
         },
 
+        logout: async (_: any, { token }: LogoutUserInput) => {
+            const result = await supabase.auth.admin.signOut(token, 'global');
+            return result.error === null;
+        },
+
         createUser: async (_: any, { input, password }: CreateUserInput) => {
-            await supabase.auth.signUp({
+            await supabase.auth.admin.createUser({
                 email: input.email,
                 password: password
             });

@@ -71,6 +71,7 @@ export const typeDefs = `
         createEvent(input: CreateEventInput!): Event!,
         updateEvent(input: UpdateEventInput!): Event!,
         removeEvent(input: RemoveEventInput!): Event!,
+        logout(token: String!): Boolean!,
     }
 `;
 

@@ -10,9 +10,12 @@ const server = new ApolloServer({ typeDefs, resolvers });
 
 startStandaloneServer(server, {
     context: async ({req}) => {
-        const token = req.headers.authorization || '';
-        const isAuthenticated = await authToken(token);
-        return { token: req.headers.token, isAuthenticated: isAuthenticated } as Context;
+        const token = req.headers.authorization;
+        if (token == undefined || token == '') {
+            return { token: req.headers.token, isAuthenticated: false } as Context;
+        } else {
+            return { token: req.headers.token, isAuthenticated: await authToken(token) } as Context;
+        }
     },
     listen: { port: PORT }
 }).then((resp) => {
