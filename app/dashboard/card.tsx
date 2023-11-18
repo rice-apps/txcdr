@@ -7,6 +7,7 @@ import {
   Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ProgressBar from "./progressBar";
 
 type CardProps = {
   title: string;
@@ -127,16 +128,7 @@ const styles = StyleSheet.create({
   spacer: {
     paddingLeft: 90,
   },
-  progressBar: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    width: 120,
-  },
-
-  progressBarFilled: {
-    backgroundColor: "red",
-    borderRadius: 10,
-    height: 1,
-    paddingTop: -15,
-  },
+  progressBarContainer: {
+    paddingTop: -40,
+  }
 });

@@ -16,6 +16,9 @@ export default function ProgressBar(props: ProgressBarProps) {
   return (
         <SafeAreaView style={styles.container}>
             <SafeAreaView style={styles.progressBar}>
+              <SafeAreaView style={styles.progressBarFilled}>
+
+              </SafeAreaView>
             </SafeAreaView>
         </SafeAreaView>
   );
@@ -28,15 +31,19 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     backgroundColor: "black",
-    width: 120,
-    height: 3,
+    width: 160,
+    paddingBottom: -10,
+    paddingTop: -20,
+    borderRadius: 10,
   },
 
   progressBarFilled: {
-    backgroundColor: "red",
-    width: 120,
+    paddingTop: -10,
+    backgroundColor: "green",
+    width: 150,
     height: 1,
     alignSelf: "auto",
+    borderRadius: 10,
 
   },
 });

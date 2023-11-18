@@ -1,6 +1,7 @@
 import { Link } from "expo-router";
 import { Text, StyleSheet, Image, Pressable, GestureResponderEvent, ScrollView} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ProgressBar from "../dashboard/progressBar";
 
 export default function Page() {
 
@@ -57,6 +58,7 @@ export default function Page() {
 
           </SafeAreaView>
         </SafeAreaView>
+        <ProgressBar></ProgressBar>
 
         
 
