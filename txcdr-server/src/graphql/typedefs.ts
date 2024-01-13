@@ -53,6 +53,11 @@ export const typeDefs = `
         address: String,
     }
 
+    input LoginUserInput {
+        email: String!,
+        password: String!
+    }
+
     input RemoveUserInput {
         id: ID!,
     }
@@ -91,13 +96,15 @@ export const typeDefs = `
     }
 
     type Mutation {
-        createUser(input: CreateUserInput!): User!,
+        login(input: LoginUserInput!): String!,
+        createUser(input: CreateUserInput!, password: String!): User!,
         removeUser(input: RemoveUserInput!): User!,
         removeAll: BatchPayload!,
         createEvent(input: CreateEventInput!): Event!,
         updateEvent(input: UpdateEventInput!): Event!,
         removeEvent(input: RemoveEventInput!): Event!,
         createForm(input: CreateFormInput!): Form!
+        logout(token: String!): Boolean!,
     }
 `;
 

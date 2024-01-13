@@ -1,4 +1,7 @@
 import { PrismaClient } from '@prisma/client';
+import supabase from './auth.js';
+import { GraphQLError } from 'graphql';
+
 const prisma = new PrismaClient();
 
 export const resolvers = {
@@ -24,7 +27,25 @@ export const resolvers = {
         }
     },
     Mutation: {
-        createUser: async (_: any, { input }: CreateUserInput) => {
+        login: async (_: any, { input }: LoginUserInput) => {
+            const res = await supabase.auth.signInWithPassword({
+                email: input.email,
+                password: input.password
+            });
+            
+            return res.data.session?.access_token;
+        },
+
+        logout: async (_: any, { token }: LogoutUserInput) => {
+            const result = await supabase.auth.admin.signOut(token, 'global');
+            return result.error === null;
+        },
+
+        createUser: async (_: any, { input, password }: CreateUserInput) => {
+            await supabase.auth.admin.createUser({
+                email: input.email,
+                password: password
+            });
             return await prisma.user.create({ data: input });
         }, 
 
@@ -36,8 +57,17 @@ export const resolvers = {
             return await prisma.user.deleteMany();
         },
 
-        createEvent: async (_: any, { input }: CreateEventInput) => {
-            return await prisma.event.create({ data: input });
+        createEvent: async (_: any, { input }: CreateEventInput, context: Context) => {
+            if (context.isAuthenticated) {
+                return await prisma.event.create({ data: input });
+            } else {
+                throw new GraphQLError('User is not authenticated', {
+                    extensions: {
+                        code: 'UNAUTHENTICATED',
+                        http: { status: 401 },
+                    },
+                });
+            }
         },
 
         updateEvent: async (_: any, { input }: UpdateEventInput) => {

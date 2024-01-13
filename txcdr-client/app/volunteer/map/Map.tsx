@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { SafeAreaView, TextInput } from "react-native";
+import { TextInput } from "react-native";
+import { View } from "react-native";
 import MapView, { Region, Marker } from "react-native-maps";
-import { EventMarker } from "../../types/types";
+import { EventMarker } from "../../../types/map";
 import { EventCallout } from "./EventCallout";
 
 /**
@@ -62,15 +63,15 @@ export function Map() {
   ];
 
   return (
-    <SafeAreaView>
-      <MapView className="w-full h-full" region={region}>
+    <View className="h-full">
+      <MapView className="w-full h-full" region={region} provider="google">
         {markers.map((marker, index) => (
           <Marker key={index} coordinate={marker.latlng}>
             <EventCallout eventData={marker} />
           </Marker>
         ))}
       </MapView>
-      <SafeAreaView className="w-full top-7 absolute mx-auto flex items-center justify-center">
+      <View className="w-full top-7 absolute mx-auto flex items-center justify-center">
         <TextInput
           placeholder="Enter a ZIP code"
           inputMode="numeric"
@@ -79,7 +80,7 @@ export function Map() {
           returnKeyType="done"
           defaultValue={zipCode}
         />
-      </SafeAreaView>
-    </SafeAreaView>
+      </View>
+    </View>
   );
 }

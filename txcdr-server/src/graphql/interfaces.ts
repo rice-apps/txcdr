@@ -1,10 +1,27 @@
+interface Context {
+    token: string;
+    isAuthenticated: boolean;
+}
+
 interface CreateUserInput {
+    password: string,
     input: {
         email: string,
         name: string,
         phone: string,
         address: string
     }
+}
+
+interface LoginUserInput {
+    input: {
+        email: string,
+        password: string
+    }
+}
+
+interface LogoutUserInput {
+    token: string
 }
 
 interface RemoveUserInput {
