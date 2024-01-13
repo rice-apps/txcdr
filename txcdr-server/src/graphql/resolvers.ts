@@ -38,7 +38,6 @@ export const resolvers = {
                 email: input.email,
                 password: password
             });
-
             return await prisma.user.create({ data: input });
         }, 
 

@@ -18,8 +18,8 @@ export const typeDefs = `
 
     type Query {
         getUsers: [User!]!,
-        getEvent: Event!,
         getEvents: [Event!]!,
+        getEvent(id: ID!): Event,
     }
 
     input CreateUserInput {
