@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import supabase from './auth.js';
+import { GraphQLError } from 'graphql';
 const prisma = new PrismaClient();
 export const resolvers = {
     Query: {
@@ -13,11 +15,22 @@ export const resolvers = {
         }
     },
     Mutation: {
-        createUser: async (_, { input }) => {
-            const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-            if (!emailRegex.test(input.email)) {
-                throw new Error('Invalid email address');
-            }
+        login: async (_, { input }) => {
+            const res = await supabase.auth.signInWithPassword({
+                email: input.email,
+                password: input.password
+            });
+            return res.data.session?.access_token;
+        },
+        logout: async (_, { token }) => {
+            const result = await supabase.auth.admin.signOut(token, 'global');
+            return result.error !== null;
+        },
+        createUser: async (_, { input, password }) => {
+            await supabase.auth.admin.createUser({
+                email: input.email,
+                password: password
+            });
             return await prisma.user.create({ data: input });
         },
         removeUser: async (_, { input }) => {
@@ -26,8 +39,18 @@ export const resolvers = {
         removeAll: async () => {
             return await prisma.user.deleteMany();
         },
-        createEvent: async (_, { input }) => {
-            return await prisma.event.create({ data: input });
+        createEvent: async (_, { input }, context) => {
+            if (context.isAuthenticated) {
+                return await prisma.event.create({ data: input });
+            }
+            else {
+                throw new GraphQLError('User is not authenticated', {
+                    extensions: {
+                        code: 'UNAUTHENTICATED',
+                        http: { status: 401 },
+                    },
+                });
+            }
         },
         updateEvent: async (_, { input }) => {
             return await prisma.event.update({
