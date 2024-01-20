@@ -1,5 +1,5 @@
 import { Link, router } from "expo-router";
-import { Button, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useSession } from "../../../auth/ctx";
 
 /**
@@ -12,13 +12,15 @@ export default function Page() {
   return (
     <View>
       <Text className="text-2xl">Login page</Text>
-      <Button
-        title="Sign in"
+      <Pressable
+        className="px-4 py-2 bg-slate-400"
         onPress={() => {
           signIn();
-          router.replace("/");
+          router.replace("/home");
         }}
-      />
+      >
+        <Text>Sign in</Text>
+      </Pressable>
     </View>
   );
 }
