@@ -23,7 +23,6 @@ export const resolvers = {
                 email: input.email,
                 password: input.password
             });
-            console.log(res);
             await prisma.user.update({
                 where: { email: input.email },
                 data: { isAuth: true }
@@ -38,17 +37,15 @@ export const resolvers = {
                 where: { email: user?.email },
                 data: { isAuth: false }
             });
-            console.log(result);
-            return dbResult.isAuth;
+            return !(dbResult.isAuth);
         },
         createUser: async (_, { input, password }) => {
             const res = await supabase.auth.admin.createUser({
                 email: input.email,
                 password: password,
-                email_confirm: true
+                email_confirm: true,
+                role: 'USER'
             });
-            console.log(res);
-            console.log(input, password);
             return await prisma.user.create({ data: input });
         },
         removeUser: async (_, { input }) => {
@@ -58,7 +55,7 @@ export const resolvers = {
             return await prisma.user.deleteMany();
         },
         createEvent: async (_, { input }, context) => {
-            if (context.isAuthenticated) {
+            if (context.isAuthenticated && context.role === 'USER') {
                 return await prisma.event.create({ data: input });
             }
             else {
@@ -76,8 +73,18 @@ export const resolvers = {
                 data: { ...input, id: parseInt(input.id) }
             });
         },
-        removeEvent: async (_, { input }) => {
-            return await prisma.event.delete({ where: { id: parseInt(input.id) } });
+        removeEvent: async (_, { input }, context) => {
+            if (context.isAuthenticated && context.role === 'ADMIN') {
+                return await prisma.event.delete({ where: { id: parseInt(input.id) } });
+            }
+            else {
+                throw new GraphQLError('User is not authenticated', {
+                    extensions: {
+                        code: 'UNAUTHENTICATED',
+                        http: { status: 401 },
+                    },
+                });
+            }
         },
     }
 };

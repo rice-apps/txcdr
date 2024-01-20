@@ -26,7 +26,7 @@ export const resolvers = {
         login: async (_: any, { input }: LoginUserInput) => {
             const res = await supabase.auth.signInWithPassword({
                 email: input.email,
-                password: input.password
+                password: input.password               
             });
 
             await prisma.user.update({
@@ -54,7 +54,8 @@ export const resolvers = {
             const res = await supabase.auth.admin.createUser({
                 email: input.email,
                 password: password,
-                email_confirm: true
+                email_confirm: true,
+                role: 'USER'
             });
             return await prisma.user.create({ data: input });
         }, 
@@ -68,7 +69,7 @@ export const resolvers = {
         },
 
         createEvent: async (_: any, { input }: CreateEventInput, context: Context) => {
-            if (context.isAuthenticated) {
+            if (context.isAuthenticated && context.role === 'USER') {
                 return await prisma.event.create({ data: input });
             } else {
                 throw new GraphQLError('User is not authenticated', {
@@ -87,8 +88,17 @@ export const resolvers = {
             });
         },
 
-        removeEvent: async (_: any, { input }: RemoveEventInput) => {
-            return await prisma.event.delete({ where: { id: parseInt(input.id) } });
+        removeEvent: async (_: any, { input }: RemoveEventInput, context: Context) => {
+            if (context.isAuthenticated && context.role === 'ADMIN') {
+                return await prisma.event.delete({ where: { id: parseInt(input.id) } });
+            } else {
+                throw new GraphQLError('User is not authenticated', {
+                    extensions: {
+                        code: 'UNAUTHENTICATED',
+                        http: { status: 401 },
+                    },
+                });
+            }
         },
     }
 };

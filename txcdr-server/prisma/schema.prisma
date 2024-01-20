@@ -14,6 +14,7 @@ model User {
   phone   String?
   address String? 
   isAuth  Boolean  @default(false) 
+  role    Role     @default(USER) 
   forms   Form[]
 }
 
@@ -48,4 +49,10 @@ model Form {
   floodWaterHeight  String?
   ableToStayHome    Boolean?
 
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
 }

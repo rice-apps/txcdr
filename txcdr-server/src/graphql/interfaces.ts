@@ -1,6 +1,7 @@
 interface Context {
     token: string;
     isAuthenticated: boolean;
+    role: string | null;
 }
 
 interface CreateUserInput {
