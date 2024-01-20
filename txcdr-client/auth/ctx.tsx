@@ -43,10 +43,11 @@ export function AuthProvider(props: React.PropsWithChildren) {
       value={{
         signIn: () => {
           // Perform sign-in logic here
-          console.log("signed in");
+          console.log("signing in");
           setSession("xxx");
         },
         signOut: () => {
+          console.log("signing out");
           setSession(null);
         },
         session,

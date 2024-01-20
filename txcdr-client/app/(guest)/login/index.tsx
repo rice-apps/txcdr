@@ -7,8 +7,8 @@ import { useSession } from "../../../auth/ctx";
  * @returns Login page component
  */
 export default function Page() {
-  const { session, signIn } = useSession();
-  console.log(session);
+  const { signIn } = useSession();
+
   return (
     <View>
       <Text className="text-2xl">Login page</Text>
