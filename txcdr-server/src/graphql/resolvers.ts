@@ -1,8 +1,12 @@
 import { PrismaClient } from '@prisma/client';
-import supabase from './auth.js';
 import { GraphQLError } from 'graphql';
+import { createClient } from '@supabase/supabase-js';
 
 const prisma = new PrismaClient();
+
+const supabaseUrl = process.env.SUPERBASE_URL!;
+const supabaseKey = process.env.SUPERBASE_KEY!;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const resolvers = {
     Query: {
@@ -24,19 +28,33 @@ export const resolvers = {
                 email: input.email,
                 password: input.password
             });
+
+            await prisma.user.update({
+                where: { email: input.email }, 
+                data: { isAuth: true }
+            });
             
             return res.data.session?.access_token;
         },
 
         logout: async (_: any, { token }: LogoutUserInput) => {
             const result = await supabase.auth.admin.signOut(token, 'global');
-            return result.error === null;
+            const response = await supabase.auth.getUser(token);
+            const user = response.data.user;
+
+            const dbResult = await prisma.user.update({
+                where: { email: user?.email }, 
+                data: { isAuth: false }
+            });
+
+            return !(dbResult.isAuth);
         },
 
         createUser: async (_: any, { input, password }: CreateUserInput) => {
-            await supabase.auth.admin.createUser({
+            const res = await supabase.auth.admin.createUser({
                 email: input.email,
-                password: password
+                password: password,
+                email_confirm: true
             });
 
             return await prisma.user.create({ data: input });

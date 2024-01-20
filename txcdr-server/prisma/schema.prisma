@@ -13,6 +13,8 @@ model User {
   name    String?
   phone   String?
   address String? 
+  isAuth  Boolean  @default(false) 
+  forms   Form[]
 }
 
 model Event {
@@ -24,4 +26,26 @@ model Event {
   description  String
   title        String
   nHouses      Int
+  forms        Form[]
+}
+
+model Form {
+  id                Int         @id @default(autoincrement())
+  
+  userId            Int
+  user              User        @relation(fields: [userId], references: [id])
+
+  eventId           Int         
+  event             Event       @relation(fields: [eventId], references: [id])
+
+  impacted          Boolean?  
+  residentName      String?
+  residentPhone     String?
+  residentEmail     String?
+  primaryLanguage   String?
+  needHelp          Boolean?
+  roofDamaged       Boolean?
+  floodWaterHeight  String?
+  ableToStayHome    Boolean?
+
 }
