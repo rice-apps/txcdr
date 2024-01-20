@@ -5,9 +5,11 @@ import {
   StyleSheet,
   Text,
   Image,
+  ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProgressBar from "./progressBar";
+import Severity from "./severity";
 
 type CardProps = {
   title: string;
@@ -15,10 +17,12 @@ type CardProps = {
   status: boolean;
   maxHouse: string;
   house: string;
+  severity: string;
 
 };
 
 export default function Card(props: CardProps) {
+
   const id = props.id;
   const status = props.status;
 
@@ -27,10 +31,13 @@ export default function Card(props: CardProps) {
     <Link href="/event" asChild>
       <Pressable onPress={onPressFunction}>
         <SafeAreaView style={styles.container}>
-          <Image
+          <ImageBackground
             style={styles.mapIcon}
             source={require("txcdr-client/assets/map.png")}
-          ></Image>
+          >
+            <Severity text={props.severity}></Severity>
+
+          </ImageBackground>
           <SafeAreaView style={styles.primary}>
             <Image
               style={styles.pinIcon}
@@ -59,6 +66,7 @@ const styles = StyleSheet.create({
     width: 330,
     height: 150,
     backgroundColor: "#D3D3D3",
+    // backgroundColor: "#6693F5",
     alignSelf: "center",
     borderRadius: 10,
     paddingTop: -5,
@@ -96,6 +104,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     width: 200,
     fontSize: 16,
+    color: "black",
   },
   secondary: {
     paddingTop: -15,

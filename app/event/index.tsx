@@ -2,6 +2,7 @@ import { Link } from "expo-router";
 import { Text, StyleSheet, Image, Pressable, GestureResponderEvent, ScrollView} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProgressBar from "../dashboard/progressBar";
+import Severity from "../dashboard/severity";
 
 export default function Page() {
 
@@ -20,17 +21,13 @@ export default function Page() {
 
       <ScrollView>
         <SafeAreaView style={styles.body}>
+          <Severity text = "Moderate"></Severity>
           <Image
             style={styles.mapIcon}
             source={require("txcdr-client/assets/map.png")}
           ></Image>
 
-        <SafeAreaView style={styles.description}>
-          <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales.</Text>
-          <Link href="/">Go back to home page</Link>
-        </SafeAreaView>
-
-        <SafeAreaView style={styles.inline}>
+<SafeAreaView style={styles.inline}>
           <SafeAreaView style={styles.backgroundBox}>
             <SafeAreaView style={styles.inline}>
               <Image
@@ -58,11 +55,14 @@ export default function Page() {
 
           </SafeAreaView>
         </SafeAreaView>
-        <ProgressBar></ProgressBar>
+
+        <SafeAreaView style={styles.description}>
+          <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales.</Text>
+          <Link href="/">Go back to home page</Link>
+        </SafeAreaView>
 
         
-
-
+        <ProgressBar></ProgressBar>
         </SafeAreaView>
       </ScrollView>
     </SafeAreaView>

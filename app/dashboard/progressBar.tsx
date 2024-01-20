@@ -1,10 +1,5 @@
-import { Link } from "expo-router";
 import {
-  GestureResponderEvent,
-  Pressable,
   StyleSheet,
-  Text,
-  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 

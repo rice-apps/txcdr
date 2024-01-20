@@ -8,5 +8,8 @@ export default function Page() {
       <Text className="text-2xl">Map page</Text>
       <Link href="/">Go back to home page</Link>
     </SafeAreaView>
+
   );
 }
+
+

@@ -9,19 +9,19 @@ export default function Page() {
       <Text style={styles.pageTitle}>Event Dashboard</Text>
       <ScrollView style={styles.scroller}>
         <SafeAreaView>
-          <Card title="Houston, Texas" house="3" maxHouse="30"></Card>
+          <Card title="Houston, Texas" house="3" maxHouse="30" severity="Moderate"></Card>
         </SafeAreaView>
         <SafeAreaView>
-          <Card title="Austin, Texas" house="10" maxHouse="30"></Card>
+          <Card title="Austin, Texas" house="10" maxHouse="30" severity="Severe"></Card>
         </SafeAreaView>
         <SafeAreaView>
-          <Card title="El Paso, Texas" house="2" maxHouse="10"></Card>
+          <Card title="El Paso, Texas" house="2" maxHouse="10" severity="Low"></Card>
         </SafeAreaView>
         <SafeAreaView>
-          <Card title="Dallas, Texas" house="9" maxHouse="80"></Card>
+          <Card title="Dallas, Texas" house="9" maxHouse="80" severity="Severe"></Card>
         </SafeAreaView>
         <SafeAreaView>
-          <Card title="Houston, Texas" house="14" maxHouse="50"></Card>
+          <Card title="Houston, Texas" house="14" maxHouse="50" severity="Moderate"></Card>
         </SafeAreaView>
       </ScrollView>
     </SafeAreaView>
