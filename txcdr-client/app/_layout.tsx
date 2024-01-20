@@ -10,11 +10,9 @@ import { AuthProvider } from "../auth/ctx";
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <View className="flex-1">
-        <SafeAreaView className="flex-1 bg-gray-100" edges={["top"]}>
-          <Slot />
-        </SafeAreaView>
-      </View>
+      <SafeAreaView className="flex-1 bg-gray-100" edges={["top"]}>
+        <Slot />
+      </SafeAreaView>
     </AuthProvider>
   );
 }
