@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^1.6.0",
+    "exceljs": "^4.4.0",
     "expo": "~49.0.15",
     "expo-constants": "~14.4.2",
     "expo-linking": "~5.0.2",

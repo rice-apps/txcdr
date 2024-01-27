@@ -1,8 +1,17 @@
 import * as ExcelJS from 'exceljs';
 
+type Address = {
+  name: string,
+  street: string,
+  type: string,
+  city: string,
+  state: string,
+  zipCode: string
+}
+
 type CensusData ={
-  census: string;
-  addresses: string[];
+  census: string,
+  addresses: Address[],
 }
 
 async function parseExcel(filePath: string) {
@@ -20,7 +29,6 @@ async function parseExcel(filePath: string) {
       if(row.getCell(1).value === undefined){
         throw new Error;
       }
-      row.
       const census: any = row.getCell(1).value;
       const address: any = row.getCell(2).value;
 
