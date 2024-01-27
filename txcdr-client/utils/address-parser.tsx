@@ -9,7 +9,7 @@ type Address = {
   zipCode: string
 }
 
-type CensusData ={
+type CensusData = {
   census: string,
   addresses: Address[],
 }
@@ -58,7 +58,4 @@ async function parseExcel(filePath: string) {
   
 }
 
-
-parseExcel("TXCDR.RiceApps.Addresses.xlsx").then((resp) => {
-  console.log(JSON.stringify(resp));
-})
+export default parseExcel;
