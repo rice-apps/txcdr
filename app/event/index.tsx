@@ -12,6 +12,7 @@ export default function Page() {
   const numOfAddresses = 30;
   const severity = "Moderate";
   const description = "Join us in Cypress, Texas, for a crucial disaster canvassing event aimed at supporting our community in times of need. As we come together, volunteers will go door-to-door to provide information, resources, and assistance to those affected by recent disasters. Your participation can make a significant impact, helping us build resilience and solidarity in Cypress during challenging times.";
+  const contactName = "Gary Flaharty";
 
 
   return (
@@ -78,7 +79,7 @@ export default function Page() {
           <SafeAreaView style={styles.inline}>
             <Image style={styles.contactIcon}
 source={require("txcdr-client/assets/person.png")}></Image>
-            <Text style={styles.contactName}>Gary Flaharty</Text>
+            <Text style={styles.contactName}>{contactName}</Text>
           </SafeAreaView>
         </SafeAreaView>
 
@@ -183,6 +184,7 @@ const styles = StyleSheet.create({
   contactName: {
     fontSize: 14,
     paddingLeft: 15,
+    paddingTop: 10,
   },
 
   footer: {
