@@ -96,7 +96,7 @@ export const typeDefs = `
     }
 
     type Mutation {
-        login(input: LoginUserInput!): String!,
+        login(input: LoginUserInput!): String,
         createUser(input: CreateUserInput!, password: String!): User!,
         removeUser(input: RemoveUserInput!): User!,
         removeAll: BatchPayload!,
