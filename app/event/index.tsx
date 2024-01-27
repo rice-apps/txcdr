@@ -6,6 +6,14 @@ import Severity from "../dashboard/severity";
 
 export default function Page() {
 
+  const eventName = "Cypress Area Disaster";
+  const numOfVolunteers = 50;
+  const numOfSurveyed = 6;
+  const numOfAddresses = 30;
+  const severity = "Moderate";
+  const description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales.";
+
+
   return (
     <SafeAreaView style={styles.margins}>
       <SafeAreaView style={styles.header}>
@@ -15,7 +23,7 @@ export default function Page() {
             source={require("txcdr-client/assets/back.png")}
           ></Image>
         </Link>
-        <Text style={styles.pageTitle}>Event Name</Text>
+        <Text style={styles.pageTitle}>{eventName}</Text>
         
       </SafeAreaView>
 
@@ -25,7 +33,7 @@ export default function Page() {
             style={styles.mapIcon}
             source={require("txcdr-client/assets/map.png")}
           >          
-          <Severity text = "Moderate"></Severity>
+          <Severity text = {severity}></Severity>
 
 
 
@@ -39,7 +47,7 @@ export default function Page() {
                 style={styles.smallIcon}
                 source={require("txcdr-client/assets/house.png")}
               ></Image>
-              <Text style={styles.bigCaption}>0/30</Text>
+              <Text style={styles.bigCaption}>{numOfSurveyed}/{numOfAddresses}</Text>
             </SafeAreaView>
           
             <Text style={styles.caption}>claimed houses</Text>
@@ -54,7 +62,7 @@ export default function Page() {
                 style={styles.smallIcon}
                 source={require("txcdr-client/assets/person.png")}
               ></Image>
-              <Text style={styles.bigCaption}>50</Text>
+              <Text style={styles.bigCaption}>{numOfVolunteers}</Text>
             </SafeAreaView>
             <Text style={styles.caption}>volunteers</Text>
 
@@ -62,7 +70,7 @@ export default function Page() {
         </SafeAreaView>
 
         <SafeAreaView style={styles.description}>
-          <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor ornare leo, non suscipit magna interdum eu. Curabitur pellentesque nibh nibh, at maximus ante fermentum sit amet. Pellentesque commodo lacus at sodales sodales.</Text>
+          <Text>{description}</Text>
           <Link href="/">Go back to home page</Link>
         </SafeAreaView>
 

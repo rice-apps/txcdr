@@ -13,7 +13,7 @@ import Severity from "./severity";
 type CardProps = {
   title: string;
   id: string;
-  status: boolean;
+  status: string;
   maxHouse: string;
   house: string;
   severity: string;
@@ -22,8 +22,7 @@ type CardProps = {
 
 export default function Card(props: CardProps) {
 
-  const id = props.id;
-  const status = props.status;
+  const isPending = props.status == "Pending";
 
   function onPressFunction(event: GestureResponderEvent): void {}
 
@@ -48,9 +47,11 @@ export default function Card(props: CardProps) {
               source={require("txcdr-client/assets/pin.png")}
             ></Image>
             <Text style={styles.title}>{props.title}</Text>
-            <SafeAreaView style={styles.status}>
+
+            {isPending && (<SafeAreaView style={styles.status}>
               <Text style={styles.statusLabel}>PENDING</Text>
             </SafeAreaView>
+            )}
           </SafeAreaView>
         </SafeAreaView>
       </Pressable>
