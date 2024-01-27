@@ -1,7 +1,7 @@
 import * as ExcelJS from 'exceljs';
 
 type Address = {
-  name: string,
+  number: string,
   street: string,
   type: string,
   city: string,
@@ -29,10 +29,17 @@ async function parseExcel(filePath: string) {
       if(row.getCell(1).value === undefined){
         throw new Error;
       }
-      const census: any = row.getCell(1).value;
-      const address: any = row.getCell(2).value;
 
-     
+      const census: string = row.getCell(1).value as string;
+
+      const address: Address = {
+        number: row.getCell(2).value as string,
+        street: row.getCell(3).value as string,
+        type: row.getCell(4).value as string,
+        city: row.getCell(5).value as string,
+        state: row.getCell(6).value as string,
+        zipCode: row.getCell(7).value as string
+      }
       
       if(JSONData.find(entry => entry.census == census)){
         JSONData.find(entry => entry.census == census)?.addresses.push(address);
@@ -52,6 +59,6 @@ async function parseExcel(filePath: string) {
 }
 
 
-parseExcel("mockaddress.xlsx").then((resp) => {
-  console.log(resp);
+parseExcel("TXCDR.RiceApps.Addresses.xlsx").then((resp) => {
+  console.log(JSON.stringify(resp));
 })
