@@ -21,25 +21,25 @@ export function NavBar() {
       <NavBarButton
         idleSvg={HomeNormal}
         activeSvg={HomeFilled}
-        href="/volunteer/home"
+        href="/home"
         label="HOME"
       />
       <NavBarButton
         idleSvg={MapNormal}
         activeSvg={MapFilled}
-        href="/volunteer/map"
+        href="/map"
         label="MAP"
       />
       <NavBarButton
         idleSvg={ListNormal}
         activeSvg={ListFilled}
-        href="/volunteer/list"
+        href="/list"
         label="LIST"
       />
       <NavBarButton
         idleSvg={ProfileNormal}
         activeSvg={ProfileFilled}
-        href="/volunteer/profile"
+        href="/profile"
         label="PROFILE"
       />
     </View>

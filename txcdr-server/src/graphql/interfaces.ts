@@ -57,3 +57,19 @@ interface RemoveEventInput {
         id: string
     }
 }
+
+interface CreateFormInput {
+    input: {
+        userId: number,
+        eventId: number,
+        impacted: boolean,
+        residentName: string,
+        residentPhone: string,
+        residentEmail: string,
+        primaryLanguage: string,
+        needHelp: boolean,
+        roofDamaged: boolean,
+        floodWaterHeight: string,
+        ableToStayHome: boolean,
+    }
+}

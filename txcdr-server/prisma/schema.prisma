@@ -48,7 +48,6 @@ model Form {
   roofDamaged       Boolean?
   floodWaterHeight  String?
   ableToStayHome    Boolean?
-
 }
 
 enum Role {

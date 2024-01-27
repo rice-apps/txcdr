@@ -10,16 +10,24 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const resolvers = {
     Query: {
-        getUsers: () => {
-            return prisma.user.findMany();
+        getUsers: async() => {
+            return await prisma.user.findMany();
         },
 
-        getEvents: () => {
-            return prisma.event.findMany();
+        getEvents: async() => {
+            return await prisma.event.findMany();
         },
 
-        getEvent: (_: any, { id }: { id: string }) => {
-            return prisma.event.findUnique({ where: { id: parseInt(id) } });
+        getEvent: async(_: any, { id }: { id: string }) => {
+            return await prisma.event.findUnique({ where: { id: parseInt(id) } });
+        },
+
+        getForm: async(_: any, { id }: { id: string}) => {
+            return await prisma.form.findUnique({ where: { id: parseInt(id) } })
+        },
+
+        getForms: async() => {
+            return await prisma.form.findMany();
         }
     },
     Mutation: {
@@ -100,6 +108,10 @@ export const resolvers = {
                 });
             }
         },
+        createForm: async (_: any, { input }: CreateFormInput) => {
+            
+            return await prisma.form.create({ data: input });
+        }
     }
 };
 

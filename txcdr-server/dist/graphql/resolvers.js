@@ -7,14 +7,20 @@ const supabaseKey = process.env.SUPERBASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 export const resolvers = {
     Query: {
-        getUsers: () => {
-            return prisma.user.findMany();
+        getUsers: async () => {
+            return await prisma.user.findMany();
         },
-        getEvents: () => {
-            return prisma.event.findMany();
+        getEvents: async () => {
+            return await prisma.event.findMany();
         },
-        getEvent: (_, { id }) => {
-            return prisma.event.findUnique({ where: { id: parseInt(id) } });
+        getEvent: async (_, { id }) => {
+            return await prisma.event.findUnique({ where: { id: parseInt(id) } });
+        },
+        getForm: async (_, { id }) => {
+            return await prisma.form.findUnique({ where: { id: parseInt(id) } });
+        },
+        getForms: async () => {
+            return await prisma.form.findMany();
         }
     },
     Mutation: {
@@ -86,5 +92,8 @@ export const resolvers = {
                 });
             }
         },
+        createForm: async (_, { input }) => {
+            return await prisma.form.create({ data: input });
+        }
     }
 };
