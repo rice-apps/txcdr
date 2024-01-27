@@ -3,6 +3,7 @@ import { Text, StyleSheet, Image, Pressable, GestureResponderEvent, ScrollView, 
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProgressBar from "../dashboard/progressBar";
 import Severity from "../dashboard/severity";
+import CensusBlock from "./censusBlock";
 
 export default function Page() {
 
@@ -13,6 +14,7 @@ export default function Page() {
   const severity = "Moderate";
   const description = "Join us in Cypress, Texas, for a crucial disaster canvassing event aimed at supporting our community in times of need. As we come together, volunteers will go door-to-door to provide information, resources, and assistance to those affected by recent disasters. Your participation can make a significant impact, helping us build resilience and solidarity in Cypress during challenging times.";
   const contactName = "Gary Flaharty";
+  const isRegistered = true;
 
 
   return (
@@ -71,9 +73,21 @@ export default function Page() {
           <Text>{description}</Text>
           <Link href="/">Go back to home page</Link>
         </SafeAreaView>
-
-        
         <ProgressBar></ProgressBar>
+
+
+        {isRegistered && (
+        <SafeAreaView>
+          <Text style={styles.heading}>Census Block</Text>
+          <CensusBlock></CensusBlock>
+          <CensusBlock></CensusBlock>
+          <CensusBlock></CensusBlock>
+          
+ 
+        </SafeAreaView>
+        )}
+
+
         <SafeAreaView>
           <Text style={styles.heading}>Created by</Text>
           <SafeAreaView style={styles.inline}>
@@ -179,6 +193,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     paddingLeft: 35,
+    paddingBottom: 10,
   },
 
   contactName: {
