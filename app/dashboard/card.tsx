@@ -8,7 +8,6 @@ import {
   ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ProgressBar from "./progressBar";
 import Severity from "./severity";
 
 type CardProps = {
@@ -27,30 +26,28 @@ export default function Card(props: CardProps) {
   const status = props.status;
 
   function onPressFunction(event: GestureResponderEvent): void {}
+
+
   return (
     <Link href="/event" asChild>
       <Pressable onPress={onPressFunction}>
-        <SafeAreaView style={styles.container}>
-          <ImageBackground
+      <ImageBackground
             style={styles.mapIcon}
+            imageStyle={{     borderTopRightRadius: 10,     borderTopLeftRadius: 10,
+            }}
             source={require("txcdr-client/assets/map.png")}
           >
             <Severity text={props.severity}></Severity>
 
           </ImageBackground>
+        <SafeAreaView style={styles.container}>
+          
           <SafeAreaView style={styles.primary}>
             <Image
               style={styles.pinIcon}
               source={require("txcdr-client/assets/pin.png")}
             ></Image>
             <Text style={styles.title}>{props.title}</Text>
-            <Image
-              style={styles.homeIcon}
-              source={require("txcdr-client/assets/house.png")}
-            ></Image>
-            <Text style={styles.caption}>{props.house}/{props.maxHouse}</Text>
-          </SafeAreaView>
-          <SafeAreaView style={styles.secondary}>
             <SafeAreaView style={styles.status}>
               <Text style={styles.statusLabel}>PENDING</Text>
             </SafeAreaView>
@@ -64,22 +61,24 @@ export default function Card(props: CardProps) {
 const styles = StyleSheet.create({
   container: {
     width: 330,
-    height: 150,
-    backgroundColor: "#D3D3D3",
-    // backgroundColor: "#6693F5",
+    height: 55,
+    // backgroundColor: "#D3D3D3",
+    backgroundColor: "#5360F3",
     alignSelf: "center",
-    borderRadius: 10,
+    // borderRadius: 10,
     paddingTop: -5,
+    borderBottomRightRadius: 10,
+    borderBottomLeftRadius: 10,
   },
   mapIcon: {
     backgroundColor: "white",
-    width: 300,
-    height: 70,
+    width: 330,
+    height: 90,
     alignSelf: "center",
-    borderRadius: 8,
+
   },
   primary: {
-    paddingTop: -15,
+    paddingTop: -30,
     paddingLeft: 10,
     paddingRight: 10,
     flexDirection: "row",
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     width: 200,
     fontSize: 16,
-    color: "black",
+    color: "white",
   },
   secondary: {
     paddingTop: -15,
@@ -125,7 +124,8 @@ const styles = StyleSheet.create({
   status: {
     backgroundColor: "#8C8C8C",
     borderRadius: 10,
-    paddingTop: -20,
+    height: 20,
+    paddingTop: -25,
   },
   statusLabel: {
     color: "white",

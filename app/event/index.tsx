@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { Text, StyleSheet, Image, Pressable, GestureResponderEvent, ScrollView} from "react-native";
+import { Text, StyleSheet, Image, Pressable, GestureResponderEvent, ScrollView, ImageBackground} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ProgressBar from "../dashboard/progressBar";
 import Severity from "../dashboard/severity";
@@ -21,11 +21,16 @@ export default function Page() {
 
       <ScrollView>
         <SafeAreaView style={styles.body}>
-          <Severity text = "Moderate"></Severity>
-          <Image
+          <ImageBackground
             style={styles.mapIcon}
             source={require("txcdr-client/assets/map.png")}
-          ></Image>
+          >          
+          <Severity text = "Moderate"></Severity>
+
+
+
+          </ImageBackground>
+
 
 <SafeAreaView style={styles.inline}>
           <SafeAreaView style={styles.backgroundBox}>
@@ -34,7 +39,7 @@ export default function Page() {
                 style={styles.smallIcon}
                 source={require("txcdr-client/assets/house.png")}
               ></Image>
-              <Text>0/30</Text>
+              <Text style={styles.bigCaption}>0/30</Text>
             </SafeAreaView>
           
             <Text style={styles.caption}>claimed houses</Text>
@@ -49,7 +54,7 @@ export default function Page() {
                 style={styles.smallIcon}
                 source={require("txcdr-client/assets/person.png")}
               ></Image>
-              <Text>50</Text>
+              <Text style={styles.bigCaption}>50</Text>
             </SafeAreaView>
             <Text style={styles.caption}>volunteers</Text>
 
@@ -84,13 +89,24 @@ const styles = StyleSheet.create({
   inline: {
     flexDirection: "row",
     flexWrap: "wrap",
+    paddingLeft: 35,
     },
+  bigCaption: {
+    fontSize: 18,
+    fontWeight: "bold",
+    paddingTop: 10,
+    color: "white",
+    right: 10,
+  },
   caption: {
     textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
   },
   smallIcon: {
-    width: 20,
-    height: 20,
+    width: 40,
+    height: 40,
+    right: 15,
   },
   pageTitle: {
     fontWeight: "bold",
@@ -103,12 +119,14 @@ const styles = StyleSheet.create({
     height: 20,
   },
   backgroundBox: {
-    backgroundColor: "#D3D3D3",
+    // backgroundColor: "#D3D3D3",
+    backgroundColor: "#5360F3",
     borderRadius: 10,
     width: 140,
     height: 90,
     paddingLeft: 10,
     paddingRight: 10,
+    paddingTop: -20,
   },
   spacer: {
     width: 20,
@@ -116,17 +134,19 @@ const styles = StyleSheet.create({
   description: {
     paddingTop: 0,
     paddingBottom: 10,
+    paddingLeft: 35,
+    paddingRight: 35,
   },
   margins: {
-    paddingLeft: 35,
-    paddingRight: 35, 
+    // paddingLeft: 35,
+    // paddingRight: 35, 
     alignContent: "center",
   },
   body: {
     paddingTop: -30,
   },
   mapIcon: {
-    width : 300,
+    width: 400,
     height: 200,
   },
 
