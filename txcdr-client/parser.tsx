@@ -47,3 +47,5 @@ const filePath = "TXCDR.RiceApps.Questions.xlsx";
 convertExcelToJSON(filePath).then((questions) => {
   console.log(JSON.stringify(questions, null, 2));
 });
+
+export default convertExcelToJSON;
