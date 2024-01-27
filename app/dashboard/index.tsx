@@ -23,6 +23,7 @@ export default function Page() {
         <SafeAreaView>
           <Card title="Houston, Texas" house="14" maxHouse="50" severity="Moderate"></Card>
         </SafeAreaView>
+        <SafeAreaView style={styles.footer}></SafeAreaView>
       </ScrollView>
     </SafeAreaView>
   );
@@ -41,5 +42,6 @@ const styles = StyleSheet.create({
 
   footer: {
     textAlign: "center",
+    height: 60,
   },
 });
