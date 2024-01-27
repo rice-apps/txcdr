@@ -107,5 +107,3 @@ export const typeDefs = `
         logout(token: String!): Boolean!,
     }
 `;
-
-
