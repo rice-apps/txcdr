@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 import { createClient } from '@supabase/supabase-js';
-import { supabaseKey, supabaseUrl } from './utils/config.js';
+import { supabaseKey, supabaseUrl } from './config.js';
 const prisma = new PrismaClient();
 const supabase = createClient(supabaseUrl, supabaseKey);
 export const resolvers = {
