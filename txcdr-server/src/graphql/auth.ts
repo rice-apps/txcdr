@@ -1,10 +1,8 @@
 import { $Enums, PrismaClient, User } from '@prisma/client';
 import { AuthUser, createClient } from '@supabase/supabase-js';
+import { supabaseKey, supabaseUrl } from './utils/config.js';
 
 const prisma = new PrismaClient();
-
-const supabaseUrl = process.env.SUPERBASE_URL!;
-const supabaseKey = process.env.SUPERBASE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 type AuthResultWithRole = {
