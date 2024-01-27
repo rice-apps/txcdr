@@ -2,7 +2,7 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { typeDefs } from './graphql/typedefs.js';
 import { resolvers } from './graphql/resolvers.js';
-import { authToken } from './graphql/auth.js';
+import { authenticate, authenticateWithRole } from './graphql/auth.js';
 
 const PORT = parseInt(process.env.PORT!) || 4000;
 
@@ -12,9 +12,20 @@ startStandaloneServer(server, {
     context: async ({req}) => {
         const token = req.headers.authorization;
         if (token == undefined || token == '') {
-            return { token: req.headers.token, isAuthenticated: false } as Context;
+            return { 
+                token: req.headers.token, 
+                isAuthenticated: false, 
+                role: null 
+            } as Context;
+
         } else {
-            return { token: req.headers.token, isAuthenticated: await authToken(token) } as Context;
+            const authenticationResult = await authenticateWithRole(token);
+
+            return { 
+                token: req.headers.token, 
+                isAuthenticated: authenticationResult.isAuthenticated, 
+                role: authenticationResult.role 
+            } as Context;
         }
     },
     listen: { port: PORT }

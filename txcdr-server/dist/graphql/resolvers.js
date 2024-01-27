@@ -1,7 +1,10 @@
 import { PrismaClient } from '@prisma/client';
-import supabase from './auth.js';
 import { GraphQLError } from 'graphql';
+import { createClient } from '@supabase/supabase-js';
 const prisma = new PrismaClient();
+const supabaseUrl = process.env.SUPERBASE_URL;
+const supabaseKey = process.env.SUPERBASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 export const resolvers = {
     Query: {
         getUsers: async () => {
@@ -26,16 +29,28 @@ export const resolvers = {
                 email: input.email,
                 password: input.password
             });
+            await prisma.user.update({
+                where: { email: input.email },
+                data: { isAuth: true }
+            });
             return res.data.session?.access_token;
         },
         logout: async (_, { token }) => {
             const result = await supabase.auth.admin.signOut(token, 'global');
-            return result.error !== null;
+            const response = await supabase.auth.getUser(token);
+            const user = response.data.user;
+            const dbResult = await prisma.user.update({
+                where: { email: user?.email },
+                data: { isAuth: false }
+            });
+            return !(dbResult.isAuth);
         },
         createUser: async (_, { input, password }) => {
-            await supabase.auth.admin.createUser({
+            const res = await supabase.auth.admin.createUser({
                 email: input.email,
-                password: password
+                password: password,
+                email_confirm: true,
+                role: 'USER'
             });
             return await prisma.user.create({ data: input });
         },
@@ -46,7 +61,7 @@ export const resolvers = {
             return await prisma.user.deleteMany();
         },
         createEvent: async (_, { input }, context) => {
-            if (context.isAuthenticated) {
+            if (context.isAuthenticated && context.role === 'USER') {
                 return await prisma.event.create({ data: input });
             }
             else {
@@ -64,8 +79,18 @@ export const resolvers = {
                 data: { ...input, id: parseInt(input.id) }
             });
         },
-        removeEvent: async (_, { input }) => {
-            return await prisma.event.delete({ where: { id: parseInt(input.id) } });
+        removeEvent: async (_, { input }, context) => {
+            if (context.isAuthenticated && context.role === 'ADMIN') {
+                return await prisma.event.delete({ where: { id: parseInt(input.id) } });
+            }
+            else {
+                throw new GraphQLError('User is not authenticated', {
+                    extensions: {
+                        code: 'UNAUTHENTICATED',
+                        http: { status: 401 },
+                    },
+                });
+            }
         },
         createForm: async (_, { input }) => {
             return await prisma.form.create({ data: input });
