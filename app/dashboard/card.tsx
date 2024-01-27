@@ -135,9 +135,6 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     paddingBottom: 2,
   },
-  spacer: {
-    paddingLeft: 90,
-  },
   progressBarContainer: {
     paddingTop: -40,
   }
