@@ -82,6 +82,7 @@ export default function Page() {
           <CensusBlock></CensusBlock>
           <CensusBlock></CensusBlock>
           <CensusBlock></CensusBlock>
+          <CensusBlock></CensusBlock>
           
  
         </SafeAreaView>
@@ -97,6 +98,13 @@ source={require("txcdr-client/assets/person.png")}></Image>
           </SafeAreaView>
         </SafeAreaView>
 
+          <SafeAreaView></SafeAreaView>
+
+        <Pressable>
+          <SafeAreaView style={styles.button}>
+            <Text style={styles.buttonText}>Register</Text>
+          </SafeAreaView>
+        </Pressable>
 
         <SafeAreaView style={styles.footer}></SafeAreaView>
 
@@ -200,6 +208,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingLeft: 15,
     paddingTop: 10,
+  },
+
+  button: {
+    backgroundColor: "#5360F3",
+    width: 300,
+    height: 50, 
+    borderRadius: 15,
+    left: 35,
+
+  },
+
+  buttonText: {
+    color: "white",
+    fontSize: 20,
+    left: 110,
+    bottom: 8,
   },
 
   footer: {

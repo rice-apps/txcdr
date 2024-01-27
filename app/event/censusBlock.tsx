@@ -14,7 +14,7 @@ export default function CensusBlock(props: CensusBlockProps) {
     return (
     <SafeAreaView>
         <SafeAreaView style={styles.container}>    
-        <Text>#12345</Text>
+        <Text style={styles.text}>#1234</Text>
       </SafeAreaView>
     </SafeAreaView>
 
@@ -31,11 +31,19 @@ const styles = StyleSheet.create({
 
     container: {
         backgroundColor: "#F1A220",
-        width: 200,
-        borderRadius: 10,
+        width: 305,
+        borderRadius: 20,
         left: 35,  
-        height: 20,
-    },
+        height: 40,
+        },
+
+
+    text: {
+        fontSize: 20,
+        paddingLeft: 20,
+        bottom: 10,
+
+        }
   });
   
 
