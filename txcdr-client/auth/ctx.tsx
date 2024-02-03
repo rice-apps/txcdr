@@ -9,11 +9,19 @@ export const AuthContext = createContext<{
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
+  user: {
+    name: string;
+    profileImage: string;
+  };
 }>({
   signIn: () => {},
   signOut: () => {},
   session: null,
   isLoading: false,
+  user: {
+    name: "testing",
+    profileImage: "",
+  },
 });
 
 /**
