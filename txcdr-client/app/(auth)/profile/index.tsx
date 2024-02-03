@@ -3,7 +3,7 @@ import { useSession } from "../../../auth/ctx";
 import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 
-const Card = ({ title, children }) => (
+const Card = ({ title, children }: { title: string, children: React.ReactNode }) => (
   <View style={styles.cardContainer}>
     <View style={styles.cardHeader}>
       <Text style={styles.cardTitle}>{title}</Text>
@@ -41,45 +41,25 @@ export default function Page() {
         </Pressable>
       </View>
       <ScrollView>
-        <View style={styles.cardContainer}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardTitle}>Contact Information</Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={styles.infoTitle}>PHONE</Text>
-              {/* <Text style={styles.infoContent}>1234567890</Text> */}
+        <Card title="Contact Information">
+          <Text style={styles.infoTitle}>PHONE</Text>
 
-              <Text style={styles.infoTitle}>EMAIL</Text>
-              {/* <Text style={styles.infoContent}>test@gmail.com</Text> */}
-            </View>
-        </View>
+          <Text style={styles.infoTitle}>EMAIL</Text>
+        </Card>
 
-        <View style={styles.cardContainer}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardTitle}>Demographic Information</Text>
-            </View>
-            <View style={styles.cardContent}>
-              <Text style={styles.infoTitle}>PRONOUNS</Text>
+        <Card title="Demographic Information">
+          <Text style={styles.infoTitle}>PRONOUNS</Text>
+          <Text style={styles.infoTitle}>AGE</Text>
+          <Text style={styles.infoTitle}>RACE</Text>
+          <Text style={styles.infoTitle}>LANGUAGES SPOKEN</Text>
+        </Card>
 
-              <Text style={styles.infoTitle}>AGE</Text>
-              
-              <Text style={styles.infoTitle}>RACE</Text>
-
-              <Text style={styles.infoTitle}>LANGUAGES SPOKEN</Text>
-            </View>
-        </View>
-
-        <View style={styles.cardContainer}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardTitle}>Organizations</Text>
-            </View>
-            <View style={styles.cardContent}>
-              <View style={styles.organization}>
-                <View style={styles.profileImageContainer}></View>
-                <Text style={styles.infoContent}>Organization Name</Text>
-              </View>
-            </View>
-        </View>
+        <Card title="Organizations">
+          <View style={styles.organization}>
+            <View style={styles.profileImageContainer}></View>
+            <Text style={styles.infoContent}>Organization Name</Text>
+          </View>
+        </Card>
       </ScrollView>
     </View>
   );
