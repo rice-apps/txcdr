@@ -13,6 +13,8 @@ model User {
   name    String?
   phone   String?
   address String? 
+  isAuth  Boolean  @default(false) 
+  role    Role     @default(USER) 
   forms   Form[]
 }
 
@@ -46,5 +48,10 @@ model Form {
   roofDamaged       Boolean?
   floodWaterHeight  String?
   ableToStayHome    Boolean?
+}
 
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
 }
