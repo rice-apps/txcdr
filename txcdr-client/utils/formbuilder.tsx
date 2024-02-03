@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
-import convertExcelToJSON from "./parser";
+import React, { useState, useEffect, ChangeEvent } from 'react';
+import convertExcelToJSON from './parser';
+import RadioQuestion from './radioquestions';
+import TextQuestion from './textquestions';
 
 interface Question {
   descriptionOne: string;
   options: string[];
+  questionType: number; // Assuming this indicates the type of question
 }
 
 const FormBuilder: React.FC = () => {
@@ -11,42 +14,46 @@ const FormBuilder: React.FC = () => {
 
   useEffect(() => {
     // Define the file path to your Excel file
+    // Simulated file path (in reality, you would get this from a file input and server processing)
     const filePath = "TXCDR.RiceApps.Questions.xlsx";
 
-    // Use the parser function to get the question data
-    convertExcelToJSON(filePath).then((parsedQuestions: any) => {
-      // Map the data to the desired format
-      const simplifiedQuestions = parsedQuestions.map((q: any) => ({
-        descriptionOne: q.descriptionOne,
-        options: q.options,
-      }));
-      setQuestions(simplifiedQuestions);
-    });
+    // Directly use the filePath for development/testing purposes
+    convertExcelToJSON(filePath).then(parsedQuestions => {
+      setQuestions(parsedQuestions); // Assuming parsedQuestions is already in the correct format
+    }).catch(error => console.error('Error parsing Excel file:', error));
   }, []);
 
-  const renderOption = (
-    option: string,
-    index: number,
-    questionIndex: number,
-  ) => (
-    <label key={`${questionIndex}-${index}`}>
-      <input type="radio" name={`question-${questionIndex}`} value={option} />
-      {option}
-    </label>
-  );
+  const renderQuestion = (question: Question, index: number) => {
+    const key = `question-${index}`;
+    switch (question.questionType) {
+      case 3: // 3 indicates a radio question
+        return (
+          <RadioQuestion
+            key={key}
+            description={question.descriptionOne}
+            options={question.options}
+            name={key}
+          />
+        );
+      case 4: // 4 indicates a text input question
+        return (
+          <TextQuestion
+            key={key}
+            description={question.descriptionOne}
+            name={key}
+          />
+        );
+      // Define more cases for other question types as needed
+      default:
+        return null; // Or a placeholder component for unrecognized types
+    }
+  };
 
-  const renderQuestion = (question: Question, index: number) => (
-    <div key={`question-${index}`}>
-      <p>{question.descriptionOne}</p>
-      <div>
-        {question.options.map((option, optIndex) =>
-          renderOption(option, optIndex, index),
-        )}
-      </div>
+  return (
+    <div>
+      <form>{questions.map((question, index) => renderQuestion(question, index))}</form>
     </div>
   );
-
-  return <form>{questions.map(renderQuestion)}</form>;
 };
 
 export default FormBuilder;
