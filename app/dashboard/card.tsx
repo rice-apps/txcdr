@@ -62,7 +62,7 @@ export default function Card(props: CardProps) {
 const styles = StyleSheet.create({
   container: {
     width: 330,
-    height: 55,
+    height: 50,
     // backgroundColor: "#D3D3D3",
     backgroundColor: "#5360F3",
     alignSelf: "center",
@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
 
   },
   primary: {
-    paddingTop: -30,
+    paddingTop: -25,
+    // bottom: 60,
     paddingLeft: 10,
     paddingRight: 10,
     flexDirection: "row",
