@@ -122,7 +122,7 @@ const FormBuilder: React.FC = () => {
     <View>
       {Object.keys(categorizedForms).map((key) => (
         <TouchableOpacity key={key} onPress={() => setActiveFormKey(Number(key))}>
-          <Text>{`Show Form ${key}`}</Text>
+          <Text>{`Form for ${key}`}</Text>
         </TouchableOpacity>
       ))}
       {activeFormKey !== null && renderForm(activeFormKey)}
