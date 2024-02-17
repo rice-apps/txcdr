@@ -1,18 +1,5 @@
 import * as ExcelJS from 'exceljs';
-
-type Address = {
-  number: string,
-  street: string,
-  type: string,
-  city: string,
-  state: string,
-  zipCode: string
-}
-
-type CensusData = {
-  census: string,
-  addresses: Address[],
-}
+import {Address, CensusData} from "../types/address";
 
 async function parseExcel(filePath: string) {
   const workbook = new ExcelJS.Workbook();

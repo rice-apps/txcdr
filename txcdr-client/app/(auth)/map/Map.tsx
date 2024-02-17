@@ -5,6 +5,9 @@ import { View } from "react-native";
 import MapView, { Region, Marker } from "react-native-maps";
 import { EventMarker } from "../../../types/map";
 import { EventCallout } from "./EventCallout";
+import parseExcel from "../../../utils/address-parser";
+
+import { Address, CensusData } from "../../../types/address";
 
 /**
  * MapView component with ZIP code searching, markers, and callouts
@@ -61,6 +64,61 @@ export function Map() {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     },
   ];
+
+  async function geocodeAddress(address: string): Promise<{ latitude: number, longitude: number }> {
+    try {
+      const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${process.env.EXPO_PUBLIC_MAPS_KEY}`);
+      const { results } = response.data;
+      if (results && results.length > 0) {
+        const { lat, lng } = results[0].geometry.location;
+        return { latitude: lat, longitude: lng };
+      } else {
+        throw new Error('No results found for the address');
+      }
+    } catch (error) {
+      console.error('Error geocoding address:', error);
+      throw new Error('Failed to geocode the address');
+    }
+  }
+
+  useEffect(() => {
+    //async function handling logic for parsing, processing, and storing address information used for markers
+    const fetchMarkerInformation = async (addressExcelFilePath: string) => {
+      try {
+        type AddressArray = CensusData[];
+
+        const JSONData: AddressArray = await parseExcel(addressExcelFilePath);
+
+        const markers = JSONData.flatMap(async (censusData) =>
+          censusData.addresses.map(async (address: Address) => {
+            try {
+              const { latitude, longitude } = await geocodeAddress(`${address.number} ${address.street} ${address.city} ${address.state} ${address.zipCode}`);
+              return {
+                latlng: { latitude, longitude },
+                title: `${address.city}, ${address.state}`,
+                description: `${address.type} ${address.street}, ${address.city}, ${address.state} ${address.zipCode}`,
+              };
+            } catch (error) {
+              console.error('Error geocoding address:', error);
+              return null; // Return null if geocoding fails
+            }
+          })
+        );
+        // Wait for all markers to be resolved
+        const resolvedMarkers = await Promise.all(markers);
+
+        // Filter out null markers (failed geocoding)
+        const validMarkers = resolvedMarkers.filter(marker => marker !== null);
+
+
+      } catch (error) {
+        console.log("error processing address data");
+      }
+      fetchMarkerInformation("mock")//hard coded. remove later
+    };
+  }, []);
+
+  
 
   return (
     <View className="h-full">
