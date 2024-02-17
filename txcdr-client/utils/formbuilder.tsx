@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 // import { Picker } from '@react-native-picker/picker';
 import convertExcelToJSON from './parser';
@@ -24,7 +24,6 @@ const FormBuilder: React.FC = () => {
   const [activeFormKey, setActiveFormKey] = useState<number | null>(null);
 
   useEffect(() => {
-    // Assuming you have a way to obtain a file path string
     const filePath = "./TXCDR.RiceApps.Questions.xlsx";
 
     convertExcelToJSON(filePath).then((parsedQuestions: Question[]) => {
@@ -101,10 +100,9 @@ const FormBuilder: React.FC = () => {
   
   const categorizedForms = categorizeQuestions(questions);
 
-  // Adjusted to directly work with form objects
   const renderForm = (formKey: number) => {
     const form = categorizedForms[formKey];
-    if (!form) return null; // Guard against undefined forms
+    if (!form) return null; // undefined forms
 
     return (
       <View>
