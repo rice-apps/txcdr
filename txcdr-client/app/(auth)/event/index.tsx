@@ -1,26 +1,33 @@
 import { Link } from "expo-router";
-import { Text, StyleSheet, Image, Pressable, GestureResponderEvent, ScrollView, ImageBackground, Button, View} from "react-native";
+import {
+  Text,
+  StyleSheet,
+  Image,
+  Pressable,
+  GestureResponderEvent,
+  ScrollView,
+  ImageBackground,
+  Button,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ProgressBar from "../dashboard/progressBar";
 import Severity from "../dashboard/severity";
 import CensusBlock from "./censusBlock";
 
 export default function Page() {
-
   const eventName = "Cypress Area Disaster";
   const numOfVolunteers = 50;
   const numOfSurveyed = 6;
   const numOfAddresses = 30;
   const severity = "Moderate";
-  const description = "Join us in Cypress, Texas, for a crucial disaster canvassing event aimed at supporting our community in times of need. As we come together, volunteers will go door-to-door to provide information, resources, and assistance to those affected by recent disasters. Your participation can make a significant impact, helping us build resilience and solidarity in Cypress during challenging times.";
+  const description =
+    "Join us in Cypress, Texas, for a crucial disaster canvassing event aimed at supporting our community in times of need. As we come together, volunteers will go door-to-door to provide information, resources, and assistance to those affected by recent disasters. Your participation can make a significant impact, helping us build resilience and solidarity in Cypress during challenging times.";
   const contactName = "Gary Flaharty";
   const isRegistered = true;
 
-
   return (
-    <SafeAreaView style={{alignContent: "center"}}>
+    <SafeAreaView style={{ alignContent: "center" }}>
       <View style={styles.header}>
-
         <Link href="/dashboard">
           <Image
             style={styles.backIcon}
@@ -29,7 +36,6 @@ export default function Page() {
         </Link>
 
         <Text style={styles.pageTitle}>{eventName}</Text>
-        
       </View>
 
       <ScrollView>
@@ -37,86 +43,81 @@ export default function Page() {
           <ImageBackground
             style={styles.mapIcon}
             source={require("txcdr-client/assets/map.png")}
-          >          
-          <Severity text = {severity}></Severity>
+          >
+            <Severity text={severity}></Severity>
           </ImageBackground>
 
+          <View
+            style={[styles.inline, { paddingTop: 20 }, { paddingBottom: 20 }]}
+          >
+            <View style={[styles.backgroundBox, { paddingTop: 15 }]}>
+              <View style={styles.inline}>
+                <Image
+                  style={styles.smallIcon}
+                  source={require("txcdr-client/assets/house.png")}
+                ></Image>
+                <Text style={styles.bigCaption}>
+                  {numOfSurveyed}/{numOfAddresses}
+                </Text>
+              </View>
 
-<View style={[styles.inline, { paddingTop: 20 }, {paddingBottom: 20}]}>
-          <View style={[styles.backgroundBox, {paddingTop: 15}]}>
-            <View style={styles.inline}>
-              <Image
-                style={styles.smallIcon}
-                source={require("txcdr-client/assets/house.png")}
-              ></Image>
-              <Text style={styles.bigCaption}>{numOfSurveyed}/{numOfAddresses}</Text>
+              <Text style={styles.caption}>claimed houses</Text>
             </View>
-          
-            <Text style={styles.caption}>claimed houses</Text>
 
+            <View style={styles.spacer}></View>
+
+            <View style={[styles.backgroundBox, { paddingTop: 15 }]}>
+              <View style={styles.inline}>
+                <Image
+                  style={styles.smallIcon}
+                  source={require("txcdr-client/assets/person.png")}
+                ></Image>
+                <Text style={styles.bigCaption}>{numOfVolunteers}</Text>
+              </View>
+              <Text style={styles.caption}>volunteers</Text>
+            </View>
           </View>
 
-          <View style={styles.spacer}></View>
+          <View style={styles.description}>
+            <Text>{description}</Text>
+            <Link href="/">Go back to home page</Link>
+          </View>
 
-          <View style={[styles.backgroundBox, {paddingTop: 15}]}>
+          {isRegistered && (
+            <View style={{ paddingTop: 20, paddingBottom: 20 }}>
+              <Text style={styles.heading}>Census Block</Text>
+              <CensusBlock censusNumber="#1234"></CensusBlock>
+              <CensusBlock censusNumber="#5678"></CensusBlock>
+              <CensusBlock censusNumber="#9999"></CensusBlock>
+              <CensusBlock censusNumber="#1000"></CensusBlock>
+            </View>
+          )}
+
+          <View>
+            <Text style={styles.heading}>Created by</Text>
             <View style={styles.inline}>
               <Image
-                style={styles.smallIcon}
+                style={styles.contactIcon}
                 source={require("txcdr-client/assets/person.png")}
               ></Image>
-              <Text style={styles.bigCaption}>{numOfVolunteers}</Text>
+              <Text style={styles.contactName}>{contactName}</Text>
             </View>
-            <Text style={styles.caption}>volunteers</Text>
-
           </View>
-        </View>
-
-        <View style={styles.description}>
-          <Text>{description}</Text>
-          <Link href="/">Go back to home page</Link>
-        </View>
-
-
-        {isRegistered && (
-        <View style={{ paddingTop: 20 }, {paddingBottom: 20}}>
-          <Text style={styles.heading}>Census Block</Text>
-          <CensusBlock censusNumber="#1234"></CensusBlock>
-          <CensusBlock censusNumber="#5678"></CensusBlock>
-          <CensusBlock censusNumber="#9999"></CensusBlock>
-          <CensusBlock censusNumber="#1000"></CensusBlock>
-        </View>
-        )}
-
-
-        <View >
-          <Text style={styles.heading}>Created by</Text>
-          <View style={styles.inline}>
-            <Image style={styles.contactIcon}
-source={require("txcdr-client/assets/person.png")}></Image>
-            <Text style={styles.contactName}>{contactName}</Text>
-          </View>
-        </View>
 
           <SafeAreaView></SafeAreaView>
 
-        <Pressable>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>Register</Text>
-          </View>
-        </Pressable>
+          <Pressable>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>Register</Text>
+            </View>
+          </Pressable>
 
-        <View style={styles.footer}></View>
-
-
+          <View style={styles.footer}></View>
         </View>
       </ScrollView>
     </SafeAreaView>
-    
-
   );
 }
-
-
 
 const styles = StyleSheet.create({
   header: {
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     paddingLeft: 35,
-    },
+  },
   bigCaption: {
     fontSize: 18,
     fontWeight: "bold",
@@ -152,7 +153,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     backgroundColor: "black",
-    
   },
   pageTitle: {
     fontWeight: "bold",
@@ -207,10 +207,9 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#5360F3",
     width: 300,
-    height: 50, 
+    height: 50,
     borderRadius: 15,
     left: 35,
-
   },
 
   buttonText: {
@@ -222,10 +221,5 @@ const styles = StyleSheet.create({
 
   footer: {
     height: 75,
-  }
-
-  
-
-  
-
+  },
 });
