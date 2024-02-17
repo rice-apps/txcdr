@@ -11,7 +11,9 @@ const server = new ApolloServer({ typeDefs, resolvers });
 startStandaloneServer(server, {
     context: async ({req}) => {
         const token = req.headers.authorization;
+        console.log(token)
         if (token == undefined || token == '') {
+            console.log('if')
             return { 
                 token: req.headers.token, 
                 isAuthenticated: false, 
@@ -19,6 +21,7 @@ startStandaloneServer(server, {
             } as Context;
 
         } else {
+            console.log('else')
             const authenticationResult = await authenticateWithRole(token);
 
             return { 

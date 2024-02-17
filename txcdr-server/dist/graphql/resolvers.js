@@ -21,6 +21,36 @@ export const resolvers = {
         },
         getForms: async () => {
             return await prisma.form.findMany();
+        },
+        getAddress: async (_, { id }) => {
+            return await prisma.address.findUnique({ where: { id: parseInt(id) } });
+        },
+        getAddresses: async () => {
+            return await prisma.address.findMany();
+        },
+        getDisasterFormQuestion: async (_, { id }) => {
+            return await prisma.disasterFormQuestion.findUnique({ where: { id: parseInt(id) } });
+        },
+        getDisasterFormQuestions: async () => {
+            return await prisma.disasterFormQuestion.findMany();
+        },
+        getDisasterFormAnswer: async (_, { id }) => {
+            return await prisma.disasterFormAnswer.findUnique({ where: { id: parseInt(id) } });
+        },
+        getDisasterFormAnswers: async () => {
+            return await prisma.disasterFormAnswer.findMany();
+        },
+        getDisasterFormResponse: async (_, { id }) => {
+            return await prisma.disasterFormResponse.findUnique({ where: { id: parseInt(id) } });
+        },
+        getDisasterFormResponses: async () => {
+            return await prisma.disasterFormResponse.findMany();
+        },
+        getEventOnAddress: async (_, { id }) => {
+            return await prisma.eventsOnAddresses.findUnique({ where: { id: parseInt(id) } });
+        },
+        getEventsOnAddresses: async () => {
+            return await prisma.eventsOnAddresses.findMany();
         }
     },
     Mutation: {
@@ -94,6 +124,21 @@ export const resolvers = {
         },
         createForm: async (_, { input }) => {
             return await prisma.form.create({ data: input });
+        },
+        createAddress: async (_, { input }) => {
+            return await prisma.address.create({ data: input });
+        },
+        createDisasterFormQuestion: async (_, { input }) => {
+            return await prisma.disasterFormQuestion.create({ data: input });
+        },
+        createDisasterFormAnswer: async (_, { input }) => {
+            return await prisma.disasterFormAnswer.create({ data: input });
+        },
+        createDisasterFormResponse: async (_, { input }) => {
+            return await prisma.disasterFormResponse.create({ data: input });
+        },
+        createEventsOnAddresses: async (_, { input }) => {
+            return await prisma.eventsOnAddresses.create({ data: input });
         }
     }
 };

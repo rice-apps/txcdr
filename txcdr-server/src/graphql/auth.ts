@@ -20,6 +20,13 @@ const getSupabaseAndDbUser = async (token: string) => {
     const response = await supabase.auth.getUser(token);
     const user = response.data.user;
 
+    if (!user?.email) {
+        return {
+            dbUser: null, 
+            user: null
+        };
+    }
+
     const dbUser = await prisma.user.findUnique({ where: { email: user?.email } });
     return {
         dbUser: dbUser, 
@@ -28,7 +35,7 @@ const getSupabaseAndDbUser = async (token: string) => {
 };
 
 const baseAuthVerification: BaseAuthVerificationFunction = (dbUser: User | null, user: AuthUser | null) => {
-    if (user != null && user.aud === 'authenticated') {
+    if (user != null && user.aud === 'authenticated' && dbUser) {
         const lastSignInTime = new Date(user?.last_sign_in_at!).getTime();
         const currentTime = new Date().getTime();
         const logginTimeHoursInMs = 12 * 60 * 60 * 1000;

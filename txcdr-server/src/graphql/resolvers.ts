@@ -28,6 +28,46 @@ export const resolvers = {
 
         getForms: async() => {
             return await prisma.form.findMany();
+        },
+
+        getAddress: async(_: any, { id }: { id: string}) => {
+            return await prisma.address.findUnique({ where: { id: parseInt(id) } })
+        },
+
+        getAddresses: async() => {
+            return await prisma.address.findMany();
+        },
+
+        getDisasterFormQuestion: async(_: any, { id }: { id: string}) => {
+            return await prisma.disasterFormQuestion.findUnique({ where: { id: parseInt(id) } })
+        },
+
+        getDisasterFormQuestions: async() => {
+            return await prisma.disasterFormQuestion.findMany();
+        },
+
+        getDisasterFormAnswer: async(_: any, { id }: { id: string}) => {
+            return await prisma.disasterFormAnswer.findUnique({ where: { id: parseInt(id) } })
+        },
+
+        getDisasterFormAnswers: async() => {
+            return await prisma.disasterFormAnswer.findMany();
+        },
+
+        getDisasterFormResponse: async(_: any, { id }: { id: string}) => {
+            return await prisma.disasterFormResponse.findUnique({ where: { id: parseInt(id) } })
+        },
+
+        getDisasterFormResponses: async() => {
+            return await prisma.disasterFormResponse.findMany();
+        },
+
+        getEventOnAddress: async(_: any, { id }: { id: string}) => {
+            return await prisma.eventsOnAddresses.findUnique({ where: { id: parseInt(id) } })
+        },
+
+        getEventsOnAddresses: async() => {
+            return await prisma.eventsOnAddresses.findMany();
         }
     },
     Mutation: {
@@ -108,9 +148,35 @@ export const resolvers = {
                 });
             }
         },
+
         createForm: async (_: any, { input }: CreateFormInput) => {
             
             return await prisma.form.create({ data: input });
+        },
+
+        createAddress: async (_: any, { input }: CreateAddressInput) => {
+            
+            return await prisma.address.create({ data: input });
+        },
+
+        createDisasterFormQuestion: async (_: any, { input }: CreateDisasterFormQuestionInput) => {
+
+            return await prisma.disasterFormQuestion.create({ data: input });
+        },
+
+        createDisasterFormAnswer: async (_: any, { input }: CreateDisasterFormAnswerInput) => {
+            
+            return await prisma.disasterFormAnswer.create({ data: input });
+        },
+
+        createDisasterFormResponse: async (_: any, { input }: CreateDisasterFormResponseInput) => {
+            
+            return await prisma.disasterFormResponse.create({ data: input });
+        },
+
+        createEventsOnAddresses: async (_: any, { input }: CreateEventsOnAddressesInput) => {
+            
+            return await prisma.eventsOnAddresses.create({ data: input });
         }
     }
 };

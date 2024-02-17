@@ -46,6 +46,91 @@ export const typeDefs = `
         ableToStayHome: Boolean,
     }
 
+    type Address {
+        id: ID!,
+        censusBlock: String,
+        number: String,
+        street: String,
+        type: String,
+        city: String,
+        state: String,
+        zipCode: String,
+    }
+
+    input CreateAddressInput {
+        censusBlock: String,
+        number: String,
+        street: String,
+        type: String,
+        city: String,
+        state: String,
+        zipCode: String,
+    }
+
+    type DisasterFormQuestions {
+        id: ID!,   
+        eventId: ID!,    
+        sequence: Int!,
+        field: String!,
+        descriptionOne: String,
+        descriptionTwo: String,
+        questionType: Int!,
+        validation: String,
+        require: Boolean,
+        options: [String],     
+    }
+
+    input CreateDisasterFormQuestion {
+        eventId: Int!,
+        sequence: Int!,
+        field: String!,
+        descriptionOne: String,
+        descriptionTwo: String,
+        questionType: Int!,
+        validation: String,
+        require: Boolean,
+        options: [String],
+    }
+
+    type DisasterFormAnswer {
+        id: ID!, 
+        answer: String,
+        formQuestionId: ID!,
+        formResponseId: ID!,
+    }
+
+    input CreateDisasterFormAnswer {
+        answer: String,
+        formQuestionId: Int!,
+        formResponseId: Int!,
+    }
+
+    type DisasterFormResponse {
+        id: ID!,
+        volunteerId: ID!,
+        eventOnAddressId: ID!,
+    }
+
+    input CreateDisasterFormResponse {
+        volunteerId: Int!,
+        eventOnAddressId: Int!,
+    }
+
+    type EventsOnAddresses {
+        id: ID!,
+        eventId: ID!,
+        addressId: ID!,
+        assignedAt: String,
+        assignedBy: String,
+    }
+
+    input CreateEventsOnAddresses {
+        eventId: Int!,
+        addressId: Int!,
+        assignedAt: String,
+        assignedBy: String,
+    }
+
     input CreateUserInput {
         email: String!,
         name: String,
@@ -92,7 +177,17 @@ export const typeDefs = `
         getEvent: Event!,
         getEvents: [Event!]!,
         getForms: [Form!]!,
-        getForm: Form!
+        getForm: Form!,
+        getAddresses: [Address!]!,
+        getAddress: Address!,
+        getDisasterFormQuestions: [DisasterFormQuestions!]!,
+        getDisasterFormQuestion: DisasterFormQuestions!,
+        getDisasterFormAnswers: [DisasterFormAnswer!]!,
+        getDisasterFormAnswer: DisasterFormAnswer!,
+        getDisasterFormResponses: [DisasterFormResponse!]!,
+        getDisasterFormResponse: DisasterFormResponse!,
+        getEventsOnAddresses: [EventsOnAddresses!]!,
+        getEventOnAddress: EventsOnAddresses!,
     }
 
     type Mutation {
@@ -103,7 +198,12 @@ export const typeDefs = `
         createEvent(input: CreateEventInput!): Event!,
         updateEvent(input: UpdateEventInput!): Event!,
         removeEvent(input: RemoveEventInput!): Event!,
-        createForm(input: CreateFormInput!): Form!
+        createForm(input: CreateFormInput!): Form!,
+        createAddress(input: CreateAddressInput!): Address!,
+        createDisasterFormQuestion(input: CreateDisasterFormQuestion!): DisasterFormQuestions!,
+        createDisasterFormAnswer(input: CreateDisasterFormAnswer!): DisasterFormAnswer!,
+        createDisasterFormResponse(input: CreateDisasterFormResponse!): DisasterFormResponse!,
+        createEventsOnAddresses(input: CreateEventsOnAddresses!): EventsOnAddresses!,
         logout(token: String!): Boolean!,
     }
 `;

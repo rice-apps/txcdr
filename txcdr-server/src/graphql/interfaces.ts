@@ -73,3 +73,53 @@ interface CreateFormInput {
         ableToStayHome: boolean,
     }
 }
+
+interface CreateAddressInput {
+    input: {
+        censusBlock: string,
+        number: string,
+        street: string,
+        type: string,
+        city: string,
+        state: string,
+        zipCode: string
+    }
+}
+
+interface CreateDisasterFormQuestionInput {
+    input: {
+        eventId: number,
+        sequence: number,
+        field: string,
+        descriptionOne: string,
+        descriptionTwo: string,
+        questionType: number,
+        validation: string,
+        require: boolean,
+        options: string [],
+    }
+}
+
+interface CreateDisasterFormAnswerInput {
+    input: {
+        answer: string,
+        formQuestionId: number,
+        formResponseId: number,
+    }
+}
+
+interface CreateDisasterFormResponseInput {
+    input: {
+        volunteerId: number,
+        eventOnAddressId: number,
+    }
+}
+
+interface CreateEventsOnAddressesInput {
+    input: {
+        eventId: number,
+        addressId: number,
+        assignedAt: string,
+        assignedBy: string,
+    }
+}
