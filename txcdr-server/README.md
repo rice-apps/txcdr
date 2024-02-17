@@ -25,7 +25,13 @@ npx prisma generate
 
 ### Environment variables
 
-Put the referenced keys in `config.ts` in your `.env` file
+Make sure you have the following environment variables in `.env`:
+
+- SUPERBASE_URL
+- SUPERBASE_KEY
+- DATABASE_URL
+
+Ask a TL for these environment variables!
 
 ### Running the server
 
