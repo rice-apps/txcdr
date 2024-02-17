@@ -21,7 +21,7 @@ export function NavBar() {
       <NavBarButton
         idleSvg={HomeNormal}
         activeSvg={HomeFilled}
-        href="/home"
+        href="/dashboard"
         label="HOME"
       />
       <NavBarButton

@@ -16,7 +16,7 @@ export default function Page() {
         className="px-4 py-2 bg-slate-400"
         onPress={() => {
           signIn();
-          router.replace("/home");
+          router.replace("/dashboard");
         }}
       >
         <Text>Sign in</Text>
