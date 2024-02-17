@@ -6,56 +6,64 @@ import {
   Text,
   Image,
   ImageBackground,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Severity from "./severity";
 
 type CardProps = {
   title: string;
-  id: string;
+  id?: string;
   status: string;
   maxHouse: string;
   house: string;
   severity: string;
-
 };
 
 export default function Card(props: CardProps) {
-
   const isPending = props.status == "Pending";
 
   function onPressFunction(event: GestureResponderEvent): void {}
 
-
   return (
     <Link href="/event" asChild>
-      <Pressable onPress={onPressFunction} style={{width: 330, height: 160, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingTop: 10, paddingBottom: 10}}>
-        
+      <Pressable
+        onPress={onPressFunction}
+        style={{
+          width: 330,
+          height: 160,
+          borderBottomLeftRadius: 10,
+          borderBottomRightRadius: 10,
+          paddingTop: 10,
+          paddingBottom: 10,
+        }}
+      >
         <ImageBackground
-              style={styles.map}
-              imageStyle={{     borderTopRightRadius: 10,     borderTopLeftRadius: 10, width: "100%", height: "100%"
-              }}
-              source={require("txcdr-client/assets/map.png")}
-            >
+          style={styles.map}
+          imageStyle={{
+            borderTopRightRadius: 10,
+            borderTopLeftRadius: 10,
+            width: "100%",
+            height: "100%",
+          }}
+          source={require("txcdr-client/assets/map.png")}
+        >
           <Severity text={props.severity}></Severity>
-
         </ImageBackground>
 
         <View style={styles.container}>
-          
-            <Image
-              style={styles.pinIcon}
-              source={require("txcdr-client/assets/pin.png")}
-            ></Image>
+          <Image
+            style={styles.pinIcon}
+            source={require("txcdr-client/assets/pin.png")}
+          ></Image>
 
           <Text style={styles.title}>{props.title}</Text>
 
-            {isPending && (<View style={styles.status}>
+          {isPending && (
+            <View style={styles.status}>
               <Text style={styles.statusLabel}>PENDING</Text>
             </View>
-            )}
-
+          )}
         </View>
       </Pressable>
     </Link>
@@ -80,7 +88,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "65%",
     alignSelf: "center",
-
   },
   inline: {
     paddingTop: -25,
