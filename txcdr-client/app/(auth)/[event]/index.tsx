@@ -74,7 +74,6 @@ export default function Page() {
 
           <View style={styles.description}>
             <Text>{event.description}</Text>
-            <Link href="/">Go back to home page</Link>
           </View>
 
           {event.registered && (
