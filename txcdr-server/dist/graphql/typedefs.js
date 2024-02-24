@@ -18,8 +18,8 @@ export const typeDefs = `
 
     type Form {
         id: ID!,
-        userId: ID!,
-        eventId: ID!,
+        userId: ID,
+        eventId: ID,
         impacted: Boolean!,
         residentName: String,
         residentPhone: String,
@@ -33,8 +33,23 @@ export const typeDefs = `
     }
 
     input CreateFormInput {
-        userId: Int!,
-        eventId: Int!,
+        userId: Int,
+        eventId: Int,
+        impacted: Boolean!,
+        residentName: String,
+        residentPhone: String,
+        residentEmail: String,
+        primaryLanguage: String,
+        needHelp: Boolean,
+        roofDamaged: Boolean,
+        floodWaterHeight: String,
+        ableToStayHome: Boolean,
+    }
+
+    input UpdateFormInput {
+        id: ID!,
+        userId: Int,
+        eventId: Int,
         impacted: Boolean!,
         residentName: String,
         residentPhone: String,
@@ -58,6 +73,17 @@ export const typeDefs = `
     }
 
     input CreateAddressInput {
+        censusBlock: String,
+        number: String,
+        street: String,
+        type: String,
+        city: String,
+        state: String,
+        zipCode: String,
+    }
+
+    input UpdateAddressInput {
+        id: ID!,
         censusBlock: String,
         number: String,
         street: String,
@@ -199,7 +225,9 @@ export const typeDefs = `
         updateEvent(input: UpdateEventInput!): Event!,
         removeEvent(input: RemoveEventInput!): Event!,
         createForm(input: CreateFormInput!): Form!,
+        updateForm(input: UpdateFormInput!): Form!,
         createAddress(input: CreateAddressInput!): Address!,
+        updateAddress(input: UpdateAddressInput!): Address!,
         createDisasterFormQuestion(input: CreateDisasterFormQuestion!): DisasterFormQuestions!,
         createDisasterFormAnswer(input: CreateDisasterFormAnswer!): DisasterFormAnswer!,
         createDisasterFormResponse(input: CreateDisasterFormResponse!): DisasterFormResponse!,

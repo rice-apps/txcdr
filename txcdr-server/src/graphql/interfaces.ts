@@ -74,8 +74,38 @@ interface CreateFormInput {
     }
 }
 
+interface UpdateFormInput {
+    input: {
+        id: string,
+        userId: number,
+        eventId: number,
+        impacted: boolean,
+        residentName: string,
+        residentPhone: string,
+        residentEmail: string,
+        primaryLanguage: string,
+        needHelp: boolean,
+        roofDamaged: boolean,
+        floodWaterHeight: string,
+        ableToStayHome: boolean,
+    }
+}
+
 interface CreateAddressInput {
     input: {
+        censusBlock: string,
+        number: string,
+        street: string,
+        type: string,
+        city: string,
+        state: string,
+        zipCode: string
+    }
+}
+
+interface UpdateAddressInput {
+    input: {
+        id: string,
         censusBlock: string,
         number: string,
         street: string,

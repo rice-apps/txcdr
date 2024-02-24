@@ -33,11 +33,11 @@ model Event {
 model Form {
   id                Int                   @id @default(autoincrement())
   
-  userId            Int
-  user              User                  @relation(fields: [userId], references: [id])
+  userId            Int?
+  user              User?                 @relation(fields: [userId], references: [id])
 
-  eventId           Int         
-  event             Event                 @relation(fields: [eventId], references: [id])
+  eventId           Int?         
+  event             Event?                @relation(fields: [eventId], references: [id])
 
   impacted          Boolean?  
   residentName      String?

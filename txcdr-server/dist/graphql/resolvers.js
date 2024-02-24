@@ -125,8 +125,20 @@ export const resolvers = {
         createForm: async (_, { input }) => {
             return await prisma.form.create({ data: input });
         },
+        updateForm: async (_, { input }) => {
+            return await prisma.form.update({
+                where: { id: parseInt(input.id) },
+                data: { ...input, id: parseInt(input.id) }
+            });
+        },
         createAddress: async (_, { input }) => {
             return await prisma.address.create({ data: input });
+        },
+        updateAddress: async (_, { input }) => {
+            return await prisma.address.update({
+                where: { id: parseInt(input.id) },
+                data: { ...input, id: parseInt(input.id) }
+            });
         },
         createDisasterFormQuestion: async (_, { input }) => {
             return await prisma.disasterFormQuestion.create({ data: input });
