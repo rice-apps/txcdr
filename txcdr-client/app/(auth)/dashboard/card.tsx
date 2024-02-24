@@ -10,23 +10,19 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Severity from "./severity";
+import { EventDetails } from "../../../types/event";
 
 type CardProps = {
-  title: string;
-  id?: string;
-  status: string;
-  maxHouse: string;
-  house: string;
-  severity: string;
+  event: EventDetails;
 };
 
-export default function Card(props: CardProps) {
-  const isPending = props.status == "Pending";
+export default function Card({ event }: CardProps) {
+  const isPending = event.registered ? "Registered" : "Pending";
 
   function onPressFunction(event: GestureResponderEvent): void {}
 
   return (
-    <Link href="/event" asChild>
+    <Link href={`/${event.id}`} asChild>
       <Pressable
         onPress={onPressFunction}
         style={{
@@ -48,7 +44,7 @@ export default function Card(props: CardProps) {
           }}
           source={require("txcdr-client/assets/map.png")}
         >
-          <Severity text={props.severity}></Severity>
+          <Severity text={event.severity}></Severity>
         </ImageBackground>
 
         <View style={styles.container}>
@@ -57,7 +53,7 @@ export default function Card(props: CardProps) {
             source={require("txcdr-client/assets/pin.png")}
           ></Image>
 
-          <Text style={styles.title}>{props.title}</Text>
+          <Text style={styles.title}>{event.eventName}</Text>
 
           {isPending && (
             <View style={styles.status}>
