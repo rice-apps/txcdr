@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import {
   Text,
   StyleSheet,
@@ -13,17 +13,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Severity from "../dashboard/severity";
 import CensusBlock from "./censusBlock";
+import { fetchEvent } from "../../../mock-api/events";
 
 export default function Page() {
-  const eventName = "Cypress Area Disaster";
-  const numOfVolunteers = 50;
-  const numOfSurveyed = 6;
-  const numOfAddresses = 30;
-  const severity = "Moderate";
-  const description =
-    "Join us in Cypress, Texas, for a crucial disaster canvassing event aimed at supporting our community in times of need. As we come together, volunteers will go door-to-door to provide information, resources, and assistance to those affected by recent disasters. Your participation can make a significant impact, helping us build resilience and solidarity in Cypress during challenging times.";
-  const contactName = "Gary Flaharty";
-  const isRegistered = true;
+  const local = useLocalSearchParams();
+  const event = fetchEvent(parseInt(local.event as string)); // TODO: replace mock API call with real ones
 
   return (
     <SafeAreaView style={{ alignContent: "center" }}>
@@ -35,7 +29,7 @@ export default function Page() {
           ></Image>
         </Link>
 
-        <Text style={styles.pageTitle}>{eventName}</Text>
+        <Text style={styles.pageTitle}>{event.eventName}</Text>
       </View>
 
       <ScrollView>
@@ -44,7 +38,7 @@ export default function Page() {
             style={styles.mapIcon}
             source={require("txcdr-client/assets/map.png")}
           >
-            <Severity text={severity}></Severity>
+            <Severity text={event.severity}></Severity>
           </ImageBackground>
 
           <View
@@ -57,7 +51,7 @@ export default function Page() {
                   source={require("txcdr-client/assets/house.png")}
                 ></Image>
                 <Text style={styles.bigCaption}>
-                  {numOfSurveyed}/{numOfAddresses}
+                  {event.numSurveyed}/{event.numAddresses}
                 </Text>
               </View>
 
@@ -72,18 +66,18 @@ export default function Page() {
                   style={styles.smallIcon}
                   source={require("txcdr-client/assets/person.png")}
                 ></Image>
-                <Text style={styles.bigCaption}>{numOfVolunteers}</Text>
+                <Text style={styles.bigCaption}>{event.numVolunteers}</Text>
               </View>
               <Text style={styles.caption}>volunteers</Text>
             </View>
           </View>
 
           <View style={styles.description}>
-            <Text>{description}</Text>
+            <Text>{event.description}</Text>
             <Link href="/">Go back to home page</Link>
           </View>
 
-          {isRegistered && (
+          {event.registered && (
             <View style={{ paddingTop: 20, paddingBottom: 20 }}>
               <Text style={styles.heading}>Census Block</Text>
               <CensusBlock censusNumber="#1234"></CensusBlock>
@@ -100,7 +94,7 @@ export default function Page() {
                 style={styles.contactIcon}
                 source={require("txcdr-client/assets/person.png")}
               ></Image>
-              <Text style={styles.contactName}>{contactName}</Text>
+              <Text style={styles.contactName}>{event.contactName}</Text>
             </View>
           </View>
 
