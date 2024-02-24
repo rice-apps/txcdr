@@ -19,6 +19,7 @@ export default function Page() {
       <Link href="/dashboard" className="py-2">
         Go to home page
       </Link>
+
     </View>
   );
 }
