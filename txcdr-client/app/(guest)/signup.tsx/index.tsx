@@ -16,7 +16,7 @@ export default function Page() {
 
   return (
     <SafeAreaView>
-      <Text className="text-2xl">Login</Text>
+      <Text className="text-2xl">Sign up</Text>
       <TextInput placeholder="Email" onChangeText={(s) => setEmail(s)} />
       <TextInput
         placeholder="Password"

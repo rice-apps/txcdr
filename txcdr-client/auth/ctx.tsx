@@ -1,13 +1,14 @@
 import React, { createContext, useContext } from "react";
 import { useStorageState } from "./useStorageState";
+import { Session } from "../types/auth";
 
 /**
  * Base context for auth
  */
 export const AuthContext = createContext<{
-  signIn: () => void;
+  signIn: (email: string, password: string) => void;
   signOut: () => void;
-  session?: string | null;
+  session?: Session | null;
   isLoading: boolean;
 }>({
   signIn: () => {},
@@ -41,13 +42,17 @@ export function AuthProvider(props: React.PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
+        signIn: (email: string, password: string) => {
           // Perform sign-in logic here
           console.log("signing in");
-          setSession("xxx");
+          setSession({
+            email,
+            token: "xxx",
+          });
         },
         signOut: () => {
           console.log("signing out");
+          console.log(session?.email, session?.token);
           setSession(null);
         },
         session,

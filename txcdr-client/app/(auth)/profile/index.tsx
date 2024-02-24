@@ -7,7 +7,7 @@ import { router } from "expo-router";
  * @returns Profile page component
  */
 export default function Page() {
-  const { signOut } = useSession();
+  const { signOut, session } = useSession();
   return (
     <View>
       <Text>Profile page</Text>
