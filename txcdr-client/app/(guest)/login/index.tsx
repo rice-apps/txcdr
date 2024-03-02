@@ -32,6 +32,7 @@ export default function Page() {
       >
         <Text>Sign in</Text>
       </Pressable>
+      <Link href={"/signup"}>Don't have an account?</Link>
     </SafeAreaView>
   );
 }
