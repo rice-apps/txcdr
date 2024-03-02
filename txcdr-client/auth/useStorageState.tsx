@@ -6,7 +6,7 @@ import { Session } from "../types/auth";
 type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void];
 
 function useAsyncState<T>(
-  initialValue: [boolean, T | null] = [true, null],
+  initialValue: [boolean, T | null] = [false, null],
 ): UseStateHook<T> {
   return useReducer(
     (
