@@ -91,6 +91,12 @@ interface UpdateFormInput {
     }
 }
 
+interface RemoveFormsInput {
+    input: {
+        ids: string []
+    }
+}
+
 interface CreateAddressInput {
     input: {
         censusBlock: string,
@@ -116,8 +122,29 @@ interface UpdateAddressInput {
     }
 }
 
+interface RemoveAddressesInput {
+    input: {
+        ids: string []
+    }
+}
+
 interface CreateDisasterFormQuestionInput {
     input: {
+        eventId: number,
+        sequence: number,
+        field: string,
+        descriptionOne: string,
+        descriptionTwo: string,
+        questionType: number,
+        validation: string,
+        require: boolean,
+        options: string [],
+    }
+}
+
+interface UpdateDisasterFormQuestionInput {
+    input: {
+        id: string,
         eventId: number,
         sequence: number,
         field: string,
@@ -138,6 +165,15 @@ interface CreateDisasterFormAnswerInput {
     }
 }
 
+interface UpdateDisasterFormAnswerInput {
+    input: {
+        id: string,
+        answer: string,
+        formQuestionId: number,
+        formResponseId: number,
+    }
+}
+
 interface CreateDisasterFormResponseInput {
     input: {
         volunteerId: number,
@@ -145,8 +181,26 @@ interface CreateDisasterFormResponseInput {
     }
 }
 
+interface UpdateDisasterFormResponseInput {
+    input: {
+        id: string,
+        volunteerId: number,
+        eventOnAddressId: number,
+    }
+}
+
 interface CreateEventsOnAddressesInput {
     input: {
+        eventId: number,
+        addressId: number,
+        assignedAt: string,
+        assignedBy: string,
+    }
+}
+
+interface UpdateEventsOnAddressesInput {
+    input: {
+        id: string,
         eventId: number,
         addressId: number,
         assignedAt: string,

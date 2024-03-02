@@ -61,6 +61,10 @@ export const typeDefs = `
         ableToStayHome: Boolean,
     }
 
+    input RemoveFormsInput {
+        ids: [ID],
+    }
+
     type Address {
         id: ID!,
         censusBlock: String,
@@ -93,6 +97,10 @@ export const typeDefs = `
         zipCode: String,
     }
 
+    input RemoveAddressesInput {
+        ids: [ID],
+    }
+
     type DisasterFormQuestions {
         id: ID!,   
         eventId: ID!,    
@@ -107,7 +115,20 @@ export const typeDefs = `
     }
 
     input CreateDisasterFormQuestion {
-        eventId: Int!,
+        eventId: Int,
+        sequence: Int!,
+        field: String!,
+        descriptionOne: String,
+        descriptionTwo: String,
+        questionType: Int!,
+        validation: String,
+        require: Boolean,
+        options: [String],
+    }
+
+    input UpdateDisasterFormQuestion {
+        id: ID!,
+        eventId: Int,
         sequence: Int!,
         field: String!,
         descriptionOne: String,
@@ -127,8 +148,15 @@ export const typeDefs = `
 
     input CreateDisasterFormAnswer {
         answer: String,
-        formQuestionId: Int!,
-        formResponseId: Int!,
+        formQuestionId: Int,
+        formResponseId: Int,
+    }
+
+    input UpdateDisasterFormAnswer {
+        id: ID!,
+        answer: String,
+        formQuestionId: Int,
+        formResponseId: Int,
     }
 
     type DisasterFormResponse {
@@ -142,6 +170,12 @@ export const typeDefs = `
         eventOnAddressId: Int!,
     }
 
+    input UpdateDisasterFormResponse {
+        id: ID!,
+        volunteerId: Int,
+        eventOnAddressId: Int,
+    }
+
     type EventsOnAddresses {
         id: ID!,
         eventId: ID!,
@@ -153,6 +187,14 @@ export const typeDefs = `
     input CreateEventsOnAddresses {
         eventId: Int!,
         addressId: Int!,
+        assignedAt: String,
+        assignedBy: String,
+    }
+
+    input UpdateEventsOnAddresses {
+        id: ID!,
+        eventId: Int,
+        addressId: Int,
         assignedAt: String,
         assignedBy: String,
     }
@@ -226,12 +268,18 @@ export const typeDefs = `
         removeEvent(input: RemoveEventInput!): Event!,
         createForm(input: CreateFormInput!): Form!,
         updateForm(input: UpdateFormInput!): Form!,
+        removeForms(input: RemoveFormsInput!): Int!,
         createAddress(input: CreateAddressInput!): Address!,
         updateAddress(input: UpdateAddressInput!): Address!,
+        removeAddresses(input: RemoveAddressesInput!): Int!,
         createDisasterFormQuestion(input: CreateDisasterFormQuestion!): DisasterFormQuestions!,
+        updateDisasterFormQuestion(input: UpdateDisasterFormQuestion!): DisasterFormQuestions!,
         createDisasterFormAnswer(input: CreateDisasterFormAnswer!): DisasterFormAnswer!,
+        updateDisasterFormAnswer(input: UpdateDisasterFormAnswer!): DisasterFormAnswer!,
         createDisasterFormResponse(input: CreateDisasterFormResponse!): DisasterFormResponse!,
+        updateDisasterFormResponse(input: UpdateDisasterFormResponse!): DisasterFormResponse!,
         createEventsOnAddresses(input: CreateEventsOnAddresses!): EventsOnAddresses!,
+        updateEventsOnAddresses(input: UpdateEventsOnAddresses!): EventsOnAddresses!,
         logout(token: String!): Boolean!,
     }
 `;

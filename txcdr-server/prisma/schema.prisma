@@ -64,10 +64,10 @@ model Address {
 
 model EventsOnAddresses {
   id                Int                   @id @default(autoincrement()) 
-  event             Event                 @relation(fields: [eventId], references: [id])
-  eventId           Int                   // relation scalar field (used in the `@relation` attribute above)
-  address           Address               @relation(fields: [addressId], references: [id])
-  addressId         Int                   // relation scalar field (used in the `@relation` attribute above)
+  event             Event?                @relation(fields: [eventId], references: [id])
+  eventId           Int?                  // relation scalar field (used in the `@relation` attribute above)
+  address           Address?              @relation(fields: [addressId], references: [id])
+  addressId         Int?                  // relation scalar field (used in the `@relation` attribute above)
   assignedAt        DateTime              @default(now())
   assignedBy        String
   formResponse      DisasterFormResponse?
@@ -85,27 +85,27 @@ model DisasterFormQuestion {
   validation        String
   require           Boolean
   options           String[]
-  eventId           Int                   @unique
+  eventId           Int?                  @unique
   answers           DisasterFormAnswer[]       
-  event             Event                 @relation(fields: [eventId], references: [id])  
+  event             Event?                @relation(fields: [eventId], references: [id])  
 }
 
 model DisasterFormResponse {
   id                Int                   @id @default(autoincrement()) 
-  volunteerId       Int                   @unique
-  eventOnAddressId  Int                   @unique
-  volunteer         User                  @relation(fields: [volunteerId], references: [id])
-  eventOnAddress    EventsOnAddresses     @relation(fields: [eventOnAddressId], references: [id])
+  volunteerId       Int?                  @unique
+  eventOnAddressId  Int?                  @unique
+  volunteer         User?                 @relation(fields: [volunteerId], references: [id])
+  eventOnAddress    EventsOnAddresses?    @relation(fields: [eventOnAddressId], references: [id])
   answers           DisasterFormAnswer[] 
 } 
 
 model DisasterFormAnswer {
   id                Int                   @id @default(autoincrement()) 
   answer            String
-  formQuestionId    Int                   @unique
-  formResponseId    Int                   @unique
-  formQuestion      DisasterFormQuestion  @relation(fields: [formQuestionId], references: [id])
-  formResponse      DisasterFormResponse  @relation(fields: [formResponseId], references: [id])
+  formQuestionId    Int?                  @unique
+  formResponseId    Int?                  @unique
+  formQuestion      DisasterFormQuestion? @relation(fields: [formQuestionId], references: [id])
+  formResponse      DisasterFormResponse? @relation(fields: [formResponseId], references: [id])
 } 
 
 enum Role {

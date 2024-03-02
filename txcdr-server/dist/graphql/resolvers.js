@@ -131,6 +131,10 @@ export const resolvers = {
                 data: { ...input, id: parseInt(input.id) }
             });
         },
+        removeForms: async (_, { input }) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.form.deleteMany({ where: { id: { in: ids } } })).count;
+        },
         createAddress: async (_, { input }) => {
             return await prisma.address.create({ data: input });
         },
@@ -140,17 +144,45 @@ export const resolvers = {
                 data: { ...input, id: parseInt(input.id) }
             });
         },
+        removeAddresses: async (_, { input }) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.address.deleteMany({ where: { id: { in: ids } } })).count;
+        },
         createDisasterFormQuestion: async (_, { input }) => {
             return await prisma.disasterFormQuestion.create({ data: input });
+        },
+        updateDisasterFormQuestion: async (_, { input }) => {
+            return await prisma.disasterFormQuestion.update({
+                where: { id: parseInt(input.id) },
+                data: { ...input, id: parseInt(input.id) }
+            });
         },
         createDisasterFormAnswer: async (_, { input }) => {
             return await prisma.disasterFormAnswer.create({ data: input });
         },
+        updateDisasterFormAnswer: async (_, { input }) => {
+            return await prisma.disasterFormAnswer.update({
+                where: { id: parseInt(input.id) },
+                data: { ...input, id: parseInt(input.id) }
+            });
+        },
         createDisasterFormResponse: async (_, { input }) => {
             return await prisma.disasterFormResponse.create({ data: input });
         },
+        updateDisasterFormResponse: async (_, { input }) => {
+            return await prisma.disasterFormResponse.update({
+                where: { id: parseInt(input.id) },
+                data: { ...input, id: parseInt(input.id) }
+            });
+        },
         createEventsOnAddresses: async (_, { input }) => {
             return await prisma.eventsOnAddresses.create({ data: input });
-        }
+        },
+        updateEventsOnAddresses: async (_, { input }) => {
+            return await prisma.eventsOnAddresses.update({
+                where: { id: parseInt(input.id) },
+                data: { ...input, id: parseInt(input.id) }
+            });
+        },
     }
 };

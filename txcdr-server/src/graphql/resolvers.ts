@@ -161,6 +161,11 @@ export const resolvers = {
             });
         },
 
+        removeForms: async (_: any, { input }: RemoveFormsInput) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.form.deleteMany({ where: { id: { in: ids } } })).count;
+        },
+
         createAddress: async (_: any, { input }: CreateAddressInput) => {
             
             return await prisma.address.create({ data: input });
@@ -173,9 +178,21 @@ export const resolvers = {
             });
         },
 
+        removeAddresses: async (_: any, { input }: RemoveAddressesInput) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.address.deleteMany({ where: { id: { in: ids } } })).count;
+        },
+
         createDisasterFormQuestion: async (_: any, { input }: CreateDisasterFormQuestionInput) => {
 
             return await prisma.disasterFormQuestion.create({ data: input });
+        },
+
+        updateDisasterFormQuestion: async (_: any, { input }: UpdateDisasterFormQuestionInput) => {
+            return await prisma.disasterFormQuestion.update({ 
+                where: { id: parseInt(input.id) }, 
+                data: { ...input, id: parseInt(input.id) }
+            });
         },
 
         createDisasterFormAnswer: async (_: any, { input }: CreateDisasterFormAnswerInput) => {
@@ -183,15 +200,36 @@ export const resolvers = {
             return await prisma.disasterFormAnswer.create({ data: input });
         },
 
+        updateDisasterFormAnswer: async (_: any, { input }: UpdateDisasterFormAnswerInput) => {
+            return await prisma.disasterFormAnswer.update({ 
+                where: { id: parseInt(input.id) }, 
+                data: { ...input, id: parseInt(input.id) }
+            });
+        },
+
         createDisasterFormResponse: async (_: any, { input }: CreateDisasterFormResponseInput) => {
             
             return await prisma.disasterFormResponse.create({ data: input });
         },
 
+        updateDisasterFormResponse: async (_: any, { input }: UpdateDisasterFormResponseInput) => {
+            return await prisma.disasterFormResponse.update({ 
+                where: { id: parseInt(input.id) }, 
+                data: { ...input, id: parseInt(input.id) }
+            });
+        },
+
         createEventsOnAddresses: async (_: any, { input }: CreateEventsOnAddressesInput) => {
             
             return await prisma.eventsOnAddresses.create({ data: input });
-        }
+        },
+
+        updateEventsOnAddresses: async (_: any, { input }: UpdateEventsOnAddressesInput) => {
+            return await prisma.eventsOnAddresses.update({ 
+                where: { id: parseInt(input.id) }, 
+                data: { ...input, id: parseInt(input.id) }
+            });
+        },
     }
 };
 
