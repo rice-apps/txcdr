@@ -6,13 +6,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput } from "react-native-gesture-handler";
 
 /**
- * Login page
- * @returns Login page component
+ * Sign up page
+ * @returns Sign up page component
  */
 export default function Page() {
   const { signIn } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // TODO: figure out if we need these fields on this page
+  // const [name, setName] = useState("");
+  // const [phone, setPhone] = useState("");
+  // const [address, setAddress] = useState("");
 
   return (
     <SafeAreaView>
@@ -26,6 +31,7 @@ export default function Page() {
       <Pressable
         className="px-4 py-2 bg-slate-400"
         onPress={() => {
+          // signUp({ input: { email: email }, password: password });
           signIn(email, password);
           router.replace("/dashboard");
         }}
