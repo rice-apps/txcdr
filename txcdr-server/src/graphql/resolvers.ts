@@ -195,6 +195,11 @@ export const resolvers = {
             });
         },
 
+        removeDisasterFormQuestions: async (_: any, { input }: RemoveDisasterFormQuestionsInput) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.disasterFormQuestion.deleteMany({ where: { id: { in: ids } } })).count;
+        },
+
         createDisasterFormAnswer: async (_: any, { input }: CreateDisasterFormAnswerInput) => {
             
             return await prisma.disasterFormAnswer.create({ data: input });
@@ -205,6 +210,11 @@ export const resolvers = {
                 where: { id: parseInt(input.id) }, 
                 data: { ...input, id: parseInt(input.id) }
             });
+        },
+
+        removeDisasterFormAnswers: async (_: any, { input }: RemoveDisasterFormAnswersInput) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.disasterFormAnswer.deleteMany({ where: { id: { in: ids } } })).count;
         },
 
         createDisasterFormResponse: async (_: any, { input }: CreateDisasterFormResponseInput) => {
@@ -219,6 +229,11 @@ export const resolvers = {
             });
         },
 
+        removeDisasterFormResponses: async (_: any, { input }: RemoveDisasterFormResponsesInput) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.disasterFormResponse.deleteMany({ where: { id: { in: ids } } })).count;
+        },
+
         createEventsOnAddresses: async (_: any, { input }: CreateEventsOnAddressesInput) => {
             
             return await prisma.eventsOnAddresses.create({ data: input });
@@ -229,6 +244,11 @@ export const resolvers = {
                 where: { id: parseInt(input.id) }, 
                 data: { ...input, id: parseInt(input.id) }
             });
+        },
+
+        removeEventsOnAddresses: async (_: any, { input }: RemoveEventsOnAddressesInput) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.eventsOnAddresses.deleteMany({ where: { id: { in: ids } } })).count;
         },
     }
 };

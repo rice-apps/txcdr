@@ -85,14 +85,14 @@ model DisasterFormQuestion {
   validation        String
   require           Boolean
   options           String[]
-  eventId           Int?                  @unique
+  eventId           Int?                  
   answers           DisasterFormAnswer[]       
   event             Event?                @relation(fields: [eventId], references: [id])  
 }
 
 model DisasterFormResponse {
   id                Int                   @id @default(autoincrement()) 
-  volunteerId       Int?                  @unique
+  volunteerId       Int?                  
   eventOnAddressId  Int?                  @unique
   volunteer         User?                 @relation(fields: [volunteerId], references: [id])
   eventOnAddress    EventsOnAddresses?    @relation(fields: [eventOnAddressId], references: [id])
@@ -102,8 +102,8 @@ model DisasterFormResponse {
 model DisasterFormAnswer {
   id                Int                   @id @default(autoincrement()) 
   answer            String
-  formQuestionId    Int?                  @unique
-  formResponseId    Int?                  @unique
+  formQuestionId    Int?                  
+  formResponseId    Int?                  
   formQuestion      DisasterFormQuestion? @relation(fields: [formQuestionId], references: [id])
   formResponse      DisasterFormResponse? @relation(fields: [formResponseId], references: [id])
 } 

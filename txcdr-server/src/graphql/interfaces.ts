@@ -157,6 +157,12 @@ interface UpdateDisasterFormQuestionInput {
     }
 }
 
+interface RemoveDisasterFormQuestionsInput {
+    input: {
+        ids: string []
+    }
+}
+
 interface CreateDisasterFormAnswerInput {
     input: {
         answer: string,
@@ -174,6 +180,12 @@ interface UpdateDisasterFormAnswerInput {
     }
 }
 
+interface RemoveDisasterFormAnswersInput {
+    input: {
+        ids: string []
+    }
+}
+
 interface CreateDisasterFormResponseInput {
     input: {
         volunteerId: number,
@@ -186,6 +198,12 @@ interface UpdateDisasterFormResponseInput {
         id: string,
         volunteerId: number,
         eventOnAddressId: number,
+    }
+}
+
+interface RemoveDisasterFormResponsesInput {
+    input: {
+        ids: string []
     }
 }
 
@@ -205,5 +223,11 @@ interface UpdateEventsOnAddressesInput {
         addressId: number,
         assignedAt: string,
         assignedBy: string,
+    }
+}
+
+interface RemoveEventsOnAddressesInput {
+    input: {
+        ids: string []
     }
 }

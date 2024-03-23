@@ -139,11 +139,15 @@ export const typeDefs = `
         options: [String],
     }
 
+    input RemoveDisasterFormQuestionsInput {
+        ids: [ID],
+    }
+
     type DisasterFormAnswer {
         id: ID!, 
         answer: String,
-        formQuestionId: ID!,
-        formResponseId: ID!,
+        formQuestionId: ID,
+        formResponseId: ID,
     }
 
     input CreateDisasterFormAnswer {
@@ -159,15 +163,19 @@ export const typeDefs = `
         formResponseId: Int,
     }
 
+    input RemoveDisasterFormAnswersInput {
+        ids: [ID],
+    }
+
     type DisasterFormResponse {
         id: ID!,
-        volunteerId: ID!,
-        eventOnAddressId: ID!,
+        volunteerId: ID,
+        eventOnAddressId: ID,
     }
 
     input CreateDisasterFormResponse {
-        volunteerId: Int!,
-        eventOnAddressId: Int!,
+        volunteerId: Int,
+        eventOnAddressId: Int,
     }
 
     input UpdateDisasterFormResponse {
@@ -176,19 +184,27 @@ export const typeDefs = `
         eventOnAddressId: Int,
     }
 
+    input RemoveDisasterFormResponsesInput {
+        ids: [ID],
+    }
+
     type EventsOnAddresses {
         id: ID!,
-        eventId: ID!,
-        addressId: ID!,
+        eventId: ID,
+        addressId: ID,
         assignedAt: String,
         assignedBy: String,
     }
 
     input CreateEventsOnAddresses {
-        eventId: Int!,
-        addressId: Int!,
+        eventId: Int,
+        addressId: Int,
         assignedAt: String,
         assignedBy: String,
+    }
+
+    input RemoveEventsOnAddressesInput {
+        ids: [ID],
     }
 
     input UpdateEventsOnAddresses {
@@ -274,12 +290,16 @@ export const typeDefs = `
         removeAddresses(input: RemoveAddressesInput!): Int!,
         createDisasterFormQuestion(input: CreateDisasterFormQuestion!): DisasterFormQuestions!,
         updateDisasterFormQuestion(input: UpdateDisasterFormQuestion!): DisasterFormQuestions!,
+        removeDisasterFormQuestions(input: RemoveDisasterFormQuestionsInput!): Int!,       
         createDisasterFormAnswer(input: CreateDisasterFormAnswer!): DisasterFormAnswer!,
         updateDisasterFormAnswer(input: UpdateDisasterFormAnswer!): DisasterFormAnswer!,
+        removeDisasterFormAnswers(input: RemoveDisasterFormAnswersInput!): Int!,
         createDisasterFormResponse(input: CreateDisasterFormResponse!): DisasterFormResponse!,
         updateDisasterFormResponse(input: UpdateDisasterFormResponse!): DisasterFormResponse!,
+        removeDisasterFormResponses(input: RemoveDisasterFormResponsesInput!): Int!,
         createEventsOnAddresses(input: CreateEventsOnAddresses!): EventsOnAddresses!,
         updateEventsOnAddresses(input: UpdateEventsOnAddresses!): EventsOnAddresses!,
+        removeEventsOnAddresses(input: RemoveEventsOnAddressesInput!): Int!,
         logout(token: String!): Boolean!,
     }
 `;

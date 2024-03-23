@@ -157,6 +157,10 @@ export const resolvers = {
                 data: { ...input, id: parseInt(input.id) }
             });
         },
+        removeDisasterFormQuestions: async (_, { input }) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.disasterFormQuestion.deleteMany({ where: { id: { in: ids } } })).count;
+        },
         createDisasterFormAnswer: async (_, { input }) => {
             return await prisma.disasterFormAnswer.create({ data: input });
         },
@@ -165,6 +169,10 @@ export const resolvers = {
                 where: { id: parseInt(input.id) },
                 data: { ...input, id: parseInt(input.id) }
             });
+        },
+        removeDisasterFormAnswers: async (_, { input }) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.disasterFormAnswer.deleteMany({ where: { id: { in: ids } } })).count;
         },
         createDisasterFormResponse: async (_, { input }) => {
             return await prisma.disasterFormResponse.create({ data: input });
@@ -175,6 +183,10 @@ export const resolvers = {
                 data: { ...input, id: parseInt(input.id) }
             });
         },
+        removeDisasterFormResponses: async (_, { input }) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.disasterFormResponse.deleteMany({ where: { id: { in: ids } } })).count;
+        },
         createEventsOnAddresses: async (_, { input }) => {
             return await prisma.eventsOnAddresses.create({ data: input });
         },
@@ -183,6 +195,10 @@ export const resolvers = {
                 where: { id: parseInt(input.id) },
                 data: { ...input, id: parseInt(input.id) }
             });
+        },
+        removeEventsOnAddresses: async (_, { input }) => {
+            const ids = input.ids.map(id => parseInt(id));
+            return (await prisma.eventsOnAddresses.deleteMany({ where: { id: { in: ids } } })).count;
         },
     }
 };
