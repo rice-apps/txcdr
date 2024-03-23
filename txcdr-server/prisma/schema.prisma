@@ -8,36 +8,36 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String?
-  phone   String?
-  address String? 
-  isAuth  Boolean  @default(false) 
-  role    Role     @default(USER) 
-  forms   Form[]
+  id                Int                   @id @default(autoincrement())
+  email             String                @unique
+  name              String?
+  phone             String?
+  address           String? 
+  isAuth            Boolean               @default(false) 
+  role              Role                  @default(USER) 
+  forms             Form[]
+  responses         DisasterFormResponse[]
 }
 
 model Event {
-  id           Int         @id @default(autoincrement())
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  isActive     Boolean     @default(true)
-  location     String
-  description  String
-  title        String
-  nHouses      Int
-  forms        Form[]
+  id                Int                   @id @default(autoincrement())
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  description       String
+  title             String
+  adresses          EventsOnAddresses[]
+  forms             Form[]
+  disasterQuestions DisasterFormQuestion[]
 }
 
 model Form {
-  id                Int         @id @default(autoincrement())
+  id                Int                   @id @default(autoincrement())
   
-  userId            Int
-  user              User        @relation(fields: [userId], references: [id])
+  userId            Int?
+  user              User?                 @relation(fields: [userId], references: [id])
 
-  eventId           Int         
-  event             Event       @relation(fields: [eventId], references: [id])
+  eventId           Int?         
+  event             Event?                @relation(fields: [eventId], references: [id])
 
   impacted          Boolean?  
   residentName      String?
@@ -49,6 +49,64 @@ model Form {
   floodWaterHeight  String?
   ableToStayHome    Boolean?
 }
+
+model Address {
+  id                Int                   @id @default(autoincrement())
+  censusBlock       String
+  number            String
+  street            String
+  type              String
+  city              String
+  state             String
+  zipCode           String
+  events            EventsOnAddresses[]
+}
+
+model EventsOnAddresses {
+  id                Int                   @id @default(autoincrement()) 
+  event             Event?                @relation(fields: [eventId], references: [id])
+  eventId           Int?                  // relation scalar field (used in the `@relation` attribute above)
+  address           Address?              @relation(fields: [addressId], references: [id])
+  addressId         Int?                  // relation scalar field (used in the `@relation` attribute above)
+  assignedAt        DateTime              @default(now())
+  assignedBy        String
+  formResponse      DisasterFormResponse?
+
+  //@@id([eventId, addressId])
+}
+
+model DisasterFormQuestion {
+  id                Int                   @id @default(autoincrement())            
+  sequence          Int
+  field             String
+  descriptionOne    String
+  descriptionTwo    String
+  questionType      Int
+  validation        String
+  require           Boolean
+  options           String[]
+  eventId           Int?                  
+  answers           DisasterFormAnswer[]       
+  event             Event?                @relation(fields: [eventId], references: [id])  
+}
+
+model DisasterFormResponse {
+  id                Int                   @id @default(autoincrement()) 
+  volunteerId       Int?                  
+  eventOnAddressId  Int?                  @unique
+  volunteer         User?                 @relation(fields: [volunteerId], references: [id])
+  eventOnAddress    EventsOnAddresses?    @relation(fields: [eventOnAddressId], references: [id])
+  answers           DisasterFormAnswer[] 
+} 
+
+model DisasterFormAnswer {
+  id                Int                   @id @default(autoincrement()) 
+  answer            String
+  formQuestionId    Int?                  
+  formResponseId    Int?                  
+  formQuestion      DisasterFormQuestion? @relation(fields: [formQuestionId], references: [id])
+  formResponse      DisasterFormResponse? @relation(fields: [formResponseId], references: [id])
+} 
 
 enum Role {
   USER
