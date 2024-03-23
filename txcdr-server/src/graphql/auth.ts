@@ -37,15 +37,10 @@ const getSupabaseAndDbUser = async (token: string) => {
 };
 
 const baseAuthVerification: BaseAuthVerificationFunction = (dbUser: User | null, user: AuthUser | null) => {
-    if (user != null && user.aud === 'authenticated' && dbUser) {
-        const lastSignInTime = new Date(user?.last_sign_in_at!).getTime();
-        const currentTime = new Date().getTime();
-        const logginTimeHoursInMs = 12 * 60 * 60 * 1000;
-
-        if (currentTime - lastSignInTime <= logginTimeHoursInMs && dbUser?.isAuth) {
-            return true;
-        }
-    }
+  if (user != null && user.aud === 'authenticated' && dbUser) {
+    const lastSignInTime = new Date(user?.last_sign_in_at!).getTime();
+    const currentTime = new Date().getTime();
+    const logginTimeHoursInMs = 12 * 60 * 60 * 1000;
 
     if (currentTime - lastSignInTime <= logginTimeHoursInMs && dbUser?.isAuth) {
       return true;
