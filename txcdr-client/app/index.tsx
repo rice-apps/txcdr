@@ -16,7 +16,7 @@ export default function Page() {
       <Link href="/login" className="py-2">
         Go to login page
       </Link>
-      <Link href="/home" className="py-2">
+      <Link href="/dashboard" className="py-2">
         Go to home page
       </Link>
     </View>
