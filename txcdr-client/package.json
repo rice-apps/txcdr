@@ -7,9 +7,7 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
-    "compile": "graphql-codegen",
-    "watch": "graphql-codegen -w"
+    "web": "expo start --web"
   },
   "dependencies": {
     "@apollo/client": "^3.8.10",
@@ -33,9 +31,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@graphql-codegen/cli": "^5.0.2",
-    "@graphql-codegen/client-preset": "^4.2.4",
-    "@graphql-typed-document-node/core": "^3.2.0",
     "@types/react": "~18.2.14",
     "prettier": "3.0.3",
     "tailwindcss": "3.3.2",
