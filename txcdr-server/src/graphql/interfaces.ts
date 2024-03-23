@@ -8,9 +8,9 @@ interface CreateUserInput {
   password: string;
   input: {
     email: string;
-    name: string;
-    phone: string;
-    address: string;
+    name?: string;
+    phone?: string;
+    address?: string;
   };
 }
 
