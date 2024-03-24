@@ -48,4 +48,7 @@ convertExcelToJSON(filePath).then((questions) => {
   console.log(JSON.stringify(questions, null, 2));
 });
 
+// tsc parser.tsx
+// node parser.js
+
 export default convertExcelToJSON;
