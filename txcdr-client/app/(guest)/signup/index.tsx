@@ -19,10 +19,17 @@ export default function Page() {
   // const [phone, setPhone] = useState("");
   // const [address, setAddress] = useState("");
   const onSubmit = () => {
-    signUp({ input: { email: email }, password: password })
+    signUp({ input: { email }, password })
       .then((res) => {
         console.log(res);
-        router.replace("/dashboard");
+        signIn({ input: { email, password } })
+          .then((res) => {
+            console.log(res);
+            router.replace("/dashboard");
+          })
+          .catch((e) => {
+            console.log("login failed: " + e);
+          });
       })
       .catch((e) => {
         console.log("failed " + e);

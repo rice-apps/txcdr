@@ -26,8 +26,9 @@ export default function Page() {
       <Pressable
         className="px-4 py-2 bg-slate-400"
         onPress={() => {
-          signIn(email, password);
-          router.replace("/dashboard");
+          signIn({ input: { email, password } }).then((res) => {
+            router.replace("/dashboard");
+          });
         }}
       >
         <Text>Sign in</Text>

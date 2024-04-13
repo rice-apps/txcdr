@@ -1,7 +1,10 @@
 import React, { createContext, useContext } from "react";
 import { useStorageState } from "./useStorageState";
 import { Session } from "../types/auth";
-import { CreateUserInput } from "../../txcdr-server/src/graphql/interfaces";
+import {
+  CreateUserInput,
+  LoginUserInput,
+} from "../../txcdr-server/src/graphql/interfaces";
 import { apolloClient } from "../graphql/client";
 import { gql } from "@apollo/client";
 
@@ -9,13 +12,13 @@ import { gql } from "@apollo/client";
  * Base context for auth
  */
 export const AuthContext = createContext<{
-  signIn: (email: string, password: string) => Promise<boolean>;
+  signIn: (input: LoginUserInput) => Promise<string>;
   signOut: () => Promise<boolean>;
   signUp: (input: CreateUserInput) => Promise<number>;
   session?: Session | null;
   isLoading: boolean;
 }>({
-  signIn: async () => false,
+  signIn: async () => "",
   signOut: async () => false,
   signUp: async () => -1,
   session: null,
@@ -47,14 +50,27 @@ export function AuthProvider(props: React.PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: async (email: string, password: string) => {
-          // Perform sign-in logic here
-          console.log("signing in");
-          setSession({
-            email,
-            token: "xxx",
+        signIn: async (input: LoginUserInput) => {
+          const LOGIN = gql`
+            mutation Login($input: LoginUserInput!) {
+              login(input: $input)
+            }
+          `;
+          console.log("hello from login");
+
+          return new Promise((resolve, reject) => {
+            apolloClient
+              .mutate({ mutation: LOGIN, variables: input })
+              .then((res) => {
+                console.log(res);
+                setSession({
+                  email: input.input.email,
+                  token: res["data"]["login"],
+                });
+                resolve(res["data"]["login"]);
+              })
+              .catch((e) => reject(e));
           });
-          return true;
         },
         signOut: async () => {
           console.log("signing out");
