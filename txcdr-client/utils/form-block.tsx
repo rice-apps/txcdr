@@ -29,13 +29,12 @@ import {
 export default function FormBlock(props: FormBlockProps) {
 
     const [isCollapsed, setIsCollapsed] = useState(false);
-
-    const formName = "Form Name";
     
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
 
       };
+    const [userInput, onChangeUserInput] = useState<String[]>([]); 
 
     const [firstName, onChangeFirstName] = React.useState('John');
     const [lastName, onChangeLastName] = React.useState('Doe');
@@ -43,25 +42,25 @@ export default function FormBlock(props: FormBlockProps) {
     return (
         <View style={styles.block}>
             <View style={[styles.headerBlock, isCollapsed ? styles.collapsedHeader : styles.expandedHeader]}>                
-                <Button onPress={toggleCollapse} title = {formName} color = "white"></Button>
+                <Button onPress={toggleCollapse} title = {props.formName} color = "white"></Button>
             </View>
             <Collapsible collapsed={isCollapsed}>
                 <View style={{padding: 10}}>
+
                     <Text>First Name</Text>
                     <TextInput
         style={styles.input}
         onChangeText={onChangeFirstName}
         value={firstName}
       />
-
                     <Text>Last Name</Text>
                     <TextInput
         style={styles.input}
         onChangeText={onChangeLastName}
         value={lastName}
       />
-                    
 
+                    
                 </View>
             </Collapsible>
         </View>
@@ -76,12 +75,12 @@ const styles = StyleSheet.create({
         left: 20,
         borderWidth: 1,
         borderRadius: 15,
-        shadowOpacity: 0.5,
-        shadowRadius: 3,
-        shadowOffset: {
-            width: 1,
-            height: -1,
-        }
+        // shadowOpacity: 0.5,
+        // shadowRadius: 3,
+        // shadowOffset: {
+        //     width: 1,
+        //     height: -1,
+        // }
 
       },
 

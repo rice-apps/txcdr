@@ -46,11 +46,11 @@ export default function Form() {
 
       <FormBlock formName="Personal Information"></FormBlock>
       <View style={styles.spacer}></View>
-      <FormBlock></FormBlock>
+      <FormBlock formName="Contact Information"></FormBlock>
       <View style={styles.spacer}></View>
-      <FormBlock></FormBlock>
+      <FormBlock formName="Property Information"></FormBlock>
       <View style={styles.spacer}></View>
-      <FormBlock></FormBlock>
+      <FormBlock formName="Impact Assessment"></FormBlock>
       <View style={styles.spacer}></View>
 
 
