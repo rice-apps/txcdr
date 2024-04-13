@@ -106,6 +106,11 @@ export const resolvers = {
                 role: 'USER'
             });
             console.log(res);
+
+            if (res.error?.name) {
+                throw new GraphQLError(res.error?.message);
+            };
+
             return await prisma.user.create({ data: input });
         }, 
 
