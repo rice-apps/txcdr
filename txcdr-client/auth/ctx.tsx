@@ -7,21 +7,23 @@ import { useStorageState } from "./useStorageState";
 export const AuthContext = createContext<{
   signIn: () => void;
   signOut: () => void;
+  editProfile: () => void;
   session?: string | null;
   isLoading: boolean;
-  user: {
-    name: string;
-    profileImage: string;
-  };
+  // user: {
+  //   name: string;
+  //   profileImage: string;
+  // };
 }>({
   signIn: () => {},
   signOut: () => {},
+  editProfile: () => {},
   session: null,
   isLoading: false,
-  user: {
-    name: "testing",
-    profileImage: "",
-  },
+  // user: {
+  //   name: "testing",
+  //   profileImage: "",
+  // },
 });
 
 /**
@@ -57,6 +59,9 @@ export function AuthProvider(props: React.PropsWithChildren) {
         signOut: () => {
           console.log("signing out");
           setSession(null);
+        },
+        editProfile: () => {
+          console.log("editing profile");
         },
         session,
         isLoading,

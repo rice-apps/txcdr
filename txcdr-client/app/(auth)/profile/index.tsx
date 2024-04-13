@@ -1,7 +1,10 @@
 import { Pressable, Text, View, Image, StyleSheet } from "react-native";
 import { useSession } from "../../../auth/ctx";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
+import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
+// import EditProfilePage from 'editProfile/index.tsx';
 
 const Card = ({ title, children }: { title: string, children: React.ReactNode }) => (
   <View style={styles.cardContainer}>
@@ -13,6 +16,20 @@ const Card = ({ title, children }: { title: string, children: React.ReactNode })
     </View>
   </View>
 );
+
+// const Stack = createStackNavigator();
+
+// export default function App() {
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator initialRouteName="Profile">
+//         <Stack.Screen name="Profile" component={YourProfilePage} />
+//         <Stack.Screen name="EditProfile" component={EditProfilePage} />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// }
+
 /**
  * The volunteer profile page
  * @returns Profile page component
@@ -27,6 +44,8 @@ export default function Page() {
         <Text> UserName </Text>
         <Pressable style={styles.pencilIcon} onPress={() => {
           editProfile();
+          // router.replace("/map");
+          router.replace("/profile/editProfile");
         }}>
           <Text> Edit Profile </Text>
         </Pressable>
@@ -67,13 +86,18 @@ export default function Page() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     // padding: 20,
   },
   profileHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
+    
     height: 75,
+    // display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // height: 100,
   },
   profileImageContainer: {
     width: 50,
