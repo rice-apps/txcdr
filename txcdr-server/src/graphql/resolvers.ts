@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { GraphQLError } from "graphql";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseKey, supabaseUrl } from "./config.js";
+import { authResolverWrapper } from "./helpers.js";
 
 const prisma = new PrismaClient();
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -74,6 +75,7 @@ export const resolvers = {
                 email: input.email,
                 password: input.password               
             });
+            console.log(res);
 
             await prisma.user.update({
                 where: { email: input.email }, 
@@ -103,150 +105,173 @@ export const resolvers = {
                 email_confirm: true,
                 role: 'USER'
             });
+            console.log(res);
             return await prisma.user.create({ data: input });
         }, 
 
-        removeUser: async (_: any, { input }: RemoveUserInput) => {
-            return await prisma.user.delete({ where: { id: parseInt(input.id) } });
+        removeUser: async (_: any, { input }: RemoveUserInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.user.delete({ where: { id: parseInt(input.id) } });
+            });
         },
 
-        removeAll: async () => {
-            return await prisma.user.deleteMany();
+        removeAll: async (_: any, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.user.deleteMany();
+            });
         },
 
         createEvent: async (_: any, { input }: CreateEventInput, context: Context) => {
-            if (context.isAuthenticated && context.role === 'USER') {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
                 return await prisma.event.create({ data: input });
-            } else {
-                throw new GraphQLError('User is not authenticated', {
-                    extensions: {
-                        code: 'UNAUTHENTICATED',
-                        http: { status: 401 },
-                    },
-                });
-            }
+            });
         },
 
-        updateEvent: async (_: any, { input }: UpdateEventInput) => {
-            return await prisma.event.update({ 
-                where: { id: parseInt(input.id) }, 
-                data: { ...input, id: parseInt(input.id) }
+        updateEvent: async (_: any, { input }: UpdateEventInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.event.update({ 
+                    where: { id: parseInt(input.id) }, 
+                    data: { ...input, id: parseInt(input.id) }
+                });
             });
         },
 
         removeEvent: async (_: any, { input }: RemoveEventInput, context: Context) => {
-            if (context.isAuthenticated && context.role === 'ADMIN') {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
                 return await prisma.event.delete({ where: { id: parseInt(input.id) } });
-            } else {
-                throw new GraphQLError('User is not authenticated', {
-                    extensions: {
-                        code: 'UNAUTHENTICATED',
-                        http: { status: 401 },
-                    },
+            });
+        },
+
+        createForm: async (_: any, { input }: CreateFormInput, context: Context) => {  
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {          
+                return await prisma.form.create({ data: input });
+            });
+        },
+
+        updateForm: async (_: any, { input }: UpdateFormInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.form.update({ 
+                    where: { id: parseInt(input.id) }, 
+                    data: { ...input, id: parseInt(input.id) }
                 });
-            }
-        },
-
-        createForm: async (_: any, { input }: CreateFormInput) => {
-            
-            return await prisma.form.create({ data: input });
-        },
-
-        updateForm: async (_: any, { input }: UpdateFormInput) => {
-            return await prisma.form.update({ 
-                where: { id: parseInt(input.id) }, 
-                data: { ...input, id: parseInt(input.id) }
             });
         },
 
-        removeForms: async (_: any, { input }: RemoveFormsInput) => {
-            const ids = input.ids.map(id => parseInt(id));
-            return (await prisma.form.deleteMany({ where: { id: { in: ids } } })).count;
-        },
-
-        createAddress: async (_: any, { input }: CreateAddressInput) => {
-            
-            return await prisma.address.create({ data: input });
-        },
-
-        updateAddress: async (_: any, { input }: UpdateAddressInput) => {
-            return await prisma.address.update({ 
-                where: { id: parseInt(input.id) }, 
-                data: { ...input, id: parseInt(input.id) }
+        removeForms: async (_: any, { input }: RemoveFormsInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                const ids = input.ids.map(id => parseInt(id));
+                return (await prisma.form.deleteMany({ where: { id: { in: ids } } })).count;
             });
         },
 
-        removeAddresses: async (_: any, { input }: RemoveAddressesInput) => {
-            const ids = input.ids.map(id => parseInt(id));
-            return (await prisma.address.deleteMany({ where: { id: { in: ids } } })).count;
-        },
-
-        createDisasterFormQuestion: async (_: any, { input }: CreateDisasterFormQuestionInput) => {
-
-            return await prisma.disasterFormQuestion.create({ data: input });
-        },
-
-        updateDisasterFormQuestion: async (_: any, { input }: UpdateDisasterFormQuestionInput) => {
-            return await prisma.disasterFormQuestion.update({ 
-                where: { id: parseInt(input.id) }, 
-                data: { ...input, id: parseInt(input.id) }
+        createAddress: async (_: any, { input }: CreateAddressInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.address.create({ data: input });
             });
         },
 
-        removeDisasterFormQuestions: async (_: any, { input }: RemoveDisasterFormQuestionsInput) => {
-            const ids = input.ids.map(id => parseInt(id));
-            return (await prisma.disasterFormQuestion.deleteMany({ where: { id: { in: ids } } })).count;
-        },
-
-        createDisasterFormAnswer: async (_: any, { input }: CreateDisasterFormAnswerInput) => {
-            
-            return await prisma.disasterFormAnswer.create({ data: input });
-        },
-
-        updateDisasterFormAnswer: async (_: any, { input }: UpdateDisasterFormAnswerInput) => {
-            return await prisma.disasterFormAnswer.update({ 
-                where: { id: parseInt(input.id) }, 
-                data: { ...input, id: parseInt(input.id) }
+        updateAddress: async (_: any, { input }: UpdateAddressInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.address.update({ 
+                    where: { id: parseInt(input.id) }, 
+                    data: { ...input, id: parseInt(input.id) }
+                });
             });
         },
 
-        removeDisasterFormAnswers: async (_: any, { input }: RemoveDisasterFormAnswersInput) => {
-            const ids = input.ids.map(id => parseInt(id));
-            return (await prisma.disasterFormAnswer.deleteMany({ where: { id: { in: ids } } })).count;
-        },
-
-        createDisasterFormResponse: async (_: any, { input }: CreateDisasterFormResponseInput) => {
-            
-            return await prisma.disasterFormResponse.create({ data: input });
-        },
-
-        updateDisasterFormResponse: async (_: any, { input }: UpdateDisasterFormResponseInput) => {
-            return await prisma.disasterFormResponse.update({ 
-                where: { id: parseInt(input.id) }, 
-                data: { ...input, id: parseInt(input.id) }
+        removeAddresses: async (_: any, { input }: RemoveAddressesInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                const ids = input.ids.map(id => parseInt(id));
+                return (await prisma.address.deleteMany({ where: { id: { in: ids } } })).count;
             });
         },
 
-        removeDisasterFormResponses: async (_: any, { input }: RemoveDisasterFormResponsesInput) => {
-            const ids = input.ids.map(id => parseInt(id));
-            return (await prisma.disasterFormResponse.deleteMany({ where: { id: { in: ids } } })).count;
-        },
-
-        createEventsOnAddresses: async (_: any, { input }: CreateEventsOnAddressesInput) => {
-            
-            return await prisma.eventsOnAddresses.create({ data: input });
-        },
-
-        updateEventsOnAddresses: async (_: any, { input }: UpdateEventsOnAddressesInput) => {
-            return await prisma.eventsOnAddresses.update({ 
-                where: { id: parseInt(input.id) }, 
-                data: { ...input, id: parseInt(input.id) }
+        createDisasterFormQuestion: async (_: any, { input }: CreateDisasterFormQuestionInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.disasterFormQuestion.create({ data: input });
             });
         },
 
-        removeEventsOnAddresses: async (_: any, { input }: RemoveEventsOnAddressesInput) => {
-            const ids = input.ids.map(id => parseInt(id));
-            return (await prisma.eventsOnAddresses.deleteMany({ where: { id: { in: ids } } })).count;
+        updateDisasterFormQuestion: async (_: any, { input }: UpdateDisasterFormQuestionInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.disasterFormQuestion.update({ 
+                    where: { id: parseInt(input.id) }, 
+                    data: { ...input, id: parseInt(input.id) }
+                });
+            });
+        },
+
+        removeDisasterFormQuestions: async (_: any, { input }: RemoveDisasterFormQuestionsInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                const ids = input.ids.map(id => parseInt(id));
+                return (await prisma.disasterFormQuestion.deleteMany({ where: { id: { in: ids } } })).count;
+            });
+        },
+
+        createDisasterFormAnswer: async (_: any, { input }: CreateDisasterFormAnswerInput, context: Context) => {
+            return await authResolverWrapper(context, ['USER', 'ADMIN', 'SUPERADMIN'], async () => {            
+                return await prisma.disasterFormAnswer.create({ data: input });
+            });
+        },
+
+        updateDisasterFormAnswer: async (_: any, { input }: UpdateDisasterFormAnswerInput, context: Context) => {
+            return await authResolverWrapper(context, ['USER', 'ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.disasterFormAnswer.update({ 
+                    where: { id: parseInt(input.id) }, 
+                    data: { ...input, id: parseInt(input.id) }
+                });
+            });
+        },
+
+        removeDisasterFormAnswers: async (_: any, { input }: RemoveDisasterFormAnswersInput, context: Context) => {
+            return await authResolverWrapper(context, ['USER', 'ADMIN', 'SUPERADMIN'], async () => {
+                const ids = input.ids.map(id => parseInt(id));
+                return (await prisma.disasterFormAnswer.deleteMany({ where: { id: { in: ids } } })).count;
+            });
+        },
+
+        createDisasterFormResponse: async (_: any, { input }: CreateDisasterFormResponseInput, context: Context) => {
+            return await authResolverWrapper(context, ['USER', 'ADMIN', 'SUPERADMIN'], async () => {           
+                return await prisma.disasterFormResponse.create({ data: input });
+            });
+        },
+
+        updateDisasterFormResponse: async (_: any, { input }: UpdateDisasterFormResponseInput, context: Context) => {
+            return await authResolverWrapper(context, ['USER', 'ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.disasterFormResponse.update({ 
+                    where: { id: parseInt(input.id) }, 
+                    data: { ...input, id: parseInt(input.id) }
+                });
+            });
+        },
+
+        removeDisasterFormResponses: async (_: any, { input }: RemoveDisasterFormResponsesInput, context: Context) => {
+            return await authResolverWrapper(context, ['USER', 'ADMIN', 'SUPERADMIN'], async () => {
+                const ids = input.ids.map(id => parseInt(id));
+                return (await prisma.disasterFormResponse.deleteMany({ where: { id: { in: ids } } })).count;
+            });
+        },
+
+        createEventsOnAddresses: async (_: any, { input }: CreateEventsOnAddressesInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.eventsOnAddresses.create({ data: input });
+            });
+        },
+
+        updateEventsOnAddresses: async (_: any, { input }: UpdateEventsOnAddressesInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                return await prisma.eventsOnAddresses.update({ 
+                    where: { id: parseInt(input.id) }, 
+                    data: { ...input, id: parseInt(input.id) }
+                });
+            });
+        },
+
+        removeEventsOnAddresses: async (_: any, { input }: RemoveEventsOnAddressesInput, context: Context) => {
+            return await authResolverWrapper(context, ['ADMIN', 'SUPERADMIN'], async () => {
+                const ids = input.ids.map(id => parseInt(id));
+                return (await prisma.eventsOnAddresses.deleteMany({ where: { id: { in: ids } } })).count;
+            });
         },
     }
 };
