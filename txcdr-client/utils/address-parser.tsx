@@ -18,6 +18,7 @@ async function parseExcel(filePath: string) {
   const workbook = new ExcelJS.Workbook();
   
   try{
+    console.log(filePath);
     await workbook.xlsx.readFile(filePath);
     const worksheet = workbook.getWorksheet(1);
     type AddressArray = CensusData[];

@@ -30,12 +30,18 @@ export default function Card(props: CardProps) {
       <Pressable
         onPress={onPressFunction}
         style={{
-          width: 330,
+          width: "90%",
           height: 160,
-          borderBottomLeftRadius: 10,
-          borderBottomRightRadius: 10,
-          paddingTop: 10,
-          paddingBottom: 10,
+          borderRadius: 10,
+          marginTop: 10,
+          marginBottom: 10,
+          shadowOffset: {
+            width: 1,
+            height: -2
+          },
+          shadowRadius: 5,
+          shadowOpacity: 0.2,
+          backgroundColor: "white"
         }}
       >
         <ImageBackground

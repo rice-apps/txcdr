@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Severity from "../dashboard/severity";
 import CensusBlock from "./censusBlock";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function Page() {
   const eventName = "Cypress Area Disaster";
@@ -26,15 +27,11 @@ export default function Page() {
   const isRegistered = true;
 
   return (
-    <SafeAreaView style={{ alignContent: "center" }}>
-      <View style={styles.header}>
+    <View style={{ alignContent: "center" }}>
+      <View style={{...styles.header}}>
         <Link href="/dashboard">
-          <Image
-            style={styles.backIcon}
-            source={require("txcdr-client/assets/back.png")}
-          ></Image>
+          <Icon name="chevron-back-outline" size={30} color="black" />
         </Link>
-
         <Text style={styles.pageTitle}>{eventName}</Text>
       </View>
 
@@ -115,17 +112,18 @@ export default function Page() {
           <View style={styles.footer}></View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
-    // paddingTop: -30,
     paddingLeft: 10,
     paddingRight: 10,
     flexDirection: "row",
     flexWrap: "wrap",
+    alignItems: "center",
+    marginBottom: 4
   },
   inline: {
     flexDirection: "row",
@@ -158,7 +156,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 24,
     paddingLeft: 15,
-    paddingBottom: 15,
+    // paddingBottom: 15,
   },
   backIcon: {
     width: 15,
