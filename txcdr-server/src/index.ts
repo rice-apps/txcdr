@@ -2,11 +2,12 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { typeDefs } from "./graphql/typedefs.js";
 import { resolvers } from "./graphql/resolvers.js";
-import { authenticate, authenticateWithRole } from "./graphql/auth.js";
+import { authenticateWithRole } from "./graphql/auth.js";
+import { Context } from "./graphql/interfaces.js";
 
 const PORT = parseInt(process.env.PORT!) || 4000;
 
-const server = new ApolloServer({ typeDefs, resolvers });
+export const server = new ApolloServer({ typeDefs, resolvers });
 
 startStandaloneServer(server, {
   context: async ({ req }) => {

@@ -64,7 +64,7 @@ export function Map() {
 
   return (
     <View className="h-full">
-      <MapView className="w-full h-full" region={region} provider="google">
+      <MapView className="w-full h-full" region={region}>
         {markers.map((marker, index) => (
           <Marker key={index} coordinate={marker.latlng}>
             <EventCallout eventData={marker} />

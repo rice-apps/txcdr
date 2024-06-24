@@ -1,17 +1,26 @@
 import React, { createContext, useContext } from "react";
 import { useStorageState } from "./useStorageState";
+import { Session } from "../types/auth";
+import {
+  CreateUserInput,
+  LoginUserInput,
+} from "../../txcdr-server/src/graphql/interfaces";
+import { apolloClient } from "../graphql/client";
+import { gql } from "@apollo/client";
 
 /**
  * Base context for auth
  */
 export const AuthContext = createContext<{
-  signIn: () => void;
-  signOut: () => void;
-  session?: string | null;
+  signIn: (input: LoginUserInput) => Promise<string>;
+  signOut: () => Promise<boolean>;
+  signUp: (input: CreateUserInput) => Promise<number>;
+  session?: Session | null;
   isLoading: boolean;
 }>({
-  signIn: () => {},
-  signOut: () => {},
+  signIn: async () => "",
+  signOut: async () => false,
+  signUp: async () => -1,
   session: null,
   isLoading: false,
 });
@@ -41,14 +50,64 @@ export function AuthProvider(props: React.PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
-          // Perform sign-in logic here
-          console.log("signing in");
-          setSession("xxx");
+        signIn: async (input: LoginUserInput) => {
+          const LOGIN = gql`
+            mutation Login($input: LoginUserInput!) {
+              login(input: $input)
+            }
+          `;
+          console.log("hello from login");
+
+          return new Promise((resolve, reject) => {
+            apolloClient
+              .mutate({ mutation: LOGIN, variables: input })
+              .then((res) => {
+                // Null token indicates error
+                if (!res["data"]["login"]) {
+                  reject("Null token");
+                }
+
+                console.log(res);
+                setSession({
+                  email: input.input.email,
+                  token: res["data"]["login"],
+                });
+                resolve(res["data"]["login"]);
+              })
+              .catch((e) => reject(e));
+          });
         },
-        signOut: () => {
+        signOut: async () => {
           console.log("signing out");
+          console.log(session?.email, session?.token);
           setSession(null);
+          return true;
+        },
+        signUp: async (input: CreateUserInput) => {
+          const CREATE_USER = gql`
+            mutation CreateUser($input: CreateUserInput!, $password: String!) {
+              createUser(input: $input, password: $password) {
+                id
+                email
+              }
+            }
+          `;
+          return new Promise((resolve, reject) => {
+            console.log("hello from sign up");
+            apolloClient
+              .mutate({
+                mutation: CREATE_USER,
+                variables: input,
+              })
+              .then((res) => {
+                console.log("signup success");
+                resolve(res["data"]["createUser"]["id"]);
+              })
+              .catch((e) => {
+                console.log(e);
+                reject(e);
+              });
+          });
         },
         session,
         isLoading,
