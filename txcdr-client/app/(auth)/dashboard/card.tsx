@@ -42,7 +42,7 @@ export default function Card({ event }: CardProps) {
             width: "100%",
             height: "100%",
           }}
-          source={require("txcdr-client/assets/map.png")}
+          source={require("../../../assets/map.png")}
         >
           <Severity text={event.severity}></Severity>
         </ImageBackground>
@@ -50,7 +50,7 @@ export default function Card({ event }: CardProps) {
         <View style={styles.container}>
           <Image
             style={styles.pinIcon}
-            source={require("txcdr-client/assets/pin.png")}
+            source={require("../../../assets/pin.png")}
           ></Image>
 
           <Text style={styles.title}>{event.eventName}</Text>

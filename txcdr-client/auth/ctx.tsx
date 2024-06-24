@@ -62,6 +62,11 @@ export function AuthProvider(props: React.PropsWithChildren) {
             apolloClient
               .mutate({ mutation: LOGIN, variables: input })
               .then((res) => {
+                // Null token indicates error
+                if (!res["data"]["login"]) {
+                  reject("Null token");
+                }
+
                 console.log(res);
                 setSession({
                   email: input.input.email,
@@ -95,9 +100,13 @@ export function AuthProvider(props: React.PropsWithChildren) {
                 variables: input,
               })
               .then((res) => {
+                console.log("signup success");
                 resolve(res["data"]["createUser"]["id"]);
               })
-              .catch((e) => reject(e));
+              .catch((e) => {
+                console.log(e);
+                reject(e);
+              });
           });
         },
         session,

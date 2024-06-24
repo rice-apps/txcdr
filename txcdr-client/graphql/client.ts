@@ -5,7 +5,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 
-const LOCAL_IP = "168.5.177.55";
+const LOCAL_IP = "10.0.0.2";
 const PORT = "4000";
 
 // Apollo client

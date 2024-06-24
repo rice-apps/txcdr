@@ -25,7 +25,7 @@ export default function Page() {
         <Link href="/dashboard">
           <Image
             style={styles.backIcon}
-            source={require("txcdr-client/assets/back.png")}
+            source={require("../../../assets/back.png")}
           ></Image>
         </Link>
 
@@ -36,7 +36,7 @@ export default function Page() {
         <View style={styles.body}>
           <ImageBackground
             style={styles.mapIcon}
-            source={require("txcdr-client/assets/map.png")}
+            source={require("../../../assets/map.png")}
           >
             <Severity text={event.severity}></Severity>
           </ImageBackground>
@@ -48,7 +48,7 @@ export default function Page() {
               <View style={styles.inline}>
                 <Image
                   style={styles.smallIcon}
-                  source={require("txcdr-client/assets/house.png")}
+                  source={require("../../../assets/house.png")}
                 ></Image>
                 <Text style={styles.bigCaption}>
                   {event.numSurveyed}/{event.numAddresses}
@@ -64,7 +64,7 @@ export default function Page() {
               <View style={styles.inline}>
                 <Image
                   style={styles.smallIcon}
-                  source={require("txcdr-client/assets/person.png")}
+                  source={require("../../../assets/person.png")}
                 ></Image>
                 <Text style={styles.bigCaption}>{event.numVolunteers}</Text>
               </View>
@@ -91,7 +91,7 @@ export default function Page() {
             <View style={styles.inline}>
               <Image
                 style={styles.contactIcon}
-                source={require("txcdr-client/assets/person.png")}
+                source={require("../../../assets/person.png")}
               ></Image>
               <Text style={styles.contactName}>{event.contactName}</Text>
             </View>

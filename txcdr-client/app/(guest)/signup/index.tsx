@@ -1,9 +1,8 @@
 import { Link, router } from "expo-router";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Alert, Pressable, Text, TextInput } from "react-native";
 import { useSession } from "../../../auth/ctx";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput } from "react-native-gesture-handler";
 
 /**
  * Sign up page

@@ -84,7 +84,7 @@ export const resolvers = {
         email: input.email,
         password: input.password,
       });
-      console.log(res);
+      // console.log(res);
 
       await prisma.user.update({
         where: { email: input.email },
@@ -129,7 +129,7 @@ export const resolvers = {
     removeUser: async (
       _: any,
       { input }: interfaces.RemoveUserInput,
-      context: Context,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -142,7 +142,7 @@ export const resolvers = {
       );
     },
 
-    removeAll: async (_: any, context: Context) => {
+    removeAll: async (_: any, context: interfaces.Context) => {
       return await authResolverWrapper(
         context,
         ["ADMIN", "SUPERADMIN"],
@@ -154,8 +154,8 @@ export const resolvers = {
 
     createEvent: async (
       _: any,
-      { input }: CreateEventInput,
-      context: Context,
+      { input }: interfaces.CreateEventInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -168,8 +168,8 @@ export const resolvers = {
 
     updateEvent: async (
       _: any,
-      { input }: UpdateEventInput,
-      context: Context,
+      { input }: interfaces.UpdateEventInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -185,8 +185,8 @@ export const resolvers = {
 
     removeEvent: async (
       _: any,
-      { input }: RemoveEventInput,
-      context: Context,
+      { input }: interfaces.RemoveEventInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -201,8 +201,8 @@ export const resolvers = {
 
     createForm: async (
       _: any,
-      { input }: CreateFormInput,
-      context: Context,
+      { input }: interfaces.CreateFormInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -215,8 +215,8 @@ export const resolvers = {
 
     updateForm: async (
       _: any,
-      { input }: UpdateFormInput,
-      context: Context,
+      { input }: interfaces.UpdateFormInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -232,8 +232,8 @@ export const resolvers = {
 
     removeForms: async (
       _: any,
-      { input }: RemoveFormsInput,
-      context: Context,
+      { input }: interfaces.RemoveFormsInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -248,8 +248,8 @@ export const resolvers = {
 
     createAddress: async (
       _: any,
-      { input }: CreateAddressInput,
-      context: Context,
+      { input }: interfaces.CreateAddressInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -262,8 +262,8 @@ export const resolvers = {
 
     updateAddress: async (
       _: any,
-      { input }: UpdateAddressInput,
-      context: Context,
+      { input }: interfaces.UpdateAddressInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -279,8 +279,8 @@ export const resolvers = {
 
     removeAddresses: async (
       _: any,
-      { input }: RemoveAddressesInput,
-      context: Context,
+      { input }: interfaces.RemoveAddressesInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -296,8 +296,8 @@ export const resolvers = {
 
     createDisasterFormQuestion: async (
       _: any,
-      { input }: CreateDisasterFormQuestionInput,
-      context: Context,
+      { input }: interfaces.CreateDisasterFormQuestionInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -310,8 +310,8 @@ export const resolvers = {
 
     updateDisasterFormQuestion: async (
       _: any,
-      { input }: UpdateDisasterFormQuestionInput,
-      context: Context,
+      { input }: interfaces.UpdateDisasterFormQuestionInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -327,8 +327,8 @@ export const resolvers = {
 
     removeDisasterFormQuestions: async (
       _: any,
-      { input }: RemoveDisasterFormQuestionsInput,
-      context: Context,
+      { input }: interfaces.RemoveDisasterFormQuestionsInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -346,8 +346,8 @@ export const resolvers = {
 
     createDisasterFormAnswer: async (
       _: any,
-      { input }: CreateDisasterFormAnswerInput,
-      context: Context,
+      { input }: interfaces.CreateDisasterFormAnswerInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -360,8 +360,8 @@ export const resolvers = {
 
     updateDisasterFormAnswer: async (
       _: any,
-      { input }: UpdateDisasterFormAnswerInput,
-      context: Context,
+      { input }: interfaces.UpdateDisasterFormAnswerInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -377,8 +377,8 @@ export const resolvers = {
 
     removeDisasterFormAnswers: async (
       _: any,
-      { input }: RemoveDisasterFormAnswersInput,
-      context: Context,
+      { input }: interfaces.RemoveDisasterFormAnswersInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -396,8 +396,8 @@ export const resolvers = {
 
     createDisasterFormResponse: async (
       _: any,
-      { input }: CreateDisasterFormResponseInput,
-      context: Context,
+      { input }: interfaces.CreateDisasterFormResponseInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -410,8 +410,8 @@ export const resolvers = {
 
     updateDisasterFormResponse: async (
       _: any,
-      { input }: UpdateDisasterFormResponseInput,
-      context: Context,
+      { input }: interfaces.UpdateDisasterFormResponseInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -427,8 +427,8 @@ export const resolvers = {
 
     removeDisasterFormResponses: async (
       _: any,
-      { input }: RemoveDisasterFormResponsesInput,
-      context: Context,
+      { input }: interfaces.RemoveDisasterFormResponsesInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -446,8 +446,8 @@ export const resolvers = {
 
     createEventsOnAddresses: async (
       _: any,
-      { input }: CreateEventsOnAddressesInput,
-      context: Context,
+      { input }: interfaces.CreateEventsOnAddressesInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -460,8 +460,8 @@ export const resolvers = {
 
     updateEventsOnAddresses: async (
       _: any,
-      { input }: UpdateEventsOnAddressesInput,
-      context: Context,
+      { input }: interfaces.UpdateEventsOnAddressesInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
@@ -477,8 +477,8 @@ export const resolvers = {
 
     removeEventsOnAddresses: async (
       _: any,
-      { input }: RemoveEventsOnAddressesInput,
-      context: Context,
+      { input }: interfaces.RemoveEventsOnAddressesInput,
+      context: interfaces.Context,
     ) => {
       return await authResolverWrapper(
         context,
