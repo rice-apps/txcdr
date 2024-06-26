@@ -10,6 +10,15 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const resolvers = {
   Query: {
+    getUser: async (_: any, { id, email }: { id?: string; email?: string }) => {
+      if (id) {
+        return await prisma.user.findUnique({ where: { id: parseInt(id) } });
+      } else if (email) {
+        return await prisma.user.findUnique({ where: { email } });
+      } else {
+        throw new Error("Please provide either ID or email");
+      }
+    },
     getUsers: async () => {
       return await prisma.user.findMany();
     },

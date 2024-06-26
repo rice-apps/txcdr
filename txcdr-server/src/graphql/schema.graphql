@@ -263,7 +263,7 @@ input RemoveEventInput {
 }
 
 type Query {
-  getUser: User!
+  getUser(id: ID, email: String): User!
   getUsers: [User!]!
   getEvent: Event!
   getEvents: [Event!]!
