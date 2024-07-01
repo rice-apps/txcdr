@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
-import { useSession } from "../../../auth/ctx";
-import { router } from "expo-router";
+import { useSession } from "../../auth/ctx";
+import { supabase } from "../../utils/supabase";
 
 /**
  * The volunteer profile page
@@ -14,8 +14,7 @@ export default function Page() {
       <Pressable
         className="px-4 py-2 bg-slate-400"
         onPress={() => {
-          signOut();
-          router.replace("/");
+          supabase.auth.signOut();
         }}
       >
         <Text>Sign out</Text>

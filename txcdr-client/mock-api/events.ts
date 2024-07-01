@@ -3,7 +3,7 @@ import { EventDetails } from "../types/event";
 /**
  * Mock API for events
  */
-const events: Record<number, EventDetails> = {
+export const events: Record<number, EventDetails> = {
   1: {
     id: 1,
     eventName: "Houston, Texas",

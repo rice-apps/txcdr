@@ -1,12 +1,15 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { typeDefs } from "./graphql/typedefs.js";
 import { resolvers } from "./graphql/resolvers.js";
 import { authenticateWithRole } from "./graphql/auth.js";
 import { Context } from "./graphql/interfaces.js";
+import { readFileSync } from "fs";
 
 const PORT = parseInt(process.env.PORT!) || 4000;
 
+const typeDefs = readFileSync("./src/graphql/schema.graphql", {
+  encoding: "utf-8",
+});
 export const server = new ApolloServer({ typeDefs, resolvers });
 
 startStandaloneServer(server, {
