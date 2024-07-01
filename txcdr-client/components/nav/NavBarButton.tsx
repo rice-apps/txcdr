@@ -1,6 +1,7 @@
 import { Link, usePathname } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { ISvgProps } from "../../types/utils";
+import { msc } from "../../utils/size-matters-aliases";
 
 interface Props {
   /**
@@ -33,15 +34,23 @@ export function NavBarButton(props: Props) {
   const currPath = usePathname();
 
   return (
-    <Pressable className="p-5" hitSlop={20}>
+    <Pressable style={styles.container} hitSlop={20}>
       <Link href={props.href}>
-        <View className="flex-col justify-center items-center gap-1">
-          <View className="w-9 h-9 items-center justify-center">
-            {props.href == currPath ? <props.activeSvg /> : <props.idleSvg />}
-          </View>
+        <View style={styles.column}>
+          {props.href == currPath ? <props.activeSvg /> : <props.idleSvg />}
           <Text>{props.label}</Text>
         </View>
       </Link>
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {},
+  column: {
+    justifyContent: "center",
+    alignContent: "center",
+    gap: msc(2),
+    padding: msc(20),
+  },
+});

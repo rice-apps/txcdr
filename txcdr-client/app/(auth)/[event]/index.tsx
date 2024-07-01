@@ -20,7 +20,7 @@ export default function Page() {
   const event = fetchEvent(parseInt(local.event as string)); // TODO: replace mock API call with real ones
 
   return (
-    <SafeAreaView style={{ alignContent: "center" }}>
+    <>
       <View style={styles.header}>
         <Link href="/dashboard">
           <Image
@@ -108,7 +108,7 @@ export default function Page() {
           <View style={styles.footer}></View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { NavBarButton } from "./NavBarButton";
 import {
   HomeNormal,
@@ -10,6 +10,8 @@ import {
   ProfileNormal,
   ProfileFilled,
 } from "../../assets/svgs/NavBarIcons";
+import { msc } from "../../utils/size-matters-aliases";
+import { Zinc } from "../../utils/styles/colors";
 
 /**
  * Bottom navigation bar
@@ -17,7 +19,7 @@ import {
  */
 export function NavBar() {
   return (
-    <View className="flex-row gap-2 justify-evenly bg-gray-200 items-center align-middle">
+    <View style={styles.container}>
       <NavBarButton
         idleSvg={HomeNormal}
         activeSvg={HomeFilled}
@@ -45,3 +47,13 @@ export function NavBar() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    gap: msc(8),
+    justifyContent: "space-evenly",
+    backgroundColor: Zinc[300],
+    alignItems: "baseline",
+  },
+});

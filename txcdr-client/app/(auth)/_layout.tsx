@@ -1,30 +1,75 @@
-import { Slot } from "expo-router";
-import { NavBar } from "./NavBar";
-import { Text, View } from "react-native";
-import { Redirect, Stack } from "expo-router";
-import { useSession } from "../../auth/ctx";
+import { useEffect, useState } from "react";
+import { supabase } from "../../utils/supabase";
+import { Slot, router } from "expo-router";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { SafeAreaFlex } from "../../components/SafeAreaFlex";
+import { NavBar } from "../../components/nav/NavBar";
 
-/**
- * Layout for auth-protected pages; appends a navigation bar to the bottom of the page
- * @returns Auth-protected pages with nav bar
- */
-export default function Layout() {
-  const { session, isLoading } = useSession();
+export default function Protected() {
+  console.log("prot trigger");
+  const [loading, setLoading] = useState(true);
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
+  useEffect(() => {
+    console.log("prot useeffect");
+    supabase.auth
+      .getUser()
+      .then((res) => {
+        if (!res.data.user) {
+          console.log("kicked out of prot");
+          router.replace("/login");
+        }
+      })
+      .catch((e) => {
+        console.log("err: " + e);
+        router.replace("/login");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
 
-  if (!session) {
-    return <Redirect href="/login" />;
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        console.log("state change!");
+        if (!session?.user) {
+          console.log("kicked out of prot bc state change");
+          router.replace("/login");
+        }
+      },
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          height: "100%",
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   return (
-    <View className="flex-1">
-      <View className="flex-1">
+    <>
+      <SafeAreaFlex disableBottomSafeArea>
         <Slot />
-      </View>
+      </SafeAreaFlex>
       <NavBar />
-    </View>
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  nav: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+  },
+});
