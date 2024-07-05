@@ -16,7 +16,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.txcdr.client",
+      "buildNumber": "4",
+      "plist": {
+        "NSPhotoLibraryUsageDescription": "This app requires access to the photo library to upload images.",
+        "NSCameraUsageDescription": "This app requires access to the camera to take photos.",
+        "NSMicrophoneUsageDescription": "This app requires access to the microphone to record videos."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,6 +37,14 @@
     "plugins": [
       "expo-router",
       "expo-asset"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "680e58c3-db3b-49bc-bbf9-862e5354089c"
+      }
+    }
   }
 }
