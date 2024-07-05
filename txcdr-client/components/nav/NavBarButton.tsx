@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   text: {
     paddingTop: msc(10),
     fontSize: msc(12),
-    fontWeight: "medium",
+    fontWeight: "semibold",
     textAlign: "center",
     color: "#fff",
   },
