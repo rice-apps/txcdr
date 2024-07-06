@@ -37,8 +37,12 @@ export function NavBarButton(props: Props) {
     <Pressable style={styles.container} hitSlop={20}>
       <Link href={props.href}>
         <View style={styles.column}>
-          {props.href == currPath ? <props.activeSvg /> : <props.idleSvg />}
-          <Text>{props.label}</Text>
+          {props.href == currPath ? (
+            <props.activeSvg style={styles.icon} />
+          ) : (
+            <props.idleSvg style={styles.icon} />
+          )}
+          <Text style={styles.text}>{props.label}</Text>
         </View>
       </Link>
     </Pressable>
@@ -48,9 +52,20 @@ export function NavBarButton(props: Props) {
 const styles = StyleSheet.create({
   container: {},
   column: {
-    justifyContent: "center",
+    flexDirection: "column",
     alignContent: "center",
+    alignItems: "center",
     gap: msc(2),
     padding: msc(20),
+  },
+  text: {
+    paddingTop: msc(10),
+    fontSize: msc(12),
+    fontWeight: "semibold",
+    textAlign: "center",
+    color: "#fff",
+  },
+  icon: {
+    color: "#fff",
   },
 });

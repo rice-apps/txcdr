@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: msc(8),
     justifyContent: "space-evenly",
-    backgroundColor: Zinc[300],
+    backgroundColor: "black",
     alignItems: "baseline",
   },
 });
