@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { TextInput } from "react-native";
+import { TextInput, Text, Pressable } from "react-native";
 import { View } from "react-native";
 import MapView, { Region, Marker } from "react-native-maps";
 import { EventMarker } from "../../../types/map";
 import { EventCallout } from "./EventCallout";
+import { Ionicons } from "@expo/vector-icons";
 
 /**
  * MapView component with ZIP code searching, markers, and callouts
@@ -64,22 +65,52 @@ export function Map() {
 
   return (
     <View className="h-full">
-      <MapView className="w-full h-full" region={region}>
+      <MapView
+        className="w-full h-full"
+        region={region}
+        showsBuildings={false}
+        showsPointsOfInterest={false}
+      >
         {markers.map((marker, index) => (
           <Marker key={index} coordinate={marker.latlng}>
             <EventCallout eventData={marker} />
           </Marker>
         ))}
       </MapView>
-      <View className="w-full top-7 absolute mx-auto flex items-center justify-center">
+      <View className="w-full top-7 absolute mx-auto px-8">
         <TextInput
           placeholder="Enter a ZIP code"
           inputMode="numeric"
-          className="w-1/2 bg-gray-200 rounded-full py-2 mx-auto shadow-sm shadow-gray-600 text-lg text-center items-center text-gray-500 "
+          style={{
+            width: "100%",
+            backgroundColor: "white",
+            borderWidth: 2,
+            borderRadius: 8,
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            fontSize: 16,
+            fontWeight: "600",
+            textAlignVertical: "center", // Add this line
+          }}
           onChangeText={(e) => onInputChange(e)}
           returnKeyType="done"
           defaultValue={zipCode}
+          multiline={false}
         />
+        <Pressable className="bg-blue-500 px-3 py-2 my-2 self-start flex flex-row rounded-full">
+          <Ionicons name="add" color="white" size={18}></Ionicons>
+          <Text className="pl-1 text-white text-center self-center">
+            Filter
+          </Text>
+        </Pressable>
+      </View>
+      <View className="absolute bottom-0 p-5 right-2">
+        <Pressable className="bg-blue-500 px-4 py-2 my-2 self-start flex flex-row rounded-full">
+          <Ionicons name="chevron-up" color="white" size={18}></Ionicons>
+          <Text className="pl-1 text-white text-center self-center text-sm">
+            View address list
+          </Text>
+        </Pressable>
       </View>
     </View>
   );

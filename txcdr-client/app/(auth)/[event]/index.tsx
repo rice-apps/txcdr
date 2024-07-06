@@ -10,10 +10,10 @@ import {
   Button,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Severity from "../dashboard/severity";
 import CensusBlock from "./censusBlock";
 import { fetchEvent } from "../../../mock-api/events";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Page() {
   const local = useLocalSearchParams();
@@ -86,7 +86,7 @@ export default function Page() {
             </View>
           )}
 
-          <View>
+          <View style={{ marginRight: 40 }}>
             <Text style={styles.heading}>Created by</Text>
             <View style={styles.inline}>
               <Image
@@ -94,12 +94,25 @@ export default function Page() {
                 source={require("../../../assets/person.png")}
               ></Image>
               <Text style={styles.contactName}>{event.contactName}</Text>
+              {/* Rounded icons for email and phone */}
+              <Pressable
+                style={[
+                  styles.iconButton,
+                  {
+                    marginLeft: "auto",
+                    marginRight: 15,
+                  },
+                ]}
+              >
+                <Ionicons name="mail" color="white" size={25}></Ionicons>
+              </Pressable>
+              <Pressable style={styles.iconButton}>
+                <Ionicons name="call" color="white" size={25}></Ionicons>
+              </Pressable>
             </View>
           </View>
 
-          <SafeAreaView></SafeAreaView>
-
-          <Pressable>
+          <Pressable style={{ alignSelf: "center", paddingTop: 35 }}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Register</Text>
             </View>
@@ -143,9 +156,10 @@ const styles = StyleSheet.create({
     right: 15,
   },
   contactIcon: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
     backgroundColor: "black",
+    borderRadius: 40,
   },
   pageTitle: {
     fontWeight: "bold",
@@ -192,9 +206,10 @@ const styles = StyleSheet.create({
   },
 
   contactName: {
-    fontSize: 14,
+    fontSize: 18,
+    fontWeight: "500",
     paddingLeft: 15,
-    paddingTop: 10,
+    alignSelf: "center",
   },
 
   button: {
@@ -202,7 +217,6 @@ const styles = StyleSheet.create({
     width: 300,
     height: 50,
     borderRadius: 15,
-    left: 35,
   },
 
   buttonText: {
@@ -214,5 +228,14 @@ const styles = StyleSheet.create({
 
   footer: {
     height: 75,
+  },
+
+  iconButton: {
+    backgroundColor: "#5360F3",
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
