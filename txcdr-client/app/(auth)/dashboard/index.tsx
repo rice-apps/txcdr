@@ -1,67 +1,14 @@
-import { Link } from "expo-router";
-import {
-  Text,
-  StyleSheet,
-  ScrollView,
-  FlatList,
-  View,
-  ActivityIndicator,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Card from "./card";
-import { fetchEvent } from "../../../mock-api/events";
-import { useEffect, useState } from "react";
-import { EventDetails } from "../../../types/event";
+import { ActivityIndicator } from "react-native";
+import { useRole } from "../../../utils/hooks/useRole";
+import { UserPage } from "./UserPage";
+import { AdminPage } from "./AdminPage";
 
 export default function Page() {
-  const [loading, setLoading] = useState(true);
-  const [events, setEvents] = useState<EventDetails[]>([]);
+  const [role, loading] = useRole();
 
-  useEffect(() => {
-    for (let i = 1; i < 6; i++) {
-      setEvents([...events, fetchEvent(i)]);
-    }
-    setLoading(false);
-  }, []);
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
 
-  return (
-    <>
-      <Text style={styles.pageTitle}>Event Dashboard</Text>
-      <ScrollView
-        style={styles.scroller}
-        contentContainerStyle={{ alignItems: "center" }}
-      >
-        {/* TODO: replace mock API calls with real ones */}
-        {loading ? (
-          <ActivityIndicator size="large" />
-        ) : (
-          <View>
-            <Card event={fetchEvent(1)}></Card>
-            <Card event={fetchEvent(2)}></Card>
-            <Card event={fetchEvent(3)}></Card>
-            <Card event={fetchEvent(4)}></Card>
-            <Card event={fetchEvent(5)}></Card>
-          </View>
-        )}
-      </ScrollView>
-    </>
-  );
+  return role == "USER" ? <UserPage /> : <AdminPage />;
 }
-
-const styles = StyleSheet.create({
-  pageTitle: {
-    fontWeight: "bold",
-    fontSize: 24,
-    paddingLeft: 15,
-    paddingBottom: 15,
-  },
-  scroller: {
-    paddingBottom: 50,
-    width: "100%",
-  },
-
-  footer: {
-    // textAlign: "center",
-    height: 60,
-  },
-});
