@@ -13,7 +13,6 @@
     "@apollo/client": "^3.8.10",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "1.23.1",
-    "@react-native-community/datetimepicker": "8.0.1",
     "@rneui/themed": "^4.0.0-rc.8",
     "@supabase/supabase-js": "^2.44.2",
     "axios": "^1.6.0",
@@ -38,6 +37,7 @@
     "react-native-screens": "3.31.1",
     "react-native-size-matters": "^0.4.2",
     "react-native-svg": "15.2.0",
+    "react-native-ui-datepicker": "^2.0.3",
     "react-native-url-polyfill": "^2.0.0",
     "xlsx": "^0.18.5"
   },

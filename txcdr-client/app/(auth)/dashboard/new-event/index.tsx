@@ -1,4 +1,4 @@
-import { Alert, Pressable, StyleSheet, View } from "react-native";
+import { Alert, Platform, Pressable, StyleSheet, View } from "react-native";
 import { DText } from "../../../../components/styled-rn/DText";
 import { MaterialIcons } from "@expo/vector-icons";
 import { msc } from "../../../../utils/size-matters-aliases";
@@ -6,9 +6,9 @@ import { Zinc } from "../../../../utils/styles/colors";
 import { router } from "expo-router";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { DTextInput } from "../../../../components/styled-rn/DTextInput";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { StyledButton } from "../../../../components/buttons/StyledButton";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import CustomDateTimePicker from "react-native-ui-datepicker";
 import { supabase } from "../../../../utils/supabase";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
@@ -63,6 +63,7 @@ export default function Page() {
     }
 
     console.log("Created event, ID: " + data.id);
+    router.back();
   };
 
   const handleAddressFileUpload = async () => {
@@ -141,22 +142,24 @@ export default function Page() {
           style={styles.map}
         />
         <View style={styles.field}>
-          <DText>Event Name</DText>
+          <DText style={styles.fieldTitle}>Event Name</DText>
           <DTextInput style={styles.input} onChangeText={setName} />
           <DText style={{ fontStyle: "italic", color: Zinc[400] }}>
             30 characters max
           </DText>
         </View>
         <View style={styles.field}>
-          <DText>Select start date</DText>
-          <DateTimePicker
-            value={date}
-            onChange={(e) => setDate(new Date(e.nativeEvent.timestamp))}
-            style={{ alignSelf: "flex-start" }}
+          <DText style={styles.fieldTitle}>Select start date</DText>
+          <CustomDateTimePicker
+            date={date}
+            mode="single"
+            onChange={(e) => {
+              if (e.date) setDate(new Date(e.date.valueOf()));
+            }}
           />
         </View>
         <View style={styles.field}>
-          <DText>Create description</DText>
+          <DText style={styles.fieldTitle}>Create description</DText>
           <DTextInput
             style={[styles.input, { height: msc(128), paddingVertical: 20 }]}
             onChangeText={setDesc}
@@ -165,7 +168,7 @@ export default function Page() {
           />
         </View>
         <View style={styles.field}>
-          <DText>
+          <DText style={styles.fieldTitle}>
             Upload Forms --TODO: store this somewhere and process it--
           </DText>
           <Pressable
@@ -185,7 +188,7 @@ export default function Page() {
           </Pressable>
         </View>
         <View style={styles.field}>
-          <DText>
+          <DText style={styles.fieldTitle}>
             Disaster Impact Questions --TODO: store this somewhere--
           </DText>
           <Pressable style={styles.uploadButton} onPress={handleFormFileUpload}>
@@ -243,6 +246,10 @@ const styles = StyleSheet.create({
   },
   field: {
     gap: 10,
+  },
+  fieldTitle: {
+    fontWeight: "bold",
+    fontSize: msc(16),
   },
   input: {
     width: "100%",
