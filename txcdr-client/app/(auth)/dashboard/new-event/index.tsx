@@ -10,11 +10,24 @@ import { useState } from "react";
 import { StyledButton } from "../../../../components/buttons/StyledButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { supabase } from "../../../../utils/supabase";
+import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
+import { parseExcel } from "../../../../utils/address-parser";
+import * as XLSX from "xlsx";
+import { Image } from "expo-image";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function Page() {
   const [name, setName] = useState("");
   const [date, setDate] = useState(new Date());
   const [desc, setDesc] = useState("");
+  const [addressFile, setAddressFile] =
+    useState<DocumentPicker.DocumentPickerAsset>();
+  const [addressFileError, setAddressFileError] = useState<string>("");
+  const [formFile, setFormFile] =
+    useState<DocumentPicker.DocumentPickerAsset>();
+  const [formFileError, setFormFileError] = useState<string>("");
+  const [submitError, setSubmitError] = useState<string>("");
 
   const onSubmit = async () => {
     if (!name || !desc) {
@@ -52,15 +65,81 @@ export default function Page() {
     console.log("Created event, ID: " + data.id);
   };
 
+  const handleAddressFileUpload = async () => {
+    const { assets, canceled }: DocumentPicker.DocumentPickerResult =
+      await DocumentPicker.getDocumentAsync();
+
+    if (!canceled) {
+      if (assets.length > 0) {
+        const asset: DocumentPicker.DocumentPickerAsset = assets[0];
+
+        if (
+          asset.mimeType ==
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ) {
+          console.log(asset);
+          setAddressFile(asset);
+          setAddressFileError("");
+        } else {
+          setAddressFileError("File must be of type .xlsx");
+        }
+      }
+    }
+  };
+
+  const handleFormFileUpload = async () => {
+    const { assets, canceled }: DocumentPicker.DocumentPickerResult =
+      await DocumentPicker.getDocumentAsync();
+
+    if (!canceled) {
+      if (assets.length > 0) {
+        const asset: DocumentPicker.DocumentPickerAsset = assets[0];
+
+        if (
+          asset.mimeType ==
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ) {
+          setFormFile(asset);
+          setFormFileError("");
+        } else {
+          setFormFileError("File must be of type .xlsx");
+        }
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (addressFile == undefined || formFile == undefined) {
+      setSubmitError(
+        "Missing at least one of 'Address List' form or 'Disaster Impact Questions' form.",
+      );
+      return;
+    }
+    const data = await FileSystem.readAsStringAsync(addressFile.uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    const wb = XLSX.read(data, { type: "base64" });
+
+    const ws = wb.Sheets[wb.SheetNames[0]];
+
+    console.log(XLSX.utils.sheet_to_json(ws));
+  };
+
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       <View style={styles.topBar}>
-        <DText>New Event</DText>
+        <DText style={{ fontWeight: "bold", fontSize: msc(24) }}>
+          New Event
+        </DText>
         <Pressable onPress={() => router.back()}>
           <MaterialIcons name="close" size={msc(32, 0.25)} color={Zinc[900]} />
         </Pressable>
       </View>
       <View style={styles.body}>
+        <Image
+          source={require("../../../../assets/map.png")}
+          style={styles.map}
+        />
         <View style={styles.field}>
           <DText>Event Name</DText>
           <DTextInput style={styles.input} onChangeText={setName} />
@@ -73,6 +152,7 @@ export default function Page() {
           <DateTimePicker
             value={date}
             onChange={(e) => setDate(new Date(e.nativeEvent.timestamp))}
+            style={{ alignSelf: "flex-start" }}
           />
         </View>
         <View style={styles.field}>
@@ -84,9 +164,61 @@ export default function Page() {
             textAlignVertical="top" // Add this line to move the cursor away from the border
           />
         </View>
-        <StyledButton onPress={onSubmit}>
+        <View style={styles.field}>
+          <DText>
+            Upload Forms --TODO: store this somewhere and process it--
+          </DText>
+          <Pressable
+            style={styles.uploadButton}
+            onPress={handleAddressFileUpload}
+          >
+            <MaterialCommunityIcons
+              name="file-upload-outline"
+              color="#8C8C8C"
+              size={28}
+              style={{ marginRight: 16 }}
+            />
+            <DText style={{ fontSize: 14 }}>
+              {" "}
+              {addressFile == undefined ? "Upload file" : addressFile.name}{" "}
+            </DText>
+          </Pressable>
+        </View>
+        <View style={styles.field}>
+          <DText>
+            Disaster Impact Questions --TODO: store this somewhere--
+          </DText>
+          <Pressable style={styles.uploadButton} onPress={handleFormFileUpload}>
+            <MaterialCommunityIcons
+              name="file-upload-outline"
+              color="#8C8C8C"
+              size={28}
+              style={{ marginRight: 16 }}
+            />
+            <DText style={{ fontSize: 14 }}>
+              {formFile == undefined ? "Upload file" : formFile.name}
+            </DText>
+          </Pressable>
+          {formFileError != "" && (
+            <DText style={{ ...styles.footer, color: "red" }}>
+              {formFileError}
+            </DText>
+          )}
+        </View>
+        <StyledButton
+          onPress={() => {
+            handleSubmit();
+            onSubmit();
+          }}
+          style={{ marginVertical: msc(32) }}
+        >
           <DText style={{ color: Zinc[100], fontWeight: "bold" }}>Submit</DText>
         </StyledButton>
+        {submitError != "" && (
+          <DText style={{ ...styles.footer, color: "red" }}>
+            {submitError}
+          </DText>
+        )}
       </View>
     </KeyboardAwareScrollView>
   );
@@ -94,16 +226,18 @@ export default function Page() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     alignItems: "center",
     width: "100%",
   },
   topBar: {
+    marginTop: msc(16),
     width: "90%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   body: {
+    marginTop: msc(20),
     width: "85%",
     gap: msc(20),
   },
@@ -118,5 +252,27 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     height: msc(40),
     paddingHorizontal: 20,
+  },
+  map: {
+    width: "100%",
+    aspectRatio: 1,
+    borderRadius: 25,
+    alignSelf: "center",
+  },
+  uploadButton: {
+    height: 60,
+    borderWidth: 1,
+    paddingVertical: 8,
+    borderColor: "#8C8C8C",
+    alignItems: "center",
+    flexDirection: "row",
+    borderRadius: 30,
+    paddingHorizontal: 24,
+    marginTop: 12,
+  },
+  footer: {
+    fontStyle: "italic",
+    color: "#8C8C8C",
+    marginTop: 8,
   },
 });
