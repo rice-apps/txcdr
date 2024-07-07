@@ -80,13 +80,13 @@ export default function Page() {
                 <View className="bg-slate-300 px-10 pt-6 pb-8 rounded-b-3xl drop-shadow-2xl">
                   {/* Phone */}
                   <View className="flex flex-col gap-y-2">
-                    <Text className="text-sm uppercase">Phone</Text>
-                    <Text>{user.phone}</Text>
+                    <Text className="text-xs uppercase font-medium">Phone</Text>
+                    <Text className="text-base">{user.phone}</Text>
                   </View>
                   {/* Email */}
                   <View className="flex flex-col gap-y-2">
-                    <Text className="text-sm uppercase">Email</Text>
-                    <Text>{user.email}</Text>
+                    <Text className="text-xs uppercase font-medium">Email</Text>
+                    <Text className="text-base">{user.email}</Text>
                   </View>
                 </View>
               </View>
@@ -99,21 +99,25 @@ export default function Page() {
                 <View className="bg-slate-300 px-10 pt-6 pb-8 rounded-b-3xl drop-shadow-2xl">
                   <View className="flex flex-col w-full gap-y-4">
                     {/* Phone */}
-                    <View className="flex flex-row gap-x-10">
-                      <Text className="text-sm uppercase w-25 mr-auto">
+                    <View className="flex flex-row gap-x-10 items-center">
+                      <Text className="text-xs uppercase w-25 mr-auto font-medium">
                         Phone
                       </Text>
-                      <Text className="text-sm">8328664850</Text>
+                      <Text className="text-base">8328664850</Text>
                     </View>
                     {/* Email */}
-                    <View className="flex flex-row gap-x-10">
-                      <Text className="text-sm uppercase mr-auto">Email</Text>
-                      <Text className="text-sm">{user.email}</Text>
+                    <View className="flex flex-row gap-x-10 items-center">
+                      <Text className="text-xs uppercase mr-auto font-medium">
+                        Email
+                      </Text>
+                      <Text className="text-base">{user.email}</Text>
                     </View>
                     {/* Email */}
-                    <View className="flex flex-row gap-x-10">
-                      <Text className="text-sm uppercase mr-auto">Email</Text>
-                      <Text className="text-sm">{user.email}</Text>
+                    <View className="flex flex-row gap-x-10 items-center">
+                      <Text className="text-xs uppercase mr-auto font-medium">
+                        Email
+                      </Text>
+                      <Text className="text-base">{user.email}</Text>
                     </View>
                   </View>
                 </View>
@@ -125,51 +129,13 @@ export default function Page() {
                 <View className="bg-slate-300 px-10 pt-6 pb-8 rounded-b-3xl drop-shadow-2xl">
                   {/* Phone */}
                   <View className="flex flex-col gap-y-2">
-                    <Text className="text-sm uppercase">Phone</Text>
-                    <Text>{user.phone}</Text>
+                    <Text className="text-xs uppercase font-medium">Phone</Text>
+                    <Text className="text-base">{user.phone}</Text>
                   </View>
                   {/* Email */}
                   <View className="flex flex-col gap-y-2">
-                    <Text className="text-sm uppercase">Email</Text>
-                    <Text>{user.email}</Text>
-                  </View>
-                </View>
-              </View>
-              <View className="drop-shadow-2xl">
-                <View className="bg-blue-500 py-4 px-8 rounded-t-3xl drop-shadow-2xl">
-                  <Text className="text-white text-xl">
-                    Contact Information
-                  </Text>
-                </View>
-                <View className="bg-slate-300 px-10 pt-6 pb-8 rounded-b-3xl drop-shadow-2xl">
-                  {/* Phone */}
-                  <View className="flex flex-col gap-y-2">
-                    <Text className="text-sm uppercase">Phone</Text>
-                    <Text>{user.phone}</Text>
-                  </View>
-                  {/* Email */}
-                  <View className="flex flex-col gap-y-2">
-                    <Text className="text-sm uppercase">Email</Text>
-                    <Text>{user.email}</Text>
-                  </View>
-                </View>
-              </View>
-              <View className="drop-shadow-2xl">
-                <View className="bg-blue-500 py-4 px-8 rounded-t-3xl drop-shadow-2xl">
-                  <Text className="text-white text-xl">
-                    Contact Information
-                  </Text>
-                </View>
-                <View className="bg-slate-300 px-10 pt-6 pb-8 rounded-b-3xl drop-shadow-2xl">
-                  {/* Phone */}
-                  <View className="flex flex-col gap-y-2">
-                    <Text className="text-sm uppercase">Phone</Text>
-                    <Text>{user.phone}</Text>
-                  </View>
-                  {/* Email */}
-                  <View className="flex flex-col gap-y-2">
-                    <Text className="text-sm uppercase">Email</Text>
-                    <Text>{user.email}</Text>
+                    <Text className="text-xs uppercase font-medium">Email</Text>
+                    <Text className="text-base">{user.email}</Text>
                   </View>
                 </View>
               </View>

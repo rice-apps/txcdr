@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TextInput, Image } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { Pressable } from "react-native";
-import * as ImagePicker from "react-native-image-picker";
+import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { router } from "expo-router";
 
@@ -24,13 +24,18 @@ export default function Page() {
   const [image, setImage] = useState<string | null>(null);
 
   const onCameraSelect = async () => {
-    console.log("selecting camera");
-    const result = await ImagePicker.launchImageLibrary({
-      mediaType: "photo",
-      includeBase64: true,
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
-    if (result.assets) {
-      setImage(result.assets[0].base64 || null);
+
+    console.log(result);
+    setImage(result.uri);
+    if (!result.canceled) {
+      // setImage('./assets/hydrangea.png');
+      setImage(result.assets[0].uri);
     }
   };
 
