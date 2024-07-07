@@ -3,6 +3,7 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useState } from "react";
 import { TextInput, View, Text, Pressable, ScrollView } from "react-native";
 
@@ -52,7 +53,10 @@ export default function Page() {
           </Pressable>
         </View>
         <View className="flex flex-col gap-y-2">
-          <View className="flex flex-row border-2 border-blue-400 rounded-lg p-4 items-center">
+          <Pressable
+            className="flex flex-row border-2 border-blue-400 rounded-lg p-4 items-center"
+            onPress={() => router.push("/list/1")}
+          >
             <Ionicons name="home-outline" color="black" size={32}></Ionicons>
             <Text className="pl-4 font-medium text-lg">1111 Address Dr.</Text>
             <View className="ml-auto flex flex-row items-center">
@@ -63,7 +67,7 @@ export default function Page() {
                 size={24}
               ></Ionicons>
             </View>
-          </View>
+          </Pressable>
           <View className="flex flex-row border-2 border-blue-400 rounded-lg p-4 items-center">
             <Ionicons name="home-outline" color="black" size={32}></Ionicons>
             <Text className="pl-4 font-medium text-lg">1111 Address Dr.</Text>
