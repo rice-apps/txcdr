@@ -101,23 +101,23 @@ export default function Page() {
                     {/* Phone */}
                     <View className="flex flex-row gap-x-10 items-center">
                       <Text className="text-xs uppercase w-25 mr-auto font-medium">
-                        Phone
+                        Pronouns
                       </Text>
-                      <Text className="text-base">8328664850</Text>
+                      <Text className="text-base">{user.pronouns}</Text>
                     </View>
                     {/* Email */}
                     <View className="flex flex-row gap-x-10 items-center">
                       <Text className="text-xs uppercase mr-auto font-medium">
-                        Email
+                        Age
                       </Text>
-                      <Text className="text-base">{user.email}</Text>
+                      <Text className="text-base">{user.age}</Text>
                     </View>
                     {/* Email */}
                     <View className="flex flex-row gap-x-10 items-center">
                       <Text className="text-xs uppercase mr-auto font-medium">
-                        Email
+                        Languages
                       </Text>
-                      <Text className="text-base">{user.email}</Text>
+                      <Text className="text-base">{user.languages}</Text>
                     </View>
                   </View>
                 </View>
@@ -128,15 +128,7 @@ export default function Page() {
                 </View>
                 <View className="bg-slate-300 px-10 pt-6 pb-8 rounded-b-3xl drop-shadow-2xl">
                   {/* Phone */}
-                  <View className="flex flex-col gap-y-2">
-                    <Text className="text-xs uppercase font-medium">Phone</Text>
-                    <Text className="text-base">{user.phone}</Text>
-                  </View>
-                  {/* Email */}
-                  <View className="flex flex-col gap-y-2">
-                    <Text className="text-xs uppercase font-medium">Email</Text>
-                    <Text className="text-base">{user.email}</Text>
-                  </View>
+                  <Text className="text-base">{user.organizations}</Text>
                 </View>
               </View>
             </View>
