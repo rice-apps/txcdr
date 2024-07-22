@@ -1,4 +1,4 @@
-import { Alert, Platform, Pressable, StyleSheet, View } from "react-native";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { DText } from "../../../../components/styled-rn/DText";
 import { MaterialIcons } from "@expo/vector-icons";
 import { msc } from "../../../../utils/size-matters-aliases";
@@ -6,17 +6,16 @@ import { Zinc } from "../../../../utils/styles/colors";
 import { router } from "expo-router";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { DTextInput } from "../../../../components/styled-rn/DTextInput";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { StyledButton } from "../../../../components/buttons/StyledButton";
 import CustomDateTimePicker from "react-native-ui-datepicker";
 import { supabase } from "../../../../utils/supabase";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
-import { parseExcel } from "../../../../utils/address-parser";
 import * as XLSX from "xlsx";
 import { Image } from "expo-image";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { decode } from "base64-arraybuffer";
+import { parseAddressSheet } from "../../../../utils/parser";
 
 export default function Page() {
   const [name, setName] = useState("");
@@ -46,6 +45,17 @@ export default function Page() {
       return;
     }
 
+    // Validate address file
+    let addressParseResp = await parseAddressSheet(addressFile.uri, -1);
+
+    if (addressParseResp.error) {
+      Alert.alert(
+        "Error parsing address sheet: ",
+        addressParseResp.error.message,
+      );
+      return;
+    }
+
     // Add event to db
     const createResp = await supabase
       .from("Event")
@@ -59,7 +69,7 @@ export default function Page() {
       .select()
       .maybeSingle();
 
-    if (createResp.error) {
+    if (!createResp || createResp.error) {
       Alert.alert(
         "An error occurred while attempting to create this event.\nError: " +
           createResp.error.message,
@@ -73,6 +83,23 @@ export default function Page() {
     }
 
     console.log("Created event, ID: " + createResp.data.id);
+
+    // Inject event ID into address data and mass upload
+    addressParseResp.data.forEach((address) => {
+      address.eventId = createResp!.data!.id; // Non-null is guaranteed by the above checks
+    });
+
+    const addressUploadResp = await supabase
+      .from("EventAddress")
+      .insert(addressParseResp.data);
+
+    if (addressUploadResp.error) {
+      Alert.alert(
+        "Error uploading addresses: ",
+        addressUploadResp.error.message,
+      );
+      return;
+    }
 
     // Get signed upload URL
     const storagePath = `private/${createResp.data.id}.json`;
