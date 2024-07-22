@@ -218,6 +218,63 @@ export type Database = {
         }
         Relationships: []
       }
+      EventAddress: {
+        Row: {
+          blockId: string
+          city: string
+          claimerId: string | null
+          createdAt: string
+          eventId: number
+          id: number
+          number: string
+          state: string
+          street: string
+          type: string
+          zipCode: string
+        }
+        Insert: {
+          blockId: string
+          city: string
+          claimerId?: string | null
+          createdAt?: string
+          eventId: number
+          id?: number
+          number: string
+          state: string
+          street: string
+          type: string
+          zipCode: string
+        }
+        Update: {
+          blockId?: string
+          city?: string
+          claimerId?: string | null
+          createdAt?: string
+          eventId?: number
+          id?: number
+          number?: string
+          state?: string
+          street?: string
+          type?: string
+          zipCode?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "EventAddress_claimerId_fkey"
+            columns: ["claimerId"]
+            isOneToOne: false
+            referencedRelation: "User2"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventAddress_eventId_fkey"
+            columns: ["eventId"]
+            isOneToOne: false
+            referencedRelation: "Event"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       EventsOnAddresses: {
         Row: {
           addressId: number | null
