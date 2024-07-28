@@ -145,6 +145,7 @@ export default function Page() {
     console.log("Upload success");
 
     router.back();
+    Alert.alert("Successfully created event!");
   };
 
   const handleAddressFileUpload = async () => {
@@ -232,9 +233,7 @@ export default function Page() {
           />
         </View>
         <View style={styles.field}>
-          <DText style={styles.fieldTitle}>
-            Addresses Excel sheet --TODO: store this somewhere and process it--
-          </DText>
+          <DText style={styles.fieldTitle}>Addresses Excel sheet</DText>
           <Pressable
             style={styles.uploadButton}
             onPress={handleAddressFileUpload}
