@@ -10,7 +10,7 @@ import {
   Button,
   View,
 } from "react-native";
-import Severity from "../dashboard/severity";
+import { Severity } from "../dashboard/Severity";
 import CensusBlock from "./censusBlock";
 import { fetchEvent } from "../../../mock-api/events";
 import { Ionicons } from "@expo/vector-icons";

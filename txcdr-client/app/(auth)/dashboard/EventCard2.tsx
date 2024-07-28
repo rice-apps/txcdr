@@ -9,22 +9,21 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Severity from "./severity";
+import { Severity } from "./Severity";
 import { EventDetails } from "../../../types/event";
+import { Tables } from "../../../types/supabase";
 
 type CardProps = {
-  event: EventDetails;
+  id: number;
+  title: string;
+  severity: Tables<"Event">["severity"];
+  registered: boolean | null;
 };
 
-export default function Card({ event }: CardProps) {
-  const isPending = event.registered ? "Registered" : "Pending";
-
-  function onPressFunction(event: GestureResponderEvent): void {}
-
+export function EventCard2(props: CardProps) {
   return (
-    <Link href={`/${event.id}`} asChild>
-      <Pressable
-        onPress={onPressFunction}
+    <Link href={`/${props.id}`} asChild>
+      <View
         style={{
           width: 330,
           height: 160,
@@ -44,7 +43,7 @@ export default function Card({ event }: CardProps) {
           }}
           source={require("../../../assets/map.png")}
         >
-          <Severity text={event.severity}></Severity>
+          <Severity text={props.severity ?? "Low"}></Severity>
         </ImageBackground>
 
         <View style={styles.container}>
@@ -53,15 +52,18 @@ export default function Card({ event }: CardProps) {
             source={require("../../../assets/pin.png")}
           ></Image>
 
-          <Text style={styles.title}>{event.eventName}</Text>
-
-          {isPending && (
+          <Text style={styles.title}>{props.title}</Text>
+          {props.registered != null && (
             <View style={styles.status}>
-              <Text style={styles.statusLabel}>PENDING</Text>
+              {
+                <Text style={styles.statusLabel}>
+                  {props.registered ? "Registered" : "Pending approval"}
+                </Text>
+              }
             </View>
           )}
         </View>
-      </Pressable>
+      </View>
     </Link>
   );
 }
