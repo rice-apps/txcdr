@@ -6,15 +6,17 @@ import {
   Text,
   Image,
   View,
+  ViewProps,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { DText } from "../../../components/styled-rn/DText";
 
-type ProgressBarProps = {
-  text: String;
-};
+interface Props extends ViewProps {
+  text: string;
+}
 
-export function Severity(props: ProgressBarProps) {
-  const { text } = props;
+export function Severity(props: Props) {
+  const { text, style, ...viewProps } = props;
 
   const backgroundColor =
     text === "Severe"
@@ -36,38 +38,23 @@ export function Severity(props: ProgressBarProps) {
       : 0;
 
   return (
-    <View style={styles.padding}>
-      <View
-        style={[
-          styles.severityBackground,
-          { backgroundColor },
-          { width },
-          { left },
-        ]}
-      >
-        <Text style={styles.severityLabel}>{props.text}</Text>
-      </View>
+    <View style={[styles.container, { backgroundColor }, style]} {...viewProps}>
+      <DText style={styles.text}>{props.text}</DText>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  padding: {
-    paddingTop: 20,
-    height: 10,
-  },
-  severityBackground: {
-    width: 60,
-    height: 20,
-    borderRadius: 10,
+  container: {
     justifyContent: "center",
-    paddingTop: 0,
-    top: -10,
+    alignItems: "center",
+    borderRadius: 100,
+    alignSelf: "flex-start",
+    flexWrap: "wrap",
   },
-
-  severityLabel: {
-    fontSize: 12,
-    textAlign: "center",
+  text: {
     color: "white",
+    padding: 5,
+    fontSize: 12,
   },
 });

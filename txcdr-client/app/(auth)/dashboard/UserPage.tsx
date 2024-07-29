@@ -6,10 +6,11 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import { EventCard2 } from "./EventCard2";
+import { EventCard } from "./EventCard";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../utils/supabase";
 import { Tables } from "../../../types/supabase";
+import { SafeAreaFlex } from "../../../components/SafeAreaFlex";
 
 type Event = Pick<Tables<"Event">, "id" | "title" | "severity"> & {
   approved: boolean | null;
@@ -70,29 +71,31 @@ export function UserPage() {
   }, []);
 
   return (
-    <>
+    <SafeAreaFlex>
       <Text style={styles.pageTitle}>Event Dashboard</Text>
-      <ScrollView
-        style={styles.scroller}
-        contentContainerStyle={{ alignItems: "center" }}
-      >
-        {loading ? (
-          <ActivityIndicator size="large" />
-        ) : (
-          <View>
-            {events.map((e, i) => (
-              <EventCard2
-                id={e.id}
-                registered={e.approved}
-                severity={e.severity}
-                title={e.title}
-                key={e.id}
-              />
-            ))}
-          </View>
-        )}
-      </ScrollView>
-    </>
+      {loading ? (
+        <ActivityIndicator size="large" />
+      ) : (
+        <ScrollView
+          style={styles.scroller}
+          contentContainerStyle={{
+            alignItems: "center",
+            alignSelf: "center",
+            width: "90%",
+          }}
+        >
+          {events.map((e, i) => (
+            <EventCard
+              id={e.id}
+              registered={e.approved}
+              severity={e.severity}
+              title={e.title}
+              key={e.id}
+            />
+          ))}
+        </ScrollView>
+      )}
+    </SafeAreaFlex>
   );
 }
 
@@ -105,7 +108,6 @@ const styles = StyleSheet.create({
   },
   scroller: {
     paddingBottom: 50,
-    width: "100%",
   },
 
   footer: {

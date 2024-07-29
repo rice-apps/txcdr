@@ -1,6 +1,4 @@
-import { Link } from "expo-router";
 import {
-  GestureResponderEvent,
   Pressable,
   StyleSheet,
   Text,
@@ -8,85 +6,72 @@ import {
   ImageBackground,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Severity } from "./Severity";
-import { EventDetails } from "../../../types/event";
+import { Severity } from "./SeverityCard";
+import { Tables } from "../../../types/supabase";
+import { msc } from "../../../utils/size-matters-aliases";
+import { ApprovalCard } from "./ApprovalCard";
+import { router } from "expo-router";
 
 type CardProps = {
-  event: EventDetails;
+  id: number;
+  title: string;
+  severity: Tables<"Event">["severity"];
+  registered: boolean | null;
 };
 
-export default function Card({ event }: CardProps) {
-  const isPending = event.registered ? "Registered" : "Pending";
-
-  function onPressFunction(event: GestureResponderEvent): void {}
-
+export function EventCard(props: CardProps) {
   return (
-    <Link href={`/${event.id}`} asChild>
-      <Pressable
-        onPress={onPressFunction}
-        style={{
-          width: 330,
-          height: 160,
-          borderBottomLeftRadius: 10,
-          borderBottomRightRadius: 10,
-          paddingTop: 10,
-          paddingBottom: 10,
+    <Pressable
+      style={{ width: "100%" }}
+      onPress={() => router.push(`/event/${props.id}`)}
+    >
+      <ImageBackground
+        style={styles.map}
+        imageStyle={{
+          borderTopRightRadius: 10,
+          borderTopLeftRadius: 10,
+          alignItems: "center",
         }}
+        source={require("../../../assets/map.png")}
       >
-        <ImageBackground
-          style={styles.map}
-          imageStyle={{
-            borderTopRightRadius: 10,
-            borderTopLeftRadius: 10,
-            width: "100%",
-            height: "100%",
-          }}
-          source={require("../../../assets/map.png")}
-        >
-          <Severity text={event.severity}></Severity>
-        </ImageBackground>
+        <Severity
+          style={{ alignSelf: "flex-end", marginTop: 10, marginRight: 10 }}
+          text={props.severity ?? "Low"}
+        ></Severity>
+      </ImageBackground>
 
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <View style={{ flexDirection: "row" }}>
           <Image
             style={styles.pinIcon}
             source={require("../../../assets/pin.png")}
           ></Image>
-
-          <Text style={styles.title}>{event.eventName}</Text>
-
-          {isPending && (
-            <View style={styles.status}>
-              <Text style={styles.statusLabel}>PENDING</Text>
-            </View>
-          )}
+          <Text style={styles.title}>{props.title}</Text>
         </View>
-      </Pressable>
-    </Link>
+        {props.registered != null && (
+          <ApprovalCard approved={props.registered} />
+        )}
+      </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: "35%",
+    flexGrow: 1,
     backgroundColor: "#5360F3",
     alignSelf: "center",
-    paddingTop: 10,
     paddingLeft: 10,
+    paddingVertical: 10,
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10,
-
-    flexDirection: "row",
-    flexWrap: "wrap",
+    gap: 8,
   },
   map: {
-    width: "100%",
-    height: "65%",
-    alignSelf: "center",
+    height: msc(100),
   },
   inline: {
-    paddingTop: -25,
     paddingLeft: 10,
     paddingRight: 10,
     flexDirection: "row",
@@ -105,19 +90,5 @@ const styles = StyleSheet.create({
     width: 200,
     fontSize: 16,
     color: "white",
-  },
-
-  status: {
-    backgroundColor: "#8C8C8C",
-    borderRadius: 10,
-    height: 20,
-    paddingTop: -25,
-  },
-  statusLabel: {
-    color: "white",
-    paddingRight: 10,
-    paddingLeft: 10,
-    paddingTop: 2,
-    paddingBottom: 2,
   },
 });

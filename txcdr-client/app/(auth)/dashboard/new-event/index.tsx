@@ -45,6 +45,13 @@ export default function Page() {
       return;
     }
 
+    // Get current session
+    const session = await supabase.auth.getSession();
+    if (session.error || !session.data?.session) {
+      Alert.alert("Error getting session: ", session?.error?.message);
+      return;
+    }
+
     // Validate address file
     let addressParseResp = await parseAddressSheet(addressFile.uri, -1);
 
@@ -65,6 +72,7 @@ export default function Page() {
         startDate: date.toISOString(),
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
+        creatorId: session.data.session?.user.id,
       })
       .select()
       .maybeSingle();
