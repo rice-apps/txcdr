@@ -28,7 +28,7 @@ export default function Verify() {
       .then((res) => {
         if (res.data.user) {
           console.log("user already has a session");
-          router.replace("/dash");
+          router.replace("/dashboard");
         } else {
           console.log("user should be on this page (verify page)");
         }
@@ -54,7 +54,7 @@ export default function Verify() {
           .from("User2")
           .insert({ id: data.user.id, email: email, role: "USER" });
         if (status === 201) {
-          router.replace("/dash");
+          router.replace("/dashboard");
         } else {
           Alert.alert(
             `${error?.message ?? "Something went wrong..."} (Code ${status})`,
