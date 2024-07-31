@@ -21,7 +21,7 @@ import { Tables } from "../../../types/supabase";
 import { supabase } from "../../../utils/supabase";
 import { useRole } from "../../../utils/hooks/useRole";
 import { SafeAreaFlex } from "../../../components/SafeAreaFlex";
-import { VolUnregisteredPage } from "./VolUnregisteredPage";
+import { VolunteerPage } from "./VolunteerPage";
 import { AdminPage } from "./AdminPage";
 
 export default function Page() {
@@ -80,7 +80,8 @@ export default function Page() {
         const numVolunteers = await supabase
           .from("EventVolunteer")
           .select("*", { count: "exact" })
-          .eq("eventId", event.id);
+          .eq("eventId", event.id)
+          .eq("approved", true);
         if (numVolunteers.error || numVolunteers.count == null) {
           console.log(numVolunteers.error);
           Alert.alert(
@@ -115,7 +116,7 @@ export default function Page() {
   };
 
   return role === "USER" ? (
-    <VolUnregisteredPage {...props} />
+    <VolunteerPage {...props} />
   ) : (
     <AdminPage {...props} />
   );

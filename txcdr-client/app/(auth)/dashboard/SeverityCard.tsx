@@ -13,6 +13,7 @@ import { DText } from "../../../components/styled-rn/DText";
 
 interface Props extends ViewProps {
   text: string;
+  appendedText?: string;
 }
 
 export function Severity(props: Props) {
@@ -39,7 +40,10 @@ export function Severity(props: Props) {
 
   return (
     <View style={[styles.container, { backgroundColor }, style]} {...viewProps}>
-      <DText style={styles.text}>{props.text}</DText>
+      <DText style={styles.text}>
+        {props.text}
+        {props.appendedText}
+      </DText>
     </View>
   );
 }
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
-    padding: 5,
+    padding: 7,
     fontSize: 12,
   },
 });

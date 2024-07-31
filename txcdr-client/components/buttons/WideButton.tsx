@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { BORDER_RADIUS } from "../../utils/styles/constants";
 import { Zinc } from "../../utils/styles/colors";
-import { msc } from "../../utils/size-matters-aliases";
+import { ms } from "react-native-size-matters";
 
 interface Props extends PressableProps {
   style?: StyleProp<ViewStyle>;
@@ -25,8 +25,8 @@ export function WideButton(props: Props) {
 const styles = StyleSheet.create({
   pressable: {
     width: "100%",
-    borderRadius: msc(BORDER_RADIUS),
-    padding: msc(10),
+    borderRadius: ms(BORDER_RADIUS),
+    padding: ms(10),
     backgroundColor: Zinc[800],
     flexDirection: "row",
     justifyContent: "center",

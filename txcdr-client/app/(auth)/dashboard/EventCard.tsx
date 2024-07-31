@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { Severity } from "./SeverityCard";
 import { Tables } from "../../../types/supabase";
-import { msc } from "../../../utils/size-matters-aliases";
 import { ApprovalCard } from "./ApprovalCard";
 import { router } from "expo-router";
+import { ms } from "react-native-size-matters";
 
 type CardProps = {
   id: number;
@@ -66,10 +66,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10,
-    gap: 8,
+    gap: ms(12),
   },
   map: {
-    height: msc(100),
+    height: ms(100),
   },
   inline: {
     paddingLeft: 10,

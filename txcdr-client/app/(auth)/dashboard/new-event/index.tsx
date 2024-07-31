@@ -1,7 +1,6 @@
 import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { DText } from "../../../../components/styled-rn/DText";
 import { MaterialIcons } from "@expo/vector-icons";
-import { msc } from "../../../../utils/size-matters-aliases";
 import { Zinc } from "../../../../utils/styles/colors";
 import { router } from "expo-router";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -16,6 +15,7 @@ import * as XLSX from "xlsx";
 import { Image } from "expo-image";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { parseAddressSheet } from "../../../../utils/parser";
+import { ms } from "react-native-size-matters";
 
 export default function Page() {
   const [name, setName] = useState("");
@@ -202,11 +202,11 @@ export default function Page() {
   return (
     <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       <View style={styles.topBar}>
-        <DText style={{ fontWeight: "bold", fontSize: msc(24) }}>
+        <DText style={{ fontWeight: "bold", fontSize: ms(24) }}>
           New Event
         </DText>
         <Pressable onPress={() => router.back()}>
-          <MaterialIcons name="close" size={msc(32, 0.25)} color={Zinc[900]} />
+          <MaterialIcons name="close" size={ms(32, 0.25)} color={Zinc[900]} />
         </Pressable>
       </View>
       <View style={styles.body}>
@@ -234,7 +234,7 @@ export default function Page() {
         <View style={styles.field}>
           <DText style={styles.fieldTitle}>Create description</DText>
           <DTextInput
-            style={[styles.input, { height: msc(128), paddingVertical: 20 }]}
+            style={[styles.input, { height: ms(128), paddingVertical: 20 }]}
             onChangeText={setDesc}
             multiline={true}
             textAlignVertical="top" // Add this line to move the cursor away from the border
@@ -279,7 +279,7 @@ export default function Page() {
             </DText>
           )}
         </View>
-        <StyledButton onPress={onSubmit} style={{ marginVertical: msc(32) }}>
+        <StyledButton onPress={onSubmit} style={{ marginVertical: ms(32) }}>
           <DText style={{ color: Zinc[100], fontWeight: "bold" }}>Submit</DText>
         </StyledButton>
         {submitError != "" && (
@@ -299,22 +299,22 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   topBar: {
-    marginTop: msc(16),
+    marginTop: ms(16),
     width: "90%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   body: {
-    marginTop: msc(20),
+    marginTop: ms(20),
     width: "85%",
-    gap: msc(20),
+    gap: ms(20),
   },
   field: {
     gap: 10,
   },
   fieldTitle: {
     fontWeight: "bold",
-    fontSize: msc(16),
+    fontSize: ms(16),
   },
   input: {
     width: "100%",
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: Zinc[200],
     borderRadius: 30,
-    height: msc(40),
+    height: ms(40),
     paddingHorizontal: 20,
   },
   map: {
