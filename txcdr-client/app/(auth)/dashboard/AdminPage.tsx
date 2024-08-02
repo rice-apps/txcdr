@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import { DText } from "../../../components/styled-rn/DText";
 import { useState } from "react";
-import { msc } from "../../../utils/size-matters-aliases";
 import { ModeButton } from "./ModeButton";
 import { Blue } from "../../../utils/styles/colors";
 import { router } from "expo-router";
+import { ms } from "react-native-size-matters";
 
 export function AdminPage() {
   const [mode, setMode] = useState<"ACTIVE" | "PAST">("ACTIVE");
@@ -31,8 +31,8 @@ export function AdminPage() {
           onPress={() => router.push("/dashboard/new-event")}
           style={{
             alignContent: "flex-end",
-            marginRight: msc(20),
-            marginBottom: msc(20),
+            marginRight: ms(20),
+            marginBottom: ms(20),
             backgroundColor: Blue[500],
             borderRadius: 20,
           }}
@@ -40,8 +40,8 @@ export function AdminPage() {
           <DText
             style={{
               color: "#ffffff",
-              paddingHorizontal: msc(20),
-              paddingVertical: msc(15),
+              paddingHorizontal: ms(20),
+              paddingVertical: ms(15),
             }}
           >
             + New Event
@@ -55,13 +55,13 @@ export function AdminPage() {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    gap: msc(10),
+    gap: ms(10),
     flex: 1,
     height: "100%",
   },
   modeSelector: {
     flexDirection: "row",
-    gap: msc(10),
+    gap: ms(10),
     justifyContent: "center",
   },
   buttonContainer: {

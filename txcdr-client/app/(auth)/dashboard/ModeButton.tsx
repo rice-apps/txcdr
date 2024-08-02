@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from "react-native";
 import { Blue, Zinc } from "../../../utils/styles/colors";
 import { DText } from "../../../components/styled-rn/DText";
-import { msc } from "../../../utils/size-matters-aliases";
+import { ms } from "react-native-size-matters";
 
 interface Props {
   label: string;
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    paddingVertical: msc(10),
-    paddingHorizontal: msc(20),
+    paddingVertical: ms(10),
+    paddingHorizontal: ms(20),
   },
 });

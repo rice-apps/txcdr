@@ -6,7 +6,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { Blue } from "../../utils/styles/colors";
-import { msc } from "../../utils/size-matters-aliases";
+import { ms } from "react-native-size-matters";
 
 interface Props extends PressableProps {
   style?: StyleProp<ViewStyle>;
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: Blue[500],
     alignItems: "center",
     justifyContent: "center",
-    padding: msc(15),
+    padding: ms(15),
     borderRadius: 30,
   },
 });

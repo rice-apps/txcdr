@@ -14,9 +14,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Zinc } from "../../utils/styles/colors";
 import { WideButton } from "../../components/buttons/WideButton";
 import { LinkTextStyle } from "../../utils/styles/styles";
-import { msc, sc } from "../../utils/size-matters-aliases";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaFlex } from "../../components/SafeAreaFlex";
+import { ms, s } from "react-native-size-matters";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -47,16 +47,16 @@ export default function Login() {
         contentContainerStyle={styles.outerView}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={{ gap: msc(5), alignItems: "center" }}>
+        <View style={{ gap: ms(5), alignItems: "center" }}>
           <DText
             style={{
-              fontSize: msc(26),
+              fontSize: ms(26),
               fontWeight: "bold",
             }}
           >
             Log into your account
           </DText>
-          <DText style={{ fontSize: msc(13), color: Zinc[700] }}>
+          <DText style={{ fontSize: ms(13), color: Zinc[700] }}>
             Welcome back! Please enter your details.
           </DText>
         </View>
@@ -66,7 +66,7 @@ export default function Login() {
             icon={
               <MaterialIcons
                 name="mail-outline"
-                size={msc(24, 0.25)}
+                size={ms(24, 0.25)}
                 color={Zinc[400]}
               />
             }
@@ -79,7 +79,7 @@ export default function Login() {
             icon={
               <MaterialIcons
                 name="lock-outline"
-                size={msc(24, 0.25)}
+                size={ms(24, 0.25)}
                 color={Zinc[400]}
               />
             }
@@ -107,7 +107,7 @@ export default function Login() {
             <DText>Don't have an account? </DText>
             <Pressable
               onPress={() => router.navigate("/signup")}
-              hitSlop={sc(20)}
+              hitSlop={s(20)}
             >
               <DText style={LinkTextStyle}>Sign up</DText>
             </Pressable>
@@ -127,16 +127,16 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   formView: {
-    rowGap: msc(26),
+    rowGap: ms(26),
     width: "100%",
     flexDirection: "column",
-    marginTop: msc(36),
+    marginTop: ms(36),
     alignItems: "center",
   },
   bottomView: {
     width: "100%",
     alignItems: "center",
-    gap: msc(26),
-    marginTop: msc(15),
+    gap: ms(26),
+    marginTop: ms(15),
   },
 });

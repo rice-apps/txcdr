@@ -94,22 +94,7 @@ export type Database = {
           formResponseId?: number | null
           id?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "DisasterFormAnswer_formQuestionId_fkey"
-            columns: ["formQuestionId"]
-            isOneToOne: false
-            referencedRelation: "DisasterFormQuestion"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "DisasterFormAnswer_formResponseId_fkey"
-            columns: ["formResponseId"]
-            isOneToOne: false
-            referencedRelation: "DisasterFormResponse"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       DisasterFormQuestion: {
         Row: {
@@ -194,29 +179,43 @@ export type Database = {
       Event: {
         Row: {
           createdAt: string
+          creatorId: string
           description: string
           id: number
+          severity: Database["public"]["Enums"]["severity"] | null
           startDate: string
           title: string
           updatedAt: string
         }
         Insert: {
           createdAt?: string
+          creatorId: string
           description: string
           id?: number
+          severity?: Database["public"]["Enums"]["severity"] | null
           startDate: string
           title: string
           updatedAt: string
         }
         Update: {
           createdAt?: string
+          creatorId?: string
           description?: string
           id?: number
+          severity?: Database["public"]["Enums"]["severity"] | null
           startDate?: string
           title?: string
           updatedAt?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "Event_creatorId_fkey"
+            columns: ["creatorId"]
+            isOneToOne: false
+            referencedRelation: "User2"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       EventAddress: {
         Row: {
@@ -310,6 +309,45 @@ export type Database = {
             columns: ["eventId"]
             isOneToOne: false
             referencedRelation: "Event"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      EventVolunteer: {
+        Row: {
+          approved: boolean
+          createdAt: string
+          eventId: number
+          id: number
+          volunteerId: string
+        }
+        Insert: {
+          approved?: boolean
+          createdAt?: string
+          eventId: number
+          id?: number
+          volunteerId: string
+        }
+        Update: {
+          approved?: boolean
+          createdAt?: string
+          eventId?: number
+          id?: number
+          volunteerId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "EventVolunteer_eventId_fkey"
+            columns: ["eventId"]
+            isOneToOne: false
+            referencedRelation: "Event"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventVolunteer_volunteerId_fkey"
+            columns: ["volunteerId"]
+            isOneToOne: false
+            referencedRelation: "User2"
             referencedColumns: ["id"]
           },
         ]
@@ -452,6 +490,7 @@ export type Database = {
     }
     Enums: {
       Role: "USER" | "ADMIN" | "SUPERADMIN"
+      severity: "Low" | "Moderate" | "Severe"
     }
     CompositeTypes: {
       [_ in never]: never

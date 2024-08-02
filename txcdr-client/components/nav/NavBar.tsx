@@ -10,8 +10,7 @@ import {
   ProfileNormal,
   ProfileFilled,
 } from "../../assets/svgs/NavBarIcons";
-import { msc } from "../../utils/size-matters-aliases";
-import { Zinc } from "../../utils/styles/colors";
+import { ms } from "react-native-size-matters";
 
 /**
  * Bottom navigation bar
@@ -51,7 +50,7 @@ export function NavBar() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    gap: msc(8),
+    gap: ms(8),
     justifyContent: "space-evenly",
     backgroundColor: "black",
     alignItems: "baseline",

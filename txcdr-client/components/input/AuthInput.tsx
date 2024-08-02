@@ -3,7 +3,7 @@ import { DText } from "../styled-rn/DText";
 import { DTextInput } from "../styled-rn/DTextInput";
 import { Zinc } from "../../utils/styles/colors";
 import { BORDER_RADIUS } from "../../utils/styles/constants";
-import { msc } from "../../utils/size-matters-aliases";
+import { ms } from "react-native-size-matters";
 
 interface Props extends TextInputProps {
   labelText: string;
@@ -30,7 +30,7 @@ export function AuthInput(props: Props) {
           {...textInputProps}
           placeholderTextColor={Zinc[600]}
           style={[styles.input, style]}
-          hitSlop={msc(20)}
+          hitSlop={ms(20)}
           autoCorrect={false}
         />
       </View>
@@ -44,16 +44,16 @@ const styles = StyleSheet.create({
     color: Zinc[800],
   },
   row: {
-    marginTop: msc(7),
+    marginTop: ms(7),
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: Zinc[200],
     backgroundColor: Zinc[50],
-    borderRadius: msc(BORDER_RADIUS),
+    borderRadius: ms(BORDER_RADIUS),
     flexDirection: "row",
-    gap: msc(8),
+    gap: ms(8),
     alignItems: "center",
-    padding: msc(10),
+    padding: ms(10),
   },
   input: {
     flex: 1,
