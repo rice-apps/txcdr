@@ -2,11 +2,11 @@ import { StyleSheet, View } from "react-native";
 import {
   WideButton,
   WideButtonProps,
-} from "../../../components/buttons/WideButton";
-import { DText } from "../../../components/styled-rn/DText";
+} from "../../../../components/buttons/WideButton";
+import { DText } from "../../../../components/styled-rn/DText";
 import { ms } from "react-native-size-matters";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { Blue } from "../../../utils/styles/colors";
+import { Blue } from "../../../../utils/styles/colors";
 
 interface Props extends WideButtonProps {
   text: string;

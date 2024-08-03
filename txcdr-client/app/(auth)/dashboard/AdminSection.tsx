@@ -34,6 +34,7 @@ export function AdminSection({ events }: SectionProps) {
         <ScrollView
           style={styles.scroller}
           contentContainerStyle={styles.eventList}
+          bounces={false}
         >
           {events.map(
             (
@@ -66,6 +67,7 @@ export function AdminSection({ events }: SectionProps) {
             alignContent: "flex-end",
             backgroundColor: Blue[500],
             borderRadius: 20,
+            marginBottom: ms(20),
           }}
         >
           <DText
@@ -103,6 +105,7 @@ const styles = StyleSheet.create({
   scroller: {
     paddingBottom: 50,
     marginTop: ms(20),
+    overflow: "visible",
   },
   eventList: {
     alignItems: "center",

@@ -30,6 +30,7 @@ export function UserSection({ events }: SectionProps) {
         <ScrollView
           style={styles.scroller}
           contentContainerStyle={styles.eventList}
+          bounces={false}
         >
           {events
             .filter(
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
   scroller: {
     paddingBottom: 50,
     marginTop: ms(20),
+    overflow: "visible",
   },
   eventList: {
     alignItems: "center",

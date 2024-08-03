@@ -1,14 +1,14 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { View, Pressable, Text, StyleSheet } from "react-native";
-import { PageProps } from "./[slug]";
-import { Blue, Zinc } from "../../../utils/styles/colors";
+import { PageProps } from ".";
+import { Blue, Zinc } from "../../../../utils/styles/colors";
 import { ms, s } from "react-native-size-matters";
 import * as Linking from "expo-linking";
-import { WideButton } from "../../../components/buttons/WideButton";
+import { WideButton } from "../../../../components/buttons/WideButton";
 import { useEffect, useState } from "react";
-import { supabase } from "../../../utils/supabase";
-import { useUser } from "../../../utils/hooks/useUser";
-import { DText } from "../../../components/styled-rn/DText";
+import { supabase } from "../../../../utils/supabase";
+import { useUser } from "../../../../utils/hooks/useUser";
+import { DText } from "../../../../components/styled-rn/DText";
 
 type RegistrationState = "APPLIED" | "APPROVED" | "NONE";
 export function VolunteerSection({ event, eventCreator }: PageProps) {

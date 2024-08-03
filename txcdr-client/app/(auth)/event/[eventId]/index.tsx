@@ -9,27 +9,27 @@ import {
   ActivityIndicator,
   View,
 } from "react-native";
-import { Severity } from "../dashboard/SeverityCard";
-import { FontAwesome5, MaterialIcons, Octicons } from "@expo/vector-icons";
+import { Severity } from "../../dashboard/SeverityCard";
+import { FontAwesome5, Octicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import { Tables } from "../../../types/supabase";
-import { supabase } from "../../../utils/supabase";
-import { useRole } from "../../../utils/hooks/useRole";
-import { SafeAreaFlex } from "../../../components/SafeAreaFlex";
+import { Tables } from "../../../../types/supabase";
+import { supabase } from "../../../../utils/supabase";
+import { useRole } from "../../../../utils/hooks/useRole";
+import { SafeAreaFlex } from "../../../../components/SafeAreaFlex";
 import { VolunteerSection } from "./VolunteerSection";
 import { AdminSection } from "./AdminSection";
 import { ms } from "react-native-size-matters";
-import { Blue } from "../../../utils/styles/colors";
+import { Blue } from "../../../../utils/styles/colors";
+import { Header } from "./Header";
 
 type EventCreator = Pick<Tables<"User2">, "id" | "name" | "email" | "phone">;
 type Address = Pick<Tables<"EventAddress">, "id" | "claimerId" | "blockId">;
-type Volunteer = Tables<"EventVolunteer">;
 
 export interface PageProps {
   event: Tables<"Event">;
   eventCreator?: EventCreator;
   numVolunteers?: number;
-  volunteers?: Volunteer[];
+  numApproved?: number;
   numAddresses?: number;
   addresses?: Address[];
   numSurveyed?: number;
@@ -41,7 +41,7 @@ export default function Page() {
 
   const [event, setEvent] = useState<Tables<"Event">>();
   const [numVolunteers, setNumVolunteers] = useState<number>();
-  const [volunteers, setVolunteers] = useState<Volunteer[]>();
+  const [numApproved, setNumApproved] = useState<number>();
   const [numSurveyed, setNumSurveyed] = useState<number>();
   const [numAddresses, setNumAddresses] = useState<number>();
   const [addresses, setAddresses] = useState<Address[]>();
@@ -58,7 +58,7 @@ export default function Page() {
           User2 ( id, name, email, phone ),
           EventAddress ( id, claimerId, blockId )`,
         )
-        .eq("id", parseInt(local.slug as string))
+        .eq("id", parseInt(local.eventId as string))
         .single();
       if (event.error) {
         console.log(event.error);
@@ -92,7 +92,7 @@ export default function Page() {
         // Get the number of volunteers
         const volunteersRes = await supabase
           .from("EventVolunteer")
-          .select("*", { count: "exact" })
+          .select("approved", { count: "exact" })
           .eq("eventId", event.id);
         if (volunteersRes.error) {
           console.log(volunteersRes.error);
@@ -105,8 +105,15 @@ export default function Page() {
           return;
         }
 
-        setVolunteers(volunteersRes.data);
-        setNumVolunteers(volunteersRes.data.filter((v) => v.approved).length);
+        let total = 0;
+        let approved = 0;
+        for (const volunteer of volunteersRes.data) {
+          total++;
+          approved += +volunteer.approved;
+        }
+
+        setNumVolunteers(total);
+        setNumApproved(approved);
       }
     };
     func();
@@ -124,21 +131,18 @@ export default function Page() {
     event,
     eventCreator,
     numVolunteers,
+    numApproved,
     numAddresses,
     numSurveyed,
     addresses,
-    volunteers,
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Pressable style={styles.backIcon} onPress={() => router.back()}>
-        <MaterialIcons name="arrow-back-ios" size={ms(30)} color="black" />
-      </Pressable>
-      <Text style={styles.pageTitle}>{event?.title}</Text>
+      <Header title={event?.title!} />
       <ImageBackground
         style={styles.map}
-        source={require("../../../assets/map.png")}
+        source={require("../../../../assets/map.png")}
       >
         <Severity
           appendedText=" Damage"
@@ -159,7 +163,7 @@ export default function Page() {
         <View style={styles.statBox}>
           <View style={styles.statHeaderRow}>
             <FontAwesome5 name="user" color="white" size={32} />
-            <Text style={styles.statHeaderText}>{numVolunteers}</Text>
+            <Text style={styles.statHeaderText}>{numApproved}</Text>
           </View>
           <Text style={styles.statSubtext}>registered volunteers</Text>
         </View>
@@ -177,11 +181,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: ms(30),
-    marginTop: ms(20),
-  },
-  backIcon: {
-    position: "absolute",
-    left: ms(20),
   },
   pageTitle: {
     fontWeight: "bold",

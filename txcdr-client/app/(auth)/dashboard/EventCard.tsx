@@ -22,7 +22,13 @@ type CardProps = {
 export function EventCard(props: CardProps) {
   return (
     <Pressable
-      style={{ width: "100%" }}
+      style={{
+        width: "100%",
+        shadowColor: "black",
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        shadowOffset: { width: 0, height: 0 },
+      }}
       onPress={() => router.push(`/event/${props.id}`)}
     >
       <ImageBackground
