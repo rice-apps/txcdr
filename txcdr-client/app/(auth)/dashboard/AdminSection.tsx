@@ -36,20 +36,28 @@ export function AdminSection({ events }: SectionProps) {
           contentContainerStyle={styles.eventList}
           bounces={false}
         >
-          {events.map(
-            (
-              e,
-              i, // TODO: filter by active column
-            ) => (
-              <EventCard
-                id={e.id}
-                registered={e.approved}
-                severity={e.severity}
-                title={e.title}
-                key={e.id}
-              />
-            ),
-          )}
+          {events
+            .filter((event) => {
+              if (mode == "ACTIVE") {
+                return event.active;
+              } else {
+                return !event.active;
+              }
+            })
+            .map(
+              (
+                e,
+                i, // TODO: filter by active column
+              ) => (
+                <EventCard
+                  id={e.id}
+                  registered={e.approved}
+                  severity={e.severity}
+                  title={e.title}
+                  key={e.id}
+                />
+              ),
+            )}
         </ScrollView>
       ) : (
         <ActivityIndicator

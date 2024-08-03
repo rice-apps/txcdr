@@ -7,7 +7,10 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../../utils/supabase";
 import { ms } from "react-native-size-matters";
 
-export type Event = Pick<Tables<"Event">, "id" | "title" | "severity"> & {
+export type Event = Pick<
+  Tables<"Event">,
+  "id" | "title" | "severity" | "active"
+> & {
   approved: boolean | null;
 };
 
@@ -28,7 +31,9 @@ export default function Page() {
         return;
       }
 
-      const events = await supabase.from("Event").select("id, title, severity");
+      const events = await supabase
+        .from("Event")
+        .select("id, title, severity, active");
       if (events.error) {
         console.log(events.error);
         Alert.alert("Failed to fetch events", events.error.message);
