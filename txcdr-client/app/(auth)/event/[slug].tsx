@@ -1,28 +1,39 @@
-import { Link, router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   Text,
   StyleSheet,
-  Image,
   Pressable,
-  GestureResponderEvent,
   ScrollView,
   ImageBackground,
-  Button,
-  View,
   Alert,
   ActivityIndicator,
+  View,
 } from "react-native";
 import { Severity } from "../dashboard/SeverityCard";
-import CensusBlock from "./censusBlock";
-import { fetchEvent } from "../../../mock-api/events";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../types/supabase";
 import { supabase } from "../../../utils/supabase";
 import { useRole } from "../../../utils/hooks/useRole";
 import { SafeAreaFlex } from "../../../components/SafeAreaFlex";
-import { VolunteerPage } from "./VolunteerPage";
-import { AdminPage } from "./AdminPage";
+import { VolunteerSection } from "./VolunteerSection";
+import { AdminSection } from "./AdminSection";
+import { ms } from "react-native-size-matters";
+import { Blue } from "../../../utils/styles/colors";
+
+type EventCreator = Pick<Tables<"User2">, "id" | "name" | "email" | "phone">;
+type Address = Pick<Tables<"EventAddress">, "id" | "claimerId" | "blockId">;
+type Volunteer = Tables<"EventVolunteer">;
+
+export interface PageProps {
+  event: Tables<"Event">;
+  eventCreator?: EventCreator;
+  numVolunteers?: number;
+  volunteers?: Volunteer[];
+  numAddresses?: number;
+  addresses?: Address[];
+  numSurveyed?: number;
+}
 
 export default function Page() {
   const local = useLocalSearchParams();
@@ -30,10 +41,11 @@ export default function Page() {
 
   const [event, setEvent] = useState<Tables<"Event">>();
   const [numVolunteers, setNumVolunteers] = useState<number>();
+  const [volunteers, setVolunteers] = useState<Volunteer[]>();
   const [numSurveyed, setNumSurveyed] = useState<number>();
   const [numAddresses, setNumAddresses] = useState<number>();
-  const [eventCreator, setEventCreator] =
-    useState<Pick<Tables<"User2">, "id" | "name" | "email" | "phone">>();
+  const [addresses, setAddresses] = useState<Address[]>();
+  const [eventCreator, setEventCreator] = useState<EventCreator>();
 
   // Get the event information
   useEffect(() => {
@@ -44,7 +56,7 @@ export default function Page() {
           `
           *,
           User2 ( id, name, email, phone ),
-          EventAddress ( id, claimerId )`,
+          EventAddress ( id, claimerId, blockId )`,
         )
         .eq("id", parseInt(local.slug as string))
         .single();
@@ -68,6 +80,7 @@ export default function Page() {
 
       setNumSurveyed(numClaimed);
       setNumAddresses(numTotal);
+      setAddresses(event.data.EventAddress);
     };
     func();
   }, []);
@@ -77,23 +90,23 @@ export default function Page() {
     const func = async () => {
       if (event) {
         // Get the number of volunteers
-        const numVolunteers = await supabase
+        const volunteersRes = await supabase
           .from("EventVolunteer")
           .select("*", { count: "exact" })
-          .eq("eventId", event.id)
-          .eq("approved", true);
-        if (numVolunteers.error || numVolunteers.count == null) {
-          console.log(numVolunteers.error);
+          .eq("eventId", event.id);
+        if (volunteersRes.error) {
+          console.log(volunteersRes.error);
           Alert.alert(
             "Failed to fetch number of volunteers",
-            numVolunteers?.error?.message ??
+            volunteersRes?.error?.message ??
               "Unknown error, couldn't fetch exact number of volunteers",
           );
           router.back();
           return;
         }
 
-        setNumVolunteers(numVolunteers.count);
+        setVolunteers(volunteersRes.data);
+        setNumVolunteers(volunteersRes.data.filter((v) => v.approved).length);
       }
     };
     func();
@@ -113,11 +126,92 @@ export default function Page() {
     numVolunteers,
     numAddresses,
     numSurveyed,
+    addresses,
+    volunteers,
   };
 
-  return role === "USER" ? (
-    <VolunteerPage {...props} />
-  ) : (
-    <AdminPage {...props} />
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Pressable style={styles.backIcon} onPress={() => router.back()}>
+        <MaterialIcons name="arrow-back-ios" size={ms(30)} color="black" />
+      </Pressable>
+      <Text style={styles.pageTitle}>{event?.title}</Text>
+      <ImageBackground
+        style={styles.map}
+        source={require("../../../assets/map.png")}
+      >
+        <Severity
+          appendedText=" Damage"
+          style={{ alignSelf: "flex-end", right: ms(15), top: ms(10) }}
+          text={event?.severity!}
+        ></Severity>
+      </ImageBackground>
+      <View style={styles.statBoxRow}>
+        <View style={styles.statBox}>
+          <View style={styles.statHeaderRow}>
+            <Octicons name="home" color="white" size={32} />
+            <Text style={styles.statHeaderText}>
+              {numSurveyed}/{numAddresses}
+            </Text>
+          </View>
+          <Text style={styles.statSubtext}>surveyed addresses</Text>
+        </View>
+        <View style={styles.statBox}>
+          <View style={styles.statHeaderRow}>
+            <FontAwesome5 name="user" color="white" size={32} />
+            <Text style={styles.statHeaderText}>{numVolunteers}</Text>
+          </View>
+          <Text style={styles.statSubtext}>registered volunteers</Text>
+        </View>
+      </View>
+      {role === "USER" ? (
+        <VolunteerSection {...props} />
+      ) : (
+        <AdminSection {...props} />
+      )}
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    gap: ms(30),
+    marginTop: ms(20),
+  },
+  backIcon: {
+    position: "absolute",
+    left: ms(20),
+  },
+  pageTitle: {
+    fontWeight: "bold",
+    fontSize: ms(24),
+    alignSelf: "center",
+  },
+  map: {
+    width: "100%",
+    height: ms(175),
+  },
+  statBox: {
+    backgroundColor: Blue[500],
+    borderRadius: ms(10),
+    padding: ms(12),
+    alignItems: "center",
+    justifyContent: "center",
+    gap: ms(5),
+  },
+  statBoxRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignSelf: "center",
+    gap: ms(10),
+  },
+  statHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: ms(10),
+  },
+  statHeaderText: { color: "white", fontWeight: "bold", fontSize: ms(18) },
+  statSubtext: { color: "white", fontWeight: "bold", fontSize: ms(12) },
+});

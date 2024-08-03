@@ -1,11 +1,11 @@
-import { ActivityIndicator, Alert, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
 import { useRole } from "../../../utils/hooks/useRole";
 import { UserSection } from "./UserSection";
 import { AdminSection } from "./AdminSection";
-import { SafeAreaFlex } from "../../../components/SafeAreaFlex";
 import { Tables } from "../../../types/supabase";
 import { useState, useEffect } from "react";
 import { supabase } from "../../../utils/supabase";
+import { ms } from "react-native-size-matters";
 
 export type Event = Pick<Tables<"Event">, "id" | "title" | "severity"> & {
   approved: boolean | null;
@@ -70,19 +70,20 @@ export default function Page() {
   }
 
   return (
-    <SafeAreaFlex style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.pageTitle}>Event Dashboard</Text>
       {role == "USER" ? (
         <UserSection events={events} />
       ) : (
         <AdminSection events={events} />
       )}
-    </SafeAreaFlex>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: ms(30),
     flex: 1,
     width: "90%",
     alignSelf: "center",

@@ -9,11 +9,11 @@ import { BORDER_RADIUS } from "../../utils/styles/constants";
 import { Zinc } from "../../utils/styles/colors";
 import { ms } from "react-native-size-matters";
 
-interface Props extends PressableProps {
+export interface WideButtonProps extends PressableProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export function WideButton(props: Props) {
+export function WideButton(props: WideButtonProps) {
   const { style, children, ...rest } = props;
   return (
     <Pressable style={[styles.pressable, style]} {...rest}>
