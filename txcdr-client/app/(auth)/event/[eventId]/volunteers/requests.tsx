@@ -45,7 +45,13 @@ export default function Page() {
         {requests ? (
           requests.map(
             (v) =>
-              v.User2 && <VolunteerApproval eventId={eventId} user={v.User2} />,
+              v.User2 && (
+                <VolunteerApproval
+                  eventId={eventId}
+                  user={v.User2}
+                  key={v.User2.id}
+                />
+              ),
           )
         ) : (
           <ActivityIndicator size="large" />

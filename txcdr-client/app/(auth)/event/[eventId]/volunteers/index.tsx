@@ -1,12 +1,12 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { DText } from "../../../../../components/styled-rn/DText";
+import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
 import { Tables } from "../../../../../types/supabase";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../../../utils/supabase";
 import { ms } from "react-native-size-matters";
 import { Header } from "../Header";
 import { VolunteerInfoButton } from "../VolunteerInfoButton";
+import { VolunteerAssignment } from "./VolunteerAssignment";
 
 export type User = Pick<
   Tables<"User2">,
@@ -68,6 +68,22 @@ export default function Page() {
           onPress={() => router.push(`/event/${eventId}/volunteers/requests`)}
         />
       </View>
+      <ScrollView contentContainerStyle={styles.body}>
+        {approved ? (
+          approved.map(
+            (v) =>
+              v.User2 && (
+                <VolunteerAssignment
+                  eventId={eventId}
+                  user={v.User2}
+                  key={v.User2.id}
+                />
+              ),
+          )
+        ) : (
+          <ActivityIndicator size="large" />
+        )}
+      </ScrollView>
     </View>
   );
 }

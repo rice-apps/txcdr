@@ -22,9 +22,11 @@ export function VolunteerInfoButton(props: Props) {
         <DText style={styles.text}>{text}</DText>
       </View>
       <View style={[styles.pair, { gap: ms(10) }]}>
-        <View style={styles.circle}>
-          <DText style={styles.circleText}>{numAlert}</DText>
-        </View>
+        {numAlert ? (
+          <View style={styles.circle}>
+            <DText style={styles.circleText}>{numAlert}</DText>
+          </View>
+        ) : null}
         <MaterialIcons name="arrow-forward-ios" size={ms(24)} color="black" />
       </View>
     </WideButton>
