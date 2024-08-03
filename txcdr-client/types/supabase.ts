@@ -178,6 +178,7 @@ export type Database = {
       }
       Event: {
         Row: {
+          active: boolean
           createdAt: string
           creatorId: string
           description: string
@@ -188,6 +189,7 @@ export type Database = {
           updatedAt: string
         }
         Insert: {
+          active?: boolean
           createdAt?: string
           creatorId: string
           description: string
@@ -198,6 +200,7 @@ export type Database = {
           updatedAt: string
         }
         Update: {
+          active?: boolean
           createdAt?: string
           creatorId?: string
           description?: string
