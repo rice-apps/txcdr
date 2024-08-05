@@ -24,7 +24,7 @@ export default function Page() {
 
   useEffect(() => {
     const func = async () => {
-      const res = await supabase.from("EventAddress").select("*").limit(10); // TODO: remove the limit; it's here so we aren't opps to supabase
+      const res = await supabase.from("EventAddress").select("*").limit(20); // TODO: remove the limit; it's here so we aren't opps to supabase
       if (res.error) {
         console.log(res.error);
         Alert.alert("Failed to fetch addresses", res.error.message);

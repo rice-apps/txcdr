@@ -9,41 +9,20 @@ import {
 import { DText } from "../../../components/styled-rn/DText";
 import { ms } from "react-native-size-matters";
 import { Blue, Zinc } from "../../../utils/styles/colors";
+import { OpacityPressable } from "../../../components/styled-rn/OpacityPressable";
+import { router } from "expo-router";
+import { abbreviateStreetType } from "./helpers";
 
 interface Props {
   address: Tables<"EventAddress">;
 }
 
-function abbreviateStreetType(type: string) {
-  switch (type.toLowerCase()) {
-    case "street":
-      return "St.";
-    case "avenue":
-      return "Ave.";
-    case "boulevard":
-      return "Blvd.";
-    case "drive":
-      return "Dr.";
-    case "court":
-      return "Ct.";
-    case "circle":
-      return "Cir.";
-    case "lane":
-      return "Ln.";
-    case "road":
-      return "Rd.";
-    case "parkway":
-      return "Pkwy.";
-    case "highway":
-      return "Hwy.";
-    default:
-      return type;
-  }
-}
-
 export function AddressCard({ address }: Props) {
   return (
-    <View style={styles.container}>
+    <OpacityPressable
+      style={styles.container}
+      onPress={() => router.push(`/list/${address.id}`)}
+    >
       <View style={styles.left}>
         <Octicons name="home" color="gray" size={32}></Octicons>
         <DText style={styles.text}>{`${address.number} ${
@@ -62,7 +41,7 @@ export function AddressCard({ address }: Props) {
           color={Zinc[700]}
         />
       </View>
-    </View>
+    </OpacityPressable>
   );
 }
 
