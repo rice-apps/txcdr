@@ -57,7 +57,7 @@ export default function Page() {
               className="rounded-full"
               source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
             />
-            <Text className="self-center text-2xl mr-auto">Admin Name</Text>
+            <Text className="self-center text-2xl mr-auto">{user.name}</Text>
             <Icon
               name={"edit"}
               size={20}

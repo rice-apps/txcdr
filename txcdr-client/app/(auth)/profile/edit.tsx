@@ -2,24 +2,40 @@ import { View, Text, ScrollView, TextInput, Image } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { Pressable } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { router } from "expo-router";
+import { supabase } from "../../../utils/supabase";
+import { Tables } from "../../../types/supabase";
 
 // Edit page form for user profile, where users can update their information
 export default function Page() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      pronouns: "",
-      age: "",
-      languages: "",
-      organizations: "",
-    },
+  const [user, setUser] = useState<Tables<"User2"> | null>(null);
+  const { control, handleSubmit, formState, getValues } = useForm({
+    defaultValues: useMemo(() => {
+      return {
+        name: user?.name,
+        pronouns: user?.pronouns,
+        age: user?.age,
+        languages: user?.languages,
+        organizations: user?.organizations,
+      };
+    }, [user]),
+  });
+
+  useEffect(() => {
+    // get our own id
+    supabase.auth.getUser().then((res) => {
+      // we should definitely be logged in
+      let id = res.data.user!.id;
+
+      supabase
+        .from("User2")
+        .select()
+        .eq("id", id)
+        .then((res) => {
+          setUser(res.data![0]);
+        });
+    });
   });
   const [image, setImage] = useState<string | null>(null);
 
@@ -31,8 +47,6 @@ export default function Page() {
       quality: 1,
     });
 
-    console.log(result);
-    setImage(result.uri);
     if (!result.canceled) {
       // setImage('./assets/hydrangea.png');
       setImage(result.assets[0].uri);
@@ -69,37 +83,17 @@ export default function Page() {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <View className="pb-4">
-              <Text className="text-xl pb-2 font-medium">First Name</Text>
+              <Text className="text-xl pb-2 font-medium">Name</Text>
               <TextInput
-                placeholder="First Name"
+                placeholder="Name"
                 onBlur={onBlur}
                 onChangeText={onChange}
-                value={value}
+                value={value ?? ""}
                 className="border border-gray-300 rounded-3xl p-4 w-full"
               />
             </View>
           )}
-          name="firstName"
-        />
-
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <>
-              <Text className="text-xl pb-2 font-medium">Last Name</Text>
-              <TextInput
-                placeholder="Last Name"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                className="border border-gray-300 rounded-3xl p-4 w-full"
-              />
-            </>
-          )}
-          name="lastName"
+          name="name"
         />
       </View>
       <View className="flex flex-col pt-5 pb-6">
@@ -202,7 +196,30 @@ export default function Page() {
         </Pressable>
         <Pressable
           className="bg-blue-500 rounded-3xl py-4 flex-1"
-          onPress={() => router.back()}
+          onPress={() => {
+            router.back();
+            // submit to supabase for our user id
+            supabase.auth.getUser().then((res) => {
+              // we should definitely be logged in
+              let id = res.data.user!.id;
+
+              supabase
+                .from("User2")
+                .update({
+                  name: getValues("name"),
+                  pronouns: getValues("pronouns"),
+                  age: getValues("age"),
+                  languages: getValues("languages"),
+                  organizations: getValues("organizations"),
+                })
+                .eq("id", id)
+                .then((res) => {
+                  console.log(user);
+                  console.log(id);
+                  console.log(res);
+                });
+            });
+          }}
         >
           <Text className="text-white text-center text-lg font-semibold">
             Save Changes
