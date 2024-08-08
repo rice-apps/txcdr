@@ -10,12 +10,12 @@ import { supabase } from "../../../utils/supabase";
 import React, { useEffect, useState } from "react";
 import { DText } from "../../../components/styled-rn/DText";
 import { Zinc } from "../../../utils/styles/colors";
-import { msc, sc } from "../../../utils/size-matters-aliases";
 import { WideButton } from "../../../components/buttons/WideButton";
 import { DigitRow } from "./DigitRow";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { LinkTextStyle } from "../../../utils/styles/styles";
 import { SafeAreaFlex } from "../../../components/SafeAreaFlex";
+import { ms, s } from "react-native-size-matters";
 
 export default function Verify() {
   const [code, setCode] = useState("");
@@ -28,7 +28,7 @@ export default function Verify() {
       .then((res) => {
         if (res.data.user) {
           console.log("user already has a session");
-          router.replace("/dash");
+          router.replace("/dashboard");
         } else {
           console.log("user should be on this page (verify page)");
         }
@@ -54,7 +54,7 @@ export default function Verify() {
           .from("User2")
           .insert({ id: data.user.id, email: email, role: "USER" });
         if (status === 201) {
-          router.replace("/dash");
+          router.replace("/dashboard");
         } else {
           Alert.alert(
             `${error?.message ?? "Something went wrong..."} (Code ${status})`,
@@ -81,17 +81,17 @@ export default function Verify() {
         contentContainerStyle={styles.outerView}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={{ gap: msc(5), alignItems: "center" }}>
+        <View style={{ gap: ms(5), alignItems: "center" }}>
           <DText
             style={{
-              fontSize: msc(26),
+              fontSize: ms(26),
               fontWeight: "bold",
             }}
           >
             Check your email!
           </DText>
           <DText
-            style={{ fontSize: msc(13), color: Zinc[400], textAlign: "center" }}
+            style={{ fontSize: ms(13), color: Zinc[400], textAlign: "center" }}
           >
             Type the verification code sent to{" "}
             <DText style={{ fontWeight: "bold" }}>{email}</DText>
@@ -113,7 +113,7 @@ export default function Verify() {
               </DText>
             )}
           </WideButton>
-          <Pressable onPress={() => router.back()} hitSlop={sc(20)}>
+          <Pressable onPress={() => router.back()} hitSlop={s(20)}>
             <DText style={LinkTextStyle}>{"< "} Go back to sign up</DText>
           </Pressable>
         </View>
@@ -131,12 +131,12 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   formView: {
-    marginTop: msc(36),
+    marginTop: ms(36),
   },
   bottomView: {
     width: "100%",
     alignItems: "center",
-    gap: msc(26),
-    marginTop: msc(26),
+    gap: ms(26),
+    marginTop: ms(26),
   },
 });

@@ -1,7 +1,14 @@
 import { Link, usePathname } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 import { ISvgProps } from "../../types/utils";
-import { msc } from "../../utils/size-matters-aliases";
+import { ms } from "react-native-size-matters";
 
 interface Props {
   /**
@@ -37,8 +44,12 @@ export function NavBarButton(props: Props) {
     <Pressable style={styles.container} hitSlop={20}>
       <Link href={props.href}>
         <View style={styles.column}>
-          {props.href == currPath ? <props.activeSvg /> : <props.idleSvg />}
-          <Text>{props.label}</Text>
+          {props.href == currPath ? (
+            <props.activeSvg style={styles.icon as StyleProp<ViewStyle>} />
+          ) : (
+            <props.idleSvg style={styles.icon as StyleProp<ViewStyle>} />
+          )}
+          <Text style={styles.text}>{props.label}</Text>
         </View>
       </Link>
     </Pressable>
@@ -48,9 +59,20 @@ export function NavBarButton(props: Props) {
 const styles = StyleSheet.create({
   container: {},
   column: {
-    justifyContent: "center",
+    flexDirection: "column",
     alignContent: "center",
-    gap: msc(2),
-    padding: msc(20),
+    alignItems: "center",
+    gap: ms(2),
+    padding: ms(20),
+  },
+  text: {
+    paddingTop: ms(10),
+    fontSize: ms(12),
+    fontWeight: "semibold",
+    textAlign: "center",
+    color: "#fff",
+  },
+  icon: {
+    color: "#fff",
   },
 });

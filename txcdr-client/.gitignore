@@ -36,5 +36,6 @@ yarn-error.*
 
 # apollo
 app/__generated__
-ios
-android
+
+android/
+ios/

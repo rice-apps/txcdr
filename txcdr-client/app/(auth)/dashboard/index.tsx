@@ -1,67 +1,102 @@
-import { Link } from "expo-router";
-import {
-  Text,
-  StyleSheet,
-  ScrollView,
-  FlatList,
-  View,
-  ActivityIndicator,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Card from "./card";
-import { fetchEvent } from "../../../mock-api/events";
-import { useEffect, useState } from "react";
-import { EventDetails } from "../../../types/event";
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
+import { useRole } from "../../../utils/hooks/useRole";
+import { UserSection } from "./UserSection";
+import { AdminSection } from "./AdminSection";
+import { Tables } from "../../../types/supabase";
+import { useState, useEffect } from "react";
+import { supabase } from "../../../utils/supabase";
+import { ms } from "react-native-size-matters";
+
+export type Event = Pick<
+  Tables<"Event">,
+  "id" | "title" | "severity" | "active"
+> & {
+  approved: boolean | null;
+};
+
+export interface SectionProps {
+  events: Event[];
+}
 
 export default function Page() {
-  const [loading, setLoading] = useState(true);
-  const [events, setEvents] = useState<EventDetails[]>([]);
+  const [role, loading] = useRole();
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    for (let i = 1; i < 6; i++) {
-      setEvents([...events, fetchEvent(i)]);
-    }
-    setLoading(false);
+    const func = async () => {
+      const user = await supabase.auth.getUser();
+      if (user.error) {
+        console.log(user.error);
+        Alert.alert("Failed to fetch user", user.error.message);
+        return;
+      }
+
+      const events = await supabase
+        .from("Event")
+        .select("id, title, severity, active");
+      if (events.error) {
+        console.log(events.error);
+        Alert.alert("Failed to fetch events", events.error.message);
+        return;
+      }
+
+      const eventMap: Record<number, (typeof events.data)[0]> = {};
+      events.data.forEach((e) => (eventMap[e.id] = e));
+
+      console.log(events.data, eventMap);
+      const approvals = await supabase
+        .from("EventVolunteer")
+        .select("eventId, approved")
+        .eq("volunteerId", user.data.user.id);
+      if (approvals.error) {
+        console.log(approvals.error);
+        Alert.alert("Failed to fetch approvals", approvals.error.message);
+        return;
+      }
+
+      const approvalsMap: Record<number, (typeof approvals.data)[0]> = {};
+      approvals.data.forEach((a) => (approvalsMap[a.eventId] = a));
+
+      const processedEvents: Event[] = [];
+      for (const event of events.data) {
+        processedEvents.push({
+          ...event,
+          approved: approvalsMap[event.id]?.approved,
+        });
+      }
+
+      setEvents(processedEvents);
+    };
+    func();
   }, []);
 
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
+
   return (
-    <>
+    <View style={styles.container}>
       <Text style={styles.pageTitle}>Event Dashboard</Text>
-      <ScrollView
-        style={styles.scroller}
-        contentContainerStyle={{ alignItems: "center" }}
-      >
-        {/* TODO: replace mock API calls with real ones */}
-        {loading ? (
-          <ActivityIndicator size="large" />
-        ) : (
-          <View>
-            <Card event={fetchEvent(1)}></Card>
-            <Card event={fetchEvent(2)}></Card>
-            <Card event={fetchEvent(3)}></Card>
-            <Card event={fetchEvent(4)}></Card>
-            <Card event={fetchEvent(5)}></Card>
-          </View>
-        )}
-      </ScrollView>
-    </>
+      {role == "USER" ? (
+        <UserSection events={events} />
+      ) : (
+        <AdminSection events={events} />
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: ms(30),
+    flex: 1,
+    width: "90%",
+    alignSelf: "center",
+  },
   pageTitle: {
     fontWeight: "bold",
     fontSize: 24,
     paddingLeft: 15,
     paddingBottom: 15,
-  },
-  scroller: {
-    paddingBottom: 50,
-    width: "100%",
-  },
-
-  footer: {
-    // textAlign: "center",
-    height: 60,
   },
 });

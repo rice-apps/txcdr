@@ -1,3 +1,5 @@
+import { Tables } from "./supabase";
+
 export interface EventDetails {
   id: number;
   eventName: string;
@@ -9,3 +11,5 @@ export interface EventDetails {
   contactName: string;
   registered: boolean;
 }
+
+export type Address = Omit<Tables<"EventAddress">, "id" | "createdAt">;

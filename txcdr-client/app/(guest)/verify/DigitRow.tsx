@@ -1,7 +1,7 @@
 import { ReactElement, useState } from "react";
 import { DigitBlock } from "./DigitBlock";
 import { StyleSheet, TextInput, View } from "react-native";
-import { msc } from "../../../utils/size-matters-aliases";
+import { ms } from "react-native-size-matters";
 
 interface Props {
   numDigits: number;
@@ -42,7 +42,7 @@ export function DigitRow(props: Props) {
 
 const styles = StyleSheet.create({
   row: {
-    gap: msc(13),
+    gap: ms(13),
     width: "100%",
     flexDirection: "row",
     alignItems: "center",

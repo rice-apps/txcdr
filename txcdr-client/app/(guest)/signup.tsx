@@ -12,9 +12,8 @@ import { supabase } from "../../utils/supabase";
 import { DText } from "../../components/styled-rn/DText";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Zinc } from "../../utils/styles/colors";
-import { scale } from "react-native-size-matters";
+import { ms, s, scale } from "react-native-size-matters";
 import { WideButton } from "../../components/buttons/WideButton";
-import { msc, sc } from "../../utils/size-matters-aliases";
 import { LinkTextStyle } from "../../utils/styles/styles";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { SafeAreaFlex } from "../../components/SafeAreaFlex";
@@ -62,13 +61,13 @@ export default function Signup() {
         <View style={{ gap: scale(5), alignItems: "center" }}>
           <DText
             style={{
-              fontSize: msc(26),
+              fontSize: ms(26),
               fontWeight: "bold",
             }}
           >
             Create an account
           </DText>
-          <DText style={{ fontSize: msc(13), color: Zinc[400] }}>
+          <DText style={{ fontSize: ms(13), color: Zinc[400] }}>
             Welcome! Please enter your details.
           </DText>
         </View>
@@ -78,7 +77,7 @@ export default function Signup() {
             icon={
               <MaterialIcons
                 name="mail-outline"
-                size={msc(24, 0.25)}
+                size={ms(24, 0.25)}
                 color={Zinc[400]}
               />
             }
@@ -91,7 +90,7 @@ export default function Signup() {
             icon={
               <MaterialIcons
                 name="account-circle"
-                size={msc(24, 0.25)}
+                size={ms(24, 0.25)}
                 color={Zinc[400]}
               />
             }
@@ -103,7 +102,7 @@ export default function Signup() {
             icon={
               <MaterialIcons
                 name="lock-outline"
-                size={msc(24, 0.25)}
+                size={ms(24, 0.25)}
                 color={Zinc[400]}
               />
             }
@@ -128,7 +127,7 @@ export default function Signup() {
             <DText>Already have an account? </DText>
             <Pressable
               onPress={() => router.navigate("/login")}
-              hitSlop={sc(20)}
+              hitSlop={s(20)}
             >
               <DText style={LinkTextStyle}>Log in</DText>
             </Pressable>
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   formView: {
-    rowGap: msc(26),
+    rowGap: ms(26),
     width: "100%",
     flexDirection: "column",
     marginTop: scale(36),
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
   bottomView: {
     width: "100%",
     alignItems: "center",
-    gap: msc(26),
-    marginTop: msc(40),
+    gap: ms(26),
+    marginTop: ms(40),
   },
 });
