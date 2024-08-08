@@ -18,6 +18,8 @@ import { Tables } from "../../../types/supabase";
 import { supabase } from "../../../utils/supabase";
 import { AddressCard } from "./AddressCard";
 import { ms } from "react-native-size-matters";
+import { DText } from "../../../components/styled-rn/DText";
+import { FilterList } from "./FilterList";
 
 export default function Page() {
   const [addresses, setAddresses] = useState<Tables<"EventAddress">[]>([]);
@@ -37,16 +39,29 @@ export default function Page() {
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
-      {addresses.map((a) => (
-        <AddressCard address={a} key={a.id} />
-      ))}
-    </ScrollView>
+    <View style={styles.container}>
+      <FilterList
+        filters={[
+          { name: "Event" },
+          { name: "Block ID" },
+          { name: "ZIP Code", modal: true },
+        ]}
+      />
+      <ScrollView contentContainerStyle={styles.addressList}>
+        {addresses.map((a) => (
+          <AddressCard address={a} key={a.id} />
+        ))}
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
+  container: {
+    flex: 1,
+  },
+
+  addressList: {
     width: "85%",
     gap: ms(10),
     alignSelf: "center",
