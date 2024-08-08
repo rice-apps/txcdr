@@ -35,7 +35,7 @@ export default function Page() {
           setUser(res.data![0]);
         });
     });
-  });
+  }, []);
   return (
     <ScrollView
       contentContainerStyle={
