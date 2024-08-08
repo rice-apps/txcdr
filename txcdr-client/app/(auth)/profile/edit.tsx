@@ -38,7 +38,8 @@ export default function Page() {
           setUser(res.data![0]);
         });
     });
-  });
+  }, []);
+
   const [image, setImage] = useState<string | null>(null);
 
   const onCameraSelect = async () => {
