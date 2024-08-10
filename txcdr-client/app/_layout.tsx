@@ -1,6 +1,5 @@
 import { Slot } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { AuthProvider } from "../auth/ctx";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "../graphql/client";
 
@@ -11,11 +10,9 @@ import { apolloClient } from "../graphql/client";
 export default function RootLayout() {
   return (
     <ApolloProvider client={apolloClient}>
-      <AuthProvider>
-        <View style={styles.base}>
-          <Slot />
-        </View>
-      </AuthProvider>
+      <View style={styles.base}>
+        <Slot />
+      </View>
     </ApolloProvider>
   );
 }
