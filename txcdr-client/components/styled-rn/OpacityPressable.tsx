@@ -7,6 +7,8 @@ import {
   ViewStyle,
 } from "react-native";
 
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
 export interface OpacityPressableProps extends PressableProps {
   style?: StyleProp<ViewStyle>;
 }
@@ -31,15 +33,13 @@ export function OpacityPressable(props: OpacityPressableProps) {
   };
 
   return (
-    <Animated.View style={{ opacity: animated, width: "100%" }}>
-      <Pressable
-        style={style}
-        onPressIn={fadeIn}
-        onPressOut={fadeOut}
-        {...rest}
-      >
-        {children}
-      </Pressable>
-    </Animated.View>
+    <AnimatedPressable
+      onPressIn={fadeIn}
+      onPressOut={fadeOut}
+      style={[{ opacity: animated }, style]}
+      {...rest}
+    >
+      {children}
+    </AnimatedPressable>
   );
 }
