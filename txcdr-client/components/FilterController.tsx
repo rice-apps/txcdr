@@ -2,7 +2,7 @@ import { View, ScrollView, StyleSheet, TextInput } from "react-native";
 import { ms } from "react-native-size-matters";
 import { DText } from "./styled-rn/DText";
 import { useFilter } from "../utils/hooks/useFilter";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { router, useGlobalSearchParams } from "expo-router";
 import { WideButton } from "./buttons/WideButton";
 import { HandledModal } from "./modals/HandledModal";
@@ -41,6 +41,7 @@ export function FilterController(props: Props) {
   const [claimed, setClaimed] = useState(params.claimed);
   const [completed, setCompleted] = useState(params.completed);
 
+  // Create filters
   const [StatusFilter, statusVisible, statusToggle] = useFilter({
     name: "Status",
     modal: true,
@@ -69,11 +70,19 @@ export function FilterController(props: Props) {
       "You must provide available ZIP codes for the ZIP code filter.",
     );
 
+  // Build labels to display in the filter buttons
   const statusSuffix: string[] = [];
   if (params.claimed)
     statusSuffix.push(params.claimed == "true" ? "Claimed" : "Unclaimed");
   if (params.completed)
     statusSuffix.push(params.completed == "true" ? "Complete" : "Incomplete");
+
+  // Set default states (these are only for the UI, not the global search params)
+  useEffect(() => {
+    setZipCode(
+      props.availableZipCodes ? props.availableZipCodes[0] : undefined,
+    );
+  }, [props.availableZipCodes]);
 
   return (
     <ScrollView horizontal contentContainerStyle={styles.filterList}>
@@ -142,6 +151,7 @@ export function FilterController(props: Props) {
             <Picker
               selectedValue={zipCode}
               onValueChange={(itemValue: string) => setZipCode(itemValue)}
+              mode="dropdown"
             >
               {props.availableZipCodes &&
                 props.availableZipCodes.map((zip) => (

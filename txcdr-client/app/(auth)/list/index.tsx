@@ -50,12 +50,14 @@ export default function Page() {
       >
         {addresses
           .filter((a) => {
-            return (
-              (!params.zipCode || a.zipCode == params.zipCode) &&
-              (!params.claimed ||
-                (params.claimed == "true" && a.claimerId) ||
-                (params.claimed == "false" && !a.claimerId))
-            );
+            if (params.zipCode && a.zipCode != params.zipCode) return false;
+            if (
+              params.claimed &&
+              ((!a.claimerId && params.claimed == "true") ||
+                (a.claimerId && params.claimed == "false"))
+            )
+              return false;
+            return true;
           })
           .map((a) => (
             <AddressCard address={a} key={a.id} />
@@ -71,7 +73,6 @@ const styles = StyleSheet.create({
   },
 
   addressList: {
-    flex: 1,
     width: "85%",
     gap: ms(10),
     alignSelf: "center",
