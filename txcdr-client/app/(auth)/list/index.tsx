@@ -20,6 +20,7 @@ export default function Page() {
   console.log(params.zipCode);
   const [addresses, setAddresses] = useState<Tables<"EventAddress">[]>([]);
   const [zipCodes, setZipCodes] = useState<string[]>([]);
+  const [blockIds, setBlockIds] = useState<string[]>([]);
 
   useEffect(() => {
     const func = async () => {
@@ -34,6 +35,9 @@ export default function Page() {
       setZipCodes(
         Array.from(new Set(res.data.map((address) => address.zipCode))),
       );
+      setBlockIds(
+        Array.from(new Set(res.data.map((address) => address.blockId))),
+      );
     };
     func();
   }, []);
@@ -41,8 +45,9 @@ export default function Page() {
   return (
     <View style={styles.container}>
       <FilterController
-        filters={["status", "zipCode"]}
-        availableZipCodes={zipCodes}
+        filters={["status", "zipCode", "blockId"]}
+        zipCodes={zipCodes}
+        blockIds={blockIds}
       />
       <ScrollView
         style={{ height: "100%" }}
@@ -57,6 +62,7 @@ export default function Page() {
                 (a.claimerId && params.claimed == "false"))
             )
               return false;
+            if (params.blockId && a.blockId != params.blockId) return false;
             return true;
           })
           .map((a) => (

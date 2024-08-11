@@ -1,4 +1,10 @@
-import { View, ScrollView, StyleSheet, TextInput } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { ms } from "react-native-size-matters";
 import { DText } from "./styled-rn/DText";
 import { useFilter } from "../utils/hooks/useFilter";
@@ -22,13 +28,15 @@ export interface AddressQueryParams {
   zipCode: string;
   claimed: "true" | "false";
   completed: "true" | "false";
+  blockId: string;
 }
 
 interface Props {
   /** Filters to enable */
-  filters: ("status" | "zipCode")[];
+  filters: ("status" | "zipCode" | "blockId")[];
   /** Array of ZIP codes that the user can select from. This prop must be set if the ZIP code filter is enabled. */
-  availableZipCodes?: string[];
+  zipCodes?: string[];
+  blockIds?: string[];
 }
 
 /**
@@ -38,8 +46,9 @@ interface Props {
 export function FilterController(props: Props) {
   const params = useGlobalSearchParams<Partial<AddressQueryParams>>();
   const [zipCode, setZipCode] = useState(params.zipCode);
-  const [claimed, setClaimed] = useState(params.claimed);
-  const [completed, setCompleted] = useState(params.completed);
+  const [claimed, setClaimed] = useState(params.claimed ?? "false");
+  const [completed, setCompleted] = useState(params.completed ?? "false");
+  const [blockId, setBlockId] = useState(params.blockId);
 
   // Create filters
   const [StatusFilter, statusVisible, statusToggle] = useFilter({
@@ -50,24 +59,38 @@ export function FilterController(props: Props) {
     name: "Zip code",
     modal: true,
   });
+  const [BlockFilter, blockVisible, blockToggle] = useFilter({
+    name: "Block ID",
+    modal: true,
+  });
 
   const onZipSubmit = () => {
     zipToggle();
     router.setParams({ zipCode: zipCode });
   };
+  const onBlockSubmit = () => {
+    blockToggle();
+    router.setParams({ blockId: blockId });
+  };
 
   // Activate filters
   let statusEnabled = false;
   let zipEnabled = false;
+  let blockEnabled = false;
   for (const filter of props.filters) {
     if (filter == "status") statusEnabled = true;
     if (filter == "zipCode") zipEnabled = true;
+    if (filter == "blockId") blockEnabled = true;
   }
 
   // Prop validation
-  if (zipEnabled && !props.availableZipCodes)
+  if (zipEnabled && !props.zipCodes)
     throw new Error(
       "You must provide available ZIP codes for the ZIP code filter.",
+    );
+  if (blockEnabled && !props.blockIds)
+    throw new Error(
+      "You must provide available block IDs for the block ID filter.",
     );
 
   // Build labels to display in the filter buttons
@@ -79,15 +102,19 @@ export function FilterController(props: Props) {
 
   // Set default states (these are only for the UI, not the global search params)
   useEffect(() => {
-    setZipCode(
-      props.availableZipCodes ? props.availableZipCodes[0] : undefined,
-    );
-  }, [props.availableZipCodes]);
+    setZipCode(props.zipCodes ? props.zipCodes[0] : undefined);
+    setBlockId(props.blockIds ? props.blockIds[0] : undefined);
+  }, [props.zipCodes]);
 
   return (
-    <ScrollView horizontal contentContainerStyle={styles.filterList}>
+    <ScrollView
+      horizontal
+      contentContainerStyle={styles.filterList}
+      showsHorizontalScrollIndicator={false}
+    >
       {statusEnabled && <StatusFilter suffix={statusSuffix.join(", ")} />}
       {zipEnabled && <ZipFilter suffix={params.zipCode} />}
+      {blockEnabled && <BlockFilter suffix={params.blockId} />}
 
       {statusEnabled && (
         <HandledModal
@@ -124,8 +151,8 @@ export function FilterController(props: Props) {
               <WideButton
                 style={{ backgroundColor: "transparent" }}
                 onPress={() => {
-                  setClaimed(undefined);
-                  setCompleted(undefined);
+                  setClaimed("false");
+                  setCompleted("false");
                   router.setParams({
                     claimed: undefined,
                     completed: undefined,
@@ -148,16 +175,20 @@ export function FilterController(props: Props) {
         >
           <View style={styles.modalContainer}>
             <DText style={styles.filterTitle}>Zip code</DText>
-            <Picker
-              selectedValue={zipCode}
-              onValueChange={(itemValue: string) => setZipCode(itemValue)}
-              mode="dropdown"
-            >
-              {props.availableZipCodes &&
-                props.availableZipCodes.map((zip) => (
-                  <Picker.Item label={zip} value={zip} key={zip} />
-                ))}
-            </Picker>
+            <TouchableWithoutFeedback>
+              <View>
+                <Picker
+                  selectedValue={zipCode}
+                  onValueChange={(itemValue: string) => setZipCode(itemValue)}
+                  mode="dropdown"
+                >
+                  {props.zipCodes &&
+                    props.zipCodes.map((zip) => (
+                      <Picker.Item label={zip} value={zip} key={zip} />
+                    ))}
+                </Picker>
+              </View>
+            </TouchableWithoutFeedback>
             <View style={styles.buttonColumn}>
               <WideButton
                 style={{ backgroundColor: Blue[500] }}
@@ -168,9 +199,52 @@ export function FilterController(props: Props) {
               <WideButton
                 style={{ backgroundColor: "transparent" }}
                 onPress={() => {
-                  setZipCode(undefined);
+                  setZipCode(props.zipCodes ? props.zipCodes[0] : undefined);
                   router.setParams({ zipCode: undefined });
                   zipToggle();
+                }}
+              >
+                <DText style={styles.resetButtonText}>Reset</DText>
+              </WideButton>
+            </View>
+          </View>
+        </HandledModal>
+      )}
+      {blockEnabled && (
+        <HandledModal
+          isVisible={blockVisible}
+          onSwipeComplete={blockToggle}
+          onBackdropPress={blockToggle}
+        >
+          <View style={styles.modalContainer}>
+            <DText style={styles.filterTitle}>Block ID</DText>
+            <TouchableWithoutFeedback>
+              <View>
+                <Picker
+                  selectedValue={blockId}
+                  onValueChange={(itemValue: string) => setBlockId(itemValue)}
+                  mode="dropdown"
+                >
+                  {props.blockIds &&
+                    props.blockIds.map((block) => (
+                      <Picker.Item label={block} value={block} key={block} />
+                    ))}
+                </Picker>
+              </View>
+            </TouchableWithoutFeedback>
+            <View style={styles.buttonColumn}>
+              <WideButton
+                style={{ backgroundColor: Blue[500] }}
+                onPress={onBlockSubmit}
+              >
+                <DText style={styles.saveButtonText}>Save</DText>
+              </WideButton>
+              <WideButton
+                style={{ backgroundColor: "transparent" }}
+                onPress={() => {
+                  setBlockId(props.blockIds ? props.blockIds[0] : undefined);
+                  router.setParams({ blockId: undefined });
+                  blockToggle();
                 }}
               >
                 <DText style={styles.resetButtonText}>Reset</DText>
@@ -186,9 +260,9 @@ export function FilterController(props: Props) {
 const styles = StyleSheet.create({
   filterList: {
     justifyContent: "center",
-    width: "100%",
     flexDirection: "row",
     gap: ms(10),
+    flexGrow: 1,
   },
   modalContainer: { gap: ms(20) },
   buttonColumn: { gap: ms(5) },

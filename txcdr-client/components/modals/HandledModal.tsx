@@ -19,6 +19,7 @@ export const HandledModal: React.FC<Partial<ModalProps>> = (
       useNativeDriverForBackdrop
       style={{ margin: 0 }}
       swipeDirection={"down"}
+      propagateSwipe
       avoidKeyboard
       {...props}
     >
