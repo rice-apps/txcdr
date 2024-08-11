@@ -8,6 +8,7 @@ import { WideButton } from "./buttons/WideButton";
 import { HandledModal } from "./modals/HandledModal";
 import { Blue, Zinc } from "../utils/styles/colors";
 import { Switch } from "@rneui/themed";
+import { Picker } from "@react-native-picker/picker";
 
 function bool2Str(b: boolean): "true" | "false" {
   return b ? "true" : "false";
@@ -24,8 +25,10 @@ export interface AddressQueryParams {
 }
 
 interface Props {
-  zipCode: boolean;
-  status: boolean;
+  /** Filters to enable */
+  filters: ("status" | "zipCode")[];
+  /** Array of ZIP codes that the user can select from. This prop must be set if the ZIP code filter is enabled. */
+  availableZipCodes?: string[];
 }
 
 /**
@@ -52,17 +55,32 @@ export function FilterController(props: Props) {
     router.setParams({ zipCode: zipCode });
   };
 
+  // Activate filters
+  let statusEnabled = false;
+  let zipEnabled = false;
+  for (const filter of props.filters) {
+    if (filter == "status") statusEnabled = true;
+    if (filter == "zipCode") zipEnabled = true;
+  }
+
+  // Prop validation
+  if (zipEnabled && !props.availableZipCodes)
+    throw new Error(
+      "You must provide available ZIP codes for the ZIP code filter.",
+    );
+
   const statusSuffix: string[] = [];
-  if (claimed) statusSuffix.push(claimed == "true" ? "Claimed" : "Unclaimed");
-  if (completed)
-    statusSuffix.push(completed == "true" ? "Complete" : "Incomplete");
+  if (params.claimed)
+    statusSuffix.push(params.claimed == "true" ? "Claimed" : "Unclaimed");
+  if (params.completed)
+    statusSuffix.push(params.completed == "true" ? "Complete" : "Incomplete");
 
   return (
     <ScrollView horizontal contentContainerStyle={styles.filterList}>
-      {props.status && <StatusFilter suffix={statusSuffix.join(", ")} />}
-      {props.zipCode && <ZipFilter suffix={zipCode} />}
+      {statusEnabled && <StatusFilter suffix={statusSuffix.join(", ")} />}
+      {zipEnabled && <ZipFilter suffix={params.zipCode} />}
 
-      {props.status && (
+      {statusEnabled && (
         <HandledModal
           isVisible={statusVisible}
           onSwipeComplete={statusToggle}
@@ -113,7 +131,7 @@ export function FilterController(props: Props) {
         </HandledModal>
       )}
 
-      {props.zipCode && (
+      {zipEnabled && (
         <HandledModal
           isVisible={zipVisible}
           onSwipeComplete={zipToggle}
@@ -121,16 +139,15 @@ export function FilterController(props: Props) {
         >
           <View style={styles.modalContainer}>
             <DText style={styles.filterTitle}>Zip code</DText>
-            <TextInput
-              placeholder="Enter a ZIP code"
-              inputMode="numeric"
-              style={styles.filterInput}
-              onChangeText={setZipCode}
-              returnKeyType="done"
-              multiline={false}
-              value={zipCode}
-              onSubmitEditing={onZipSubmit}
-            />
+            <Picker
+              selectedValue={zipCode}
+              onValueChange={(itemValue: string) => setZipCode(itemValue)}
+            >
+              {props.availableZipCodes &&
+                props.availableZipCodes.map((zip) => (
+                  <Picker.Item label={zip} value={zip} key={zip} />
+                ))}
+            </Picker>
             <View style={styles.buttonColumn}>
               <WideButton
                 style={{ backgroundColor: Blue[500] }}
@@ -142,7 +159,7 @@ export function FilterController(props: Props) {
                 style={{ backgroundColor: "transparent" }}
                 onPress={() => {
                   setZipCode(undefined);
-                  router.setParams({ zipCode: zipCode });
+                  router.setParams({ zipCode: undefined });
                   zipToggle();
                 }}
               >
