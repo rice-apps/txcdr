@@ -11,21 +11,14 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Zinc } from "../../../utils/styles/colors";
 import { ms } from "react-native-size-matters";
 import { SectionProps } from ".";
+import { SearchBar } from "../../../components/input/SearchBar";
 
 export function UserSection({ events }: SectionProps) {
   const [query, setQuery] = useState("");
 
   return (
     <>
-      <View style={styles.searchContainer}>
-        <MaterialIcons name="search" size={24} color={Zinc[400]} />
-        <TextInput
-          placeholder="Search for events..."
-          hitSlop={20}
-          style={styles.searchInput}
-          onChangeText={setQuery}
-        />
-      </View>
+      <SearchBar onChangeText={setQuery} placeholder="Search for events..." />
       {events ? (
         <ScrollView
           style={styles.scroller}

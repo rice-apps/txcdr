@@ -14,6 +14,8 @@ import {
   FilterController,
   AddressQueryParams,
 } from "../../../components/FilterController";
+import { SearchBar } from "../../../components/input/SearchBar";
+import { addressToString } from "./helpers";
 
 export default function Page() {
   const params = useGlobalSearchParams<Partial<AddressQueryParams>>();
@@ -21,6 +23,7 @@ export default function Page() {
   const [addresses, setAddresses] = useState<Tables<"EventAddress">[]>([]);
   const [zipCodes, setZipCodes] = useState<string[]>([]);
   const [blockIds, setBlockIds] = useState<string[]>([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const func = async () => {
@@ -44,6 +47,11 @@ export default function Page() {
 
   return (
     <View style={styles.container}>
+      <SearchBar
+        onChangeText={setSearch}
+        placeholder="Search for addresses..."
+        style={{ width: "85%", alignSelf: "center" }}
+      />
       <FilterController
         filters={["status", "zipCode", "blockId"]}
         zipCodes={zipCodes}
@@ -63,6 +71,11 @@ export default function Page() {
             )
               return false;
             if (params.blockId && a.blockId != params.blockId) return false;
+            if (
+              search &&
+              !addressToString(a).toLowerCase().includes(search.toLowerCase())
+            )
+              return false;
             return true;
           })
           .map((a) => (
@@ -76,6 +89,7 @@ export default function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap: ms(10),
   },
 
   addressList: {
