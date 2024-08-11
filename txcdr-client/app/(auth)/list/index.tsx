@@ -3,30 +3,26 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { useGlobalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  TextInput,
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  Alert,
-  StyleSheet,
-} from "react-native";
+import { View, ScrollView, Alert, StyleSheet } from "react-native";
 import { Tables } from "../../../types/supabase";
 import { supabase } from "../../../utils/supabase";
 import { AddressCard } from "./AddressCard";
 import { ms } from "react-native-size-matters";
-import { DText } from "../../../components/styled-rn/DText";
-import { FilterList } from "./FilterList";
+import {
+  FilterController,
+  AddressQueryParams,
+} from "../../../components/FilterController";
 
 export default function Page() {
+  const params = useGlobalSearchParams<Partial<AddressQueryParams>>();
+  console.log(params.zipCode);
   const [addresses, setAddresses] = useState<Tables<"EventAddress">[]>([]);
 
   useEffect(() => {
     const func = async () => {
-      const res = await supabase.from("EventAddress").select("*").limit(20); // TODO: remove the limit; it's here so we aren't opps to supabase
+      const res = await supabase.from("EventAddress").select("*");
       if (res.error) {
         console.log(res.error);
         Alert.alert("Failed to fetch addresses", res.error.message);
@@ -40,17 +36,20 @@ export default function Page() {
 
   return (
     <View style={styles.container}>
-      <FilterList
-        filters={[
-          { name: "Event" },
-          { name: "Block ID" },
-          { name: "ZIP Code", modal: true },
-        ]}
-      />
+      <FilterController zipCode status />
       <ScrollView contentContainerStyle={styles.addressList}>
-        {addresses.map((a) => (
-          <AddressCard address={a} key={a.id} />
-        ))}
+        {addresses
+          .filter((a) => {
+            return (
+              (!params.zipCode || a.zipCode == params.zipCode) &&
+              (!params.claimed ||
+                (params.claimed == "true" && a.claimerId) ||
+                (params.claimed == "false" && !a.claimerId))
+            );
+          })
+          .map((a) => (
+            <AddressCard address={a} key={a.id} />
+          ))}
       </ScrollView>
     </View>
   );

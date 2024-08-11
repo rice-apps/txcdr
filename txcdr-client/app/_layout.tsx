@@ -2,6 +2,7 @@ import { Slot } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "../graphql/client";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 /**
  * Layout for all of the pages in the app
@@ -10,9 +11,11 @@ import { apolloClient } from "../graphql/client";
 export default function RootLayout() {
   return (
     <ApolloProvider client={apolloClient}>
-      <View style={styles.base}>
-        <Slot />
-      </View>
+      <SafeAreaProvider>
+        <View style={styles.base}>
+          <Slot />
+        </View>
+      </SafeAreaProvider>
     </ApolloProvider>
   );
 }
