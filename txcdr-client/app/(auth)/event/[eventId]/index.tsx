@@ -20,7 +20,7 @@ import { VolunteerSection } from "./VolunteerSection";
 import { AdminSection } from "./AdminSection";
 import { ms } from "react-native-size-matters";
 import { Blue } from "../../../../utils/styles/colors";
-import { Header } from "./Header";
+import { Header } from "../../../../components/nav/Header";
 
 type EventCreator = Pick<Tables<"User2">, "id" | "name" | "email" | "phone">;
 type Address = Pick<Tables<"EventAddress">, "id" | "claimerId" | "blockId">;

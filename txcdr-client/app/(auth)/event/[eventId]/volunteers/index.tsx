@@ -4,7 +4,7 @@ import { Tables } from "../../../../../types/supabase";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../../../utils/supabase";
 import { ms } from "react-native-size-matters";
-import { Header } from "../Header";
+import { Header } from "../../../../../components/nav/Header";
 import { VolunteerInfoButton } from "../VolunteerInfoButton";
 import { VolunteerAssignment } from "./VolunteerAssignment";
 

@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import { DText } from "../../../../../components/styled-rn/DText";
-import { Header } from "../Header";
+import { Header } from "../../../../../components/nav/Header";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Volunteer } from ".";

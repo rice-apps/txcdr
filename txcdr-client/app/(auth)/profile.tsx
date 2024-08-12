@@ -1,5 +1,4 @@
 import { Pressable, Text, View } from "react-native";
-import { useSession } from "../../auth/ctx";
 import { supabase } from "../../utils/supabase";
 
 /**
@@ -7,7 +6,6 @@ import { supabase } from "../../utils/supabase";
  * @returns Profile page component
  */
 export default function Page() {
-  const { signOut, session } = useSession();
   return (
     <View>
       <Text>Profile page</Text>

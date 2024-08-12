@@ -11,26 +11,19 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Zinc } from "../../../utils/styles/colors";
 import { ms } from "react-native-size-matters";
 import { SectionProps } from ".";
+import { SearchBar } from "../../../components/input/SearchBar";
+import { CommonStyles } from "./styles";
 
 export function UserSection({ events }: SectionProps) {
   const [query, setQuery] = useState("");
 
   return (
     <>
-      <View style={styles.searchContainer}>
-        <MaterialIcons name="search" size={24} color={Zinc[400]} />
-        <TextInput
-          placeholder="Search for events..."
-          hitSlop={20}
-          style={styles.searchInput}
-          onChangeText={setQuery}
-        />
-      </View>
+      <SearchBar onChangeText={setQuery} placeholder="Search for events..." />
       {events ? (
         <ScrollView
-          style={styles.scroller}
-          contentContainerStyle={styles.eventList}
-          bounces={false}
+          style={CommonStyles.scroller}
+          contentContainerStyle={CommonStyles.eventList}
         >
           {events
             .filter(
@@ -84,17 +77,6 @@ const styles = StyleSheet.create({
     gap: ms(10),
   },
   searchInput: { width: "100%" },
-  scroller: {
-    paddingBottom: 50,
-    marginTop: ms(20),
-    overflow: "visible",
-  },
-  eventList: {
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    width: "100%",
-  },
 
   footer: {
     // textAlign: "center",

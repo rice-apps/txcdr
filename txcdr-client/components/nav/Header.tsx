@@ -19,11 +19,6 @@ export function Header({ title }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    gap: ms(30),
-    marginTop: ms(20),
-  },
   backIcon: {
     position: "absolute",
     left: ms(20),
