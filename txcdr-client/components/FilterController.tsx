@@ -123,6 +123,7 @@ export function FilterController(props: Props) {
   useEffect(() => {
     setZipCode(props.zipCodes ? props.zipCodes[0] : undefined);
     setBlockId(props.blockIds ? props.blockIds[0] : undefined);
+    setEventId(props.eventIds ? props.eventIds[0] : undefined);
   }, [props.zipCodes]);
 
   // Fetch event names if the event filter is enabled
@@ -297,7 +298,7 @@ export function FilterController(props: Props) {
           </View>
         </HandledModal>
       )}
-      {eventEnabled && (
+      {eventEnabled && eventNames && (
         <HandledModal
           isVisible={eventVisible}
           onSwipeComplete={eventToggle}

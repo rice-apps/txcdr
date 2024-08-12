@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { DText } from "../../components/styled-rn/DText";
-import { Zinc } from "../styles/colors";
+import { Blue, Zinc } from "../styles/colors";
 import { ReactNode, useState } from "react";
 import { ms } from "react-native-size-matters";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -29,7 +29,7 @@ export function useFilter(params: {
         <OpacityPressable
           style={[
             styles.buttonContainer,
-            { backgroundColor: props.suffix ? Zinc[700] : "transparent" },
+            { backgroundColor: props.suffix ? Blue[500] : "transparent" },
           ]}
           onPress={toggleModal}
         >
