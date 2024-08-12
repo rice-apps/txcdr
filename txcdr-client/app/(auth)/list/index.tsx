@@ -27,10 +27,11 @@ export default function Page() {
   const [addresses, setAddresses] = useState<Tables<"EventAddress">[]>();
   const [zipCodes, setZipCodes] = useState<string[]>([]);
   const [blockIds, setBlockIds] = useState<string[]>([]);
+  const [eventIds, setEventIds] = useState<number[]>([]);
   const [search, setSearch] = useState("");
   const user = useUser();
   const [role] = useRole();
-  const [eventIds, setEventIds] = useState<number[]>();
+  const [registeredEventIds, setRegisteredEventIds] = useState<number[]>();
 
   // Load events the user is registered for
   useEffect(() => {
@@ -46,7 +47,7 @@ export default function Page() {
           Alert.alert("Failed to fetch events", res.error.message);
           return;
         }
-        setEventIds(res.data.map((e) => e.eventId));
+        setRegisteredEventIds(res.data.map((e) => e.eventId));
       }
     };
 
@@ -61,10 +62,11 @@ export default function Page() {
         // Admins can see all addresses
         res = await supabase.from("EventAddress").select("*");
       } else {
+        // Users can see only the addresses of events they are registered for
         res = await supabase
           .from("EventAddress")
           .select("*")
-          .in("eventId", eventIds!);
+          .in("eventId", registeredEventIds!);
       }
       if (res) {
         if (res.error) {
@@ -73,13 +75,30 @@ export default function Page() {
           return;
         }
         setAddresses(res.data);
-        setZipCodes(Array.from(new Set(res.data.map((a) => a.zipCode))));
-        setBlockIds(Array.from(new Set(res.data.map((a) => a.blockId))));
+
+        // Build data for the filters
+        const zipCodes: Set<string> = new Set();
+        const blockIds: Set<string> = new Set();
+        const eventIds: Set<number> = new Set();
+        for (const a of res.data) {
+          zipCodes.add(a.zipCode);
+          blockIds.add(a.blockId);
+          eventIds.add(a.eventId);
+        }
+        setZipCodes(Array.from(zipCodes));
+        setBlockIds(Array.from(blockIds));
+        setEventIds(Array.from(eventIds));
       }
     };
 
-    if (addresses == undefined && user && role && eventIds != undefined) func();
-  }, [role, user, eventIds, addresses]);
+    if (
+      addresses == undefined &&
+      user &&
+      role &&
+      registeredEventIds != undefined
+    )
+      func();
+  }, [role, user, registeredEventIds, addresses]);
 
   return (
     <View style={styles.container}>
@@ -89,9 +108,10 @@ export default function Page() {
         style={{ width: "85%", alignSelf: "center" }}
       />
       <FilterController
-        filters={["status", "zipCode", "blockId"]}
+        filters={["status", "zipCode", "blockId", "event"]}
         zipCodes={zipCodes}
         blockIds={blockIds}
+        eventIds={eventIds.map((id) => id.toString())}
       />
       <ScrollView
         style={{ height: "100%" }}
@@ -116,6 +136,8 @@ export default function Page() {
                     .includes(search.toLowerCase())
                 )
                   return false;
+                if (params.eventId && a.eventId != +params.eventId)
+                  return false;
                 return true;
               })
               .map((a) => <AddressCard address={a} key={a.id} />)
@@ -133,7 +155,7 @@ export default function Page() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: ms(10),
+    gap: ms(15),
   },
 
   addressList: {

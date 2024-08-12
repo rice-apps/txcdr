@@ -15,6 +15,7 @@ import { HandledModal } from "./modals/HandledModal";
 import { Blue, Zinc } from "../utils/styles/colors";
 import { Switch } from "@rneui/themed";
 import { Picker } from "@react-native-picker/picker";
+import { supabase } from "../utils/supabase";
 
 function bool2Str(b: boolean): "true" | "false" {
   return b ? "true" : "false";
@@ -29,14 +30,16 @@ export interface AddressQueryParams {
   claimed: "true" | "false";
   completed: "true" | "false";
   blockId: string;
+  eventId: string;
 }
 
 interface Props {
   /** Filters to enable */
-  filters: ("status" | "zipCode" | "blockId")[];
+  filters: ("status" | "zipCode" | "blockId" | "event")[];
   /** Array of ZIP codes that the user can select from. This prop must be set if the ZIP code filter is enabled. */
   zipCodes?: string[];
   blockIds?: string[];
+  eventIds?: string[];
 }
 
 /**
@@ -49,6 +52,8 @@ export function FilterController(props: Props) {
   const [claimed, setClaimed] = useState(params.claimed ?? "false");
   const [completed, setCompleted] = useState(params.completed ?? "false");
   const [blockId, setBlockId] = useState(params.blockId);
+  const [eventId, setEventId] = useState(params.eventId);
+  const [eventNames, setEventNames] = useState<Map<string, string>>();
 
   // Create filters
   const [StatusFilter, statusVisible, statusToggle] = useFilter({
@@ -63,6 +68,10 @@ export function FilterController(props: Props) {
     name: "Block ID",
     modal: true,
   });
+  const [EventFilter, eventVisible, eventToggle] = useFilter({
+    name: "Event",
+    modal: true,
+  });
 
   const onZipSubmit = () => {
     zipToggle();
@@ -72,15 +81,21 @@ export function FilterController(props: Props) {
     blockToggle();
     router.setParams({ blockId: blockId });
   };
+  const onEventSubmit = () => {
+    eventToggle();
+    router.setParams({ eventId: eventId });
+  };
 
   // Activate filters
   let statusEnabled = false;
   let zipEnabled = false;
   let blockEnabled = false;
+  let eventEnabled = false;
   for (const filter of props.filters) {
     if (filter == "status") statusEnabled = true;
     if (filter == "zipCode") zipEnabled = true;
     if (filter == "blockId") blockEnabled = true;
+    if (filter == "event") eventEnabled = true;
   }
 
   // Prop validation
@@ -91,6 +106,10 @@ export function FilterController(props: Props) {
   if (blockEnabled && !props.blockIds)
     throw new Error(
       "You must provide available block IDs for the block ID filter.",
+    );
+  if (eventEnabled && !props.eventIds)
+    throw new Error(
+      "You must provide available event IDs for the event filter.",
     );
 
   // Build labels to display in the filter buttons
@@ -106,6 +125,26 @@ export function FilterController(props: Props) {
     setBlockId(props.blockIds ? props.blockIds[0] : undefined);
   }, [props.zipCodes]);
 
+  // Fetch event names if the event filter is enabled
+  useEffect(() => {
+    const func = async () => {
+      if (props.eventIds) {
+        const res = await supabase
+          .from("Event")
+          .select("id, title")
+          .in("id", props.eventIds);
+        if (res.error) {
+          console.error(res.error);
+          return;
+        }
+        const names: Map<string, string> = new Map();
+        res.data.forEach((e) => names.set(e.id.toString(), e.title));
+        setEventNames(names);
+      }
+    };
+    func();
+  }, [props.eventIds]);
+
   return (
     <ScrollView
       horizontal
@@ -115,6 +154,11 @@ export function FilterController(props: Props) {
       {statusEnabled && <StatusFilter suffix={statusSuffix.join(", ")} />}
       {zipEnabled && <ZipFilter suffix={params.zipCode} />}
       {blockEnabled && <BlockFilter suffix={params.blockId} />}
+      {eventEnabled && eventNames && (
+        <EventFilter
+          suffix={params.eventId ? eventNames.get(params.eventId) : undefined}
+        />
+      )}
 
       {statusEnabled && (
         <HandledModal
@@ -245,6 +289,53 @@ export function FilterController(props: Props) {
                   setBlockId(props.blockIds ? props.blockIds[0] : undefined);
                   router.setParams({ blockId: undefined });
                   blockToggle();
+                }}
+              >
+                <DText style={styles.resetButtonText}>Reset</DText>
+              </WideButton>
+            </View>
+          </View>
+        </HandledModal>
+      )}
+      {eventEnabled && (
+        <HandledModal
+          isVisible={eventVisible}
+          onSwipeComplete={eventToggle}
+          onBackdropPress={eventToggle}
+        >
+          <View style={styles.modalContainer}>
+            <DText style={styles.filterTitle}>Event</DText>
+            <TouchableWithoutFeedback>
+              <View>
+                <Picker
+                  selectedValue={eventId}
+                  onValueChange={(itemValue: string) => setEventId(itemValue)}
+                  mode="dropdown"
+                >
+                  {props.eventIds &&
+                    props.eventIds.map((eventId) => (
+                      <Picker.Item
+                        label={eventNames?.get(eventId)}
+                        value={eventId}
+                        key={eventId}
+                      />
+                    ))}
+                </Picker>
+              </View>
+            </TouchableWithoutFeedback>
+            <View style={styles.buttonColumn}>
+              <WideButton
+                style={{ backgroundColor: Blue[500] }}
+                onPress={onEventSubmit}
+              >
+                <DText style={styles.saveButtonText}>Save</DText>
+              </WideButton>
+              <WideButton
+                style={{ backgroundColor: "transparent" }}
+                onPress={() => {
+                  setEventId(props.eventIds ? props.eventIds[0] : undefined);
+                  router.setParams({ eventId: undefined });
+                  eventToggle();
                 }}
               >
                 <DText style={styles.resetButtonText}>Reset</DText>
