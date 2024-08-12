@@ -129,7 +129,7 @@ export function FilterController(props: Props) {
   // Fetch event names if the event filter is enabled
   useEffect(() => {
     const func = async () => {
-      if (props.eventIds) {
+      if (props.eventIds && props.eventIds.length > 0) {
         const res = await supabase
           .from("Event")
           .select("id, title")
@@ -316,7 +316,7 @@ export function FilterController(props: Props) {
                   {props.eventIds &&
                     props.eventIds.map((eventId) => (
                       <Picker.Item
-                        label={eventNames?.get(eventId)}
+                        label={eventNames.get(eventId)}
                         value={eventId}
                         key={eventId}
                       />
