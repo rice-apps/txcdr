@@ -1,11 +1,12 @@
-import {
-  AntDesign,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
 import { useGlobalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, ScrollView, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  ScrollView,
+  Alert,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Tables } from "../../../types/supabase";
 import { supabase } from "../../../utils/supabase";
 import { AddressCard } from "./AddressCard";
@@ -16,34 +17,69 @@ import {
 } from "../../../components/FilterController";
 import { SearchBar } from "../../../components/input/SearchBar";
 import { addressToString } from "./helpers";
+import { useUser } from "../../../utils/hooks/useUser";
+import { useRole } from "../../../utils/hooks/useRole";
+import { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { DText } from "../../../components/styled-rn/DText";
 
 export default function Page() {
   const params = useGlobalSearchParams<Partial<AddressQueryParams>>();
-  console.log(params.zipCode);
-  const [addresses, setAddresses] = useState<Tables<"EventAddress">[]>([]);
+  const [addresses, setAddresses] = useState<Tables<"EventAddress">[]>();
   const [zipCodes, setZipCodes] = useState<string[]>([]);
   const [blockIds, setBlockIds] = useState<string[]>([]);
   const [search, setSearch] = useState("");
+  const user = useUser();
+  const [role] = useRole();
+  const [eventIds, setEventIds] = useState<number[]>();
 
+  // Load events the user is registered for
   useEffect(() => {
     const func = async () => {
-      const res = await supabase.from("EventAddress").select("*");
-      if (res.error) {
-        console.log(res.error);
-        Alert.alert("Failed to fetch addresses", res.error.message);
-        return;
+      if (user && role != "USER") {
+        const res = await supabase
+          .from("EventVolunteer")
+          .select("eventId")
+          .eq("volunteerId", user.id)
+          .eq("approved", true);
+        if (res.error) {
+          console.log(res.error);
+          Alert.alert("Failed to fetch events", res.error.message);
+          return;
+        }
+        setEventIds(res.data.map((e) => e.eventId));
       }
-      console.log(res.data);
-      setAddresses(res.data);
-      setZipCodes(
-        Array.from(new Set(res.data.map((address) => address.zipCode))),
-      );
-      setBlockIds(
-        Array.from(new Set(res.data.map((address) => address.blockId))),
-      );
     };
+
     func();
-  }, []);
+  }, [user, role]);
+
+  // Load addresses
+  useEffect(() => {
+    const func = async () => {
+      let res: PostgrestSingleResponse<Tables<"EventAddress">[]> | undefined;
+      if (role != "USER") {
+        // Admins can see all addresses
+        res = await supabase.from("EventAddress").select("*");
+      } else {
+        res = await supabase
+          .from("EventAddress")
+          .select("*")
+          .in("eventId", eventIds!);
+      }
+      if (res) {
+        if (res.error) {
+          console.log(res.error);
+          Alert.alert("Failed to fetch addresses", res.error.message);
+          return;
+        }
+        setAddresses(res.data);
+        setZipCodes(Array.from(new Set(res.data.map((a) => a.zipCode))));
+        setBlockIds(Array.from(new Set(res.data.map((a) => a.blockId))));
+      }
+    };
+
+    if (addresses == undefined && user && role && eventIds != undefined) func();
+  }, [role, user, eventIds, addresses]);
 
   return (
     <View style={styles.container}>
@@ -61,26 +97,34 @@ export default function Page() {
         style={{ height: "100%" }}
         contentContainerStyle={styles.addressList}
       >
-        {addresses
-          .filter((a) => {
-            if (params.zipCode && a.zipCode != params.zipCode) return false;
-            if (
-              params.claimed &&
-              ((!a.claimerId && params.claimed == "true") ||
-                (a.claimerId && params.claimed == "false"))
-            )
-              return false;
-            if (params.blockId && a.blockId != params.blockId) return false;
-            if (
-              search &&
-              !addressToString(a).toLowerCase().includes(search.toLowerCase())
-            )
-              return false;
-            return true;
-          })
-          .map((a) => (
-            <AddressCard address={a} key={a.id} />
-          ))}
+        {addresses != undefined ? (
+          addresses.length > 0 ? (
+            addresses
+              .filter((a) => {
+                if (params.zipCode && a.zipCode != params.zipCode) return false;
+                if (
+                  params.claimed &&
+                  ((!a.claimerId && params.claimed == "true") ||
+                    (a.claimerId && params.claimed == "false"))
+                )
+                  return false;
+                if (params.blockId && a.blockId != params.blockId) return false;
+                if (
+                  search &&
+                  !addressToString(a)
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+                )
+                  return false;
+                return true;
+              })
+              .map((a) => <AddressCard address={a} key={a.id} />)
+          ) : (
+            <DText>No addresses found</DText>
+          )
+        ) : (
+          <ActivityIndicator size="large" />
+        )}
       </ScrollView>
     </View>
   );
