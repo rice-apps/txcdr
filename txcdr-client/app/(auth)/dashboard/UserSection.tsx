@@ -12,6 +12,7 @@ import { Zinc } from "../../../utils/styles/colors";
 import { ms } from "react-native-size-matters";
 import { SectionProps } from ".";
 import { SearchBar } from "../../../components/input/SearchBar";
+import { CommonStyles } from "./styles";
 
 export function UserSection({ events }: SectionProps) {
   const [query, setQuery] = useState("");
@@ -21,9 +22,8 @@ export function UserSection({ events }: SectionProps) {
       <SearchBar onChangeText={setQuery} placeholder="Search for events..." />
       {events ? (
         <ScrollView
-          style={styles.scroller}
-          contentContainerStyle={styles.eventList}
-          bounces={false}
+          style={CommonStyles.scroller}
+          contentContainerStyle={CommonStyles.eventList}
         >
           {events
             .filter(
@@ -77,17 +77,6 @@ const styles = StyleSheet.create({
     gap: ms(10),
   },
   searchInput: { width: "100%" },
-  scroller: {
-    paddingBottom: 50,
-    marginTop: ms(20),
-    overflow: "visible",
-  },
-  eventList: {
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    width: "100%",
-  },
 
   footer: {
     // textAlign: "center",
