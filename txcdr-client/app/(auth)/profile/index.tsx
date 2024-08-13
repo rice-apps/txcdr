@@ -18,6 +18,7 @@ import { router } from "expo-router";
  */
 export default function Page() {
   const [user, setUser] = useState<Tables<"User2"> | null>(null);
+  const [image, setImage] = useState<string | null>(null);
   // Get the user's profile data using useEffect from supabase
   useEffect(() => {
     // get our own id
@@ -32,6 +33,24 @@ export default function Page() {
         .then((res) => {
           setUser(res.data![0]);
         });
+
+      // get the user's profile image from the bucket, and if it exists, set
+      // the image state to the public URL
+      let imgUrl = supabase.storage
+        .from("images")
+        .getPublicUrl(`profiles/profile-${id}.jpg`).data.publicUrl;
+      try {
+        // check if we can access image by making request
+        fetch(imgUrl, {
+          method: "HEAD",
+        }).then((res) => {
+          if (res.ok) {
+            setImage(imgUrl);
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
     });
   }, []);
   return (
@@ -53,7 +72,9 @@ export default function Page() {
               height={50}
               width={50}
               className="rounded-full"
-              source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }}
+              source={{
+                uri: image || "https://reactnative.dev/img/tiny_logo.png",
+              }}
             />
             <Text className="self-center text-2xl mr-auto">{user.name}</Text>
             <Icon

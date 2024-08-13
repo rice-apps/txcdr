@@ -8,7 +8,7 @@ import { supabase } from "../../../utils/supabase";
 import { Tables } from "../../../types/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { ms } from "react-native-size-matters";
-var Buffer = require('buffer/').Buffer
+var Buffer = require("buffer/").Buffer;
 
 // Edit page form for user profile, where users can update their information
 export default function Page() {
@@ -246,7 +246,7 @@ export default function Page() {
                         console.error(res.error);
                       } else {
                         const imageUrl = res.data?.fullPath;
-                        console.log(imageUrl);
+                        console.log("uploaded to:", imageUrl);
                       }
                     })
                     .catch((error) => {
