@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TextInput, Image } from "react-native";
+import { View, Text, ScrollView, TextInput, Image, Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { Pressable } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -211,7 +211,6 @@ export default function Page() {
         <Pressable
           className="bg-blue-500 rounded-3xl py-4 flex-1"
           onPress={() => {
-            router.back();
             // submit to supabase for our user id
             supabase.auth.getUser().then((res) => {
               // we should definitely be logged in
@@ -225,7 +224,15 @@ export default function Page() {
                   languages: getValues("languages"),
                   organizations: getValues("organizations"),
                 })
-                .eq("id", id);
+                .eq("id", id)
+                .then(({ error }) => {
+                  if (error) {
+                    console.error("Failed to update user:", error);
+                    Alert.alert("Failed to update user", error.message);
+                  } else {
+                    router.back();
+                  }
+                });
 
               // if we have an image, upload it
               if (image) {
