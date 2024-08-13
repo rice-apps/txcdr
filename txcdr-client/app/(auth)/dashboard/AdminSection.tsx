@@ -13,6 +13,7 @@ import { router } from "expo-router";
 import { ms } from "react-native-size-matters";
 import { SectionProps } from ".";
 import { EventCard } from "./EventCard";
+import { CommonStyles } from "./styles";
 
 export function AdminSection({ events }: SectionProps) {
   const [mode, setMode] = useState<"ACTIVE" | "PAST">("ACTIVE");
@@ -32,9 +33,8 @@ export function AdminSection({ events }: SectionProps) {
       </View>
       {events ? (
         <ScrollView
-          style={styles.scroller}
-          contentContainerStyle={styles.eventList}
-          bounces={false}
+          style={CommonStyles.scroller}
+          contentContainerStyle={CommonStyles.eventList}
         >
           {events
             .filter((event) => {
@@ -44,20 +44,15 @@ export function AdminSection({ events }: SectionProps) {
                 return !event.active;
               }
             })
-            .map(
-              (
-                e,
-                i, // TODO: filter by active column
-              ) => (
-                <EventCard
-                  id={e.id}
-                  registered={e.approved}
-                  severity={e.severity}
-                  title={e.title}
-                  key={e.id}
-                />
-              ),
-            )}
+            .map((e, i) => (
+              <EventCard
+                id={e.id}
+                registered={e.approved}
+                severity={e.severity}
+                title={e.title}
+                key={e.id}
+              />
+            ))}
         </ScrollView>
       ) : (
         <ActivityIndicator
@@ -109,16 +104,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
-  },
-  scroller: {
-    paddingBottom: 50,
-    marginTop: ms(20),
-    overflow: "visible",
-  },
-  eventList: {
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "center",
-    width: "100%",
   },
 });

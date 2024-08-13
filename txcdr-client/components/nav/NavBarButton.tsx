@@ -49,7 +49,9 @@ export function NavBarButton(props: Props) {
           ) : (
             <props.idleSvg style={styles.icon as StyleProp<ViewStyle>} />
           )}
-          <Text style={styles.text}>{props.label}</Text>
+          <Text adjustsFontSizeToFit numberOfLines={1} style={styles.text}>
+            {props.label}
+          </Text>
         </View>
       </Link>
     </Pressable>
