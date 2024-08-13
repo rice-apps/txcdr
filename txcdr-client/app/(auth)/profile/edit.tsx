@@ -8,6 +8,7 @@ import { supabase } from "../../../utils/supabase";
 import { Tables } from "../../../types/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { ms } from "react-native-size-matters";
+var Buffer = require('buffer/').Buffer
 
 // Edit page form for user profile, where users can update their information
 export default function Page() {
@@ -40,7 +41,7 @@ export default function Page() {
     });
   }, []);
 
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
 
   const onCameraSelect = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -48,11 +49,12 @@ export default function Page() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
 
     if (!result.canceled) {
       // setImage('./assets/hydrangea.png');
-      setImage(result.assets[0].uri);
+      setImage(result.assets[0]);
     }
   };
 
@@ -74,7 +76,7 @@ export default function Page() {
           width={75}
           className="rounded-full"
           source={{
-            uri: image || "https://reactnative.dev/img/tiny_logo.png",
+            uri: image?.uri || "https://reactnative.dev/img/tiny_logo.png",
           }}
         />
         <Pressable className="pt-3" onPress={onCameraSelect}>
@@ -223,12 +225,38 @@ export default function Page() {
                   languages: getValues("languages"),
                   organizations: getValues("organizations"),
                 })
-                .eq("id", id)
-                .then((res) => {
-                  console.log(user);
-                  console.log(id);
-                  console.log(res);
-                });
+                .eq("id", id);
+
+              // if we have an image, upload it
+              if (image) {
+                console.log("try image upload");
+                try {
+                  let fileName = `profiles/profile-${id}.jpg`;
+                  supabase.storage
+                    .from("images")
+                    .upload(
+                      fileName,
+                      Buffer.from(image.base64 || "", "base64"),
+                      {
+                        upsert: true,
+                      },
+                    )
+                    .then((res) => {
+                      if (res.error) {
+                        console.error(res.error);
+                      } else {
+                        const imageUrl = res.data?.fullPath;
+                        console.log(imageUrl);
+                      }
+                    })
+                    .catch((error) => {
+                      console.error("Failed to upload image:", error);
+                    });
+                  console.log("uploaded image");
+                } catch (error) {
+                  console.error("Failed to upload image:", error);
+                }
+              }
             });
           }}
         >

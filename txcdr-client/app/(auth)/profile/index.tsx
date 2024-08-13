@@ -6,7 +6,6 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { useSession } from "../../../auth/ctx";
 import { supabase } from "../../../utils/supabase";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../types/supabase";
@@ -18,7 +17,6 @@ import { router } from "expo-router";
  * @returns Profile page component
  */
 export default function Page() {
-  const { signOut, session } = useSession();
   const [user, setUser] = useState<Tables<"User2"> | null>(null);
   // Get the user's profile data using useEffect from supabase
   useEffect(() => {
