@@ -6,6 +6,8 @@ import { useEffect, useMemo, useState } from "react";
 import { router } from "expo-router";
 import { supabase } from "../../../utils/supabase";
 import { Tables } from "../../../types/supabase";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { ms } from "react-native-size-matters";
 
 // Edit page form for user profile, where users can update their information
 export default function Page() {
@@ -36,7 +38,8 @@ export default function Page() {
           setUser(res.data![0]);
         });
     });
-  });
+  }, []);
+
   const [image, setImage] = useState<string | null>(null);
 
   const onCameraSelect = async () => {
@@ -54,7 +57,14 @@ export default function Page() {
   };
 
   return (
-    <ScrollView className="p-8 flex flex-col">
+    <KeyboardAwareScrollView
+      style={{ flex: 1, marginVertical: ms(30), overflow: "visible" }}
+      contentContainerStyle={{
+        alignSelf: "center",
+        width: "85%",
+        flexGrow: 1,
+      }}
+    >
       <View>
         <Text className="text-3xl font-semibold">Edit Profile</Text>
       </View>
@@ -63,7 +73,9 @@ export default function Page() {
           height={75}
           width={75}
           className="rounded-full"
-          source={{ uri: image || "https://reactnative.dev/img/tiny_logo.png" }}
+          source={{
+            uri: image || "https://reactnative.dev/img/tiny_logo.png",
+          }}
         />
         <Pressable className="pt-3" onPress={onCameraSelect}>
           <Text className="text-center text-lg text-blue-500 font-medium">
@@ -113,7 +125,7 @@ export default function Page() {
                   placeholder="Pronouns"
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  value={value}
+                  value={value ?? undefined}
                   className="border border-gray-300 rounded-3xl p-4 w-full"
                 />
               </View>
@@ -134,7 +146,7 @@ export default function Page() {
                   placeholder="Age"
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  value={value}
+                  value={value?.toString()}
                   className="border border-gray-300 rounded-3xl p-4 w-full"
                   keyboardType="numeric"
                 />
@@ -155,7 +167,7 @@ export default function Page() {
                 placeholder="Languages Spoken"
                 onBlur={onBlur}
                 onChangeText={onChange}
-                value={value}
+                value={value ?? undefined}
                 multiline={true}
                 className="border border-gray-300 rounded-3xl p-4 w-full h-32"
               />
@@ -178,7 +190,7 @@ export default function Page() {
               <TextInput
                 onBlur={onBlur}
                 onChangeText={onChange}
-                value={value}
+                value={value ?? undefined}
                 multiline={true}
                 className="border border-gray-300 rounded-3xl p-4 w-full h-32"
               />
@@ -202,7 +214,6 @@ export default function Page() {
             supabase.auth.getUser().then((res) => {
               // we should definitely be logged in
               let id = res.data.user!.id;
-
               supabase
                 .from("User2")
                 .update({
@@ -226,6 +237,6 @@ export default function Page() {
           </Text>
         </Pressable>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }

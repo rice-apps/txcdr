@@ -35,7 +35,7 @@ export default function Page() {
           setUser(res.data![0]);
         });
     });
-  });
+  }, []);
   return (
     <ScrollView
       contentContainerStyle={
@@ -61,6 +61,7 @@ export default function Page() {
             <Icon
               name={"edit"}
               size={20}
+              hitSlop={30}
               style={{ alignSelf: "center", marginVertical: "auto" }}
               onPress={() => {
                 router.push("/profile/edit");
