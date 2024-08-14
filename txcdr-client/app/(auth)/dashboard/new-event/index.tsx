@@ -24,9 +24,7 @@ export default function Page() {
   const [addressFile, setAddressFile] =
     useState<DocumentPicker.DocumentPickerAsset>();
   const [addressFileError, setAddressFileError] = useState<string>("");
-  const [formFile, setFormFile] =
-    useState<DocumentPicker.DocumentPickerAsset>();
-  const [formFileError, setFormFileError] = useState<string>("");
+  const [formLink, setFormLink] = useState("");
   const [submitError, setSubmitError] = useState<string>("");
 
   const onSubmit = async () => {
@@ -37,11 +35,13 @@ export default function Page() {
       return;
     }
 
-    if (addressFile == undefined || formFile == undefined) {
-      console.log(addressFile, formFile);
-      Alert.alert(
-        "Missing at least one of 'Address List' form or 'Disaster Impact Questions' form.",
-      );
+    if (!formLink) {
+      Alert.alert("Make sure you provide a Google Form link for the event!");
+      return;
+    }
+
+    if (addressFile == undefined) {
+      Alert.alert("Missing the 'Address List' form.");
       return;
     }
 
@@ -73,6 +73,7 @@ export default function Page() {
         updatedAt: new Date().toISOString(),
         createdAt: new Date().toISOString(),
         creatorId: session.data.session?.user.id,
+        formLink: formLink,
       })
       .select()
       .maybeSingle();
@@ -109,49 +110,6 @@ export default function Page() {
       return;
     }
 
-    // Get signed upload URL
-    const storagePath = `private/${createResp.data.id}.json`;
-    const storageResp = await supabase.storage
-      .from("txcdr-sheets")
-      .createSignedUploadUrl(storagePath);
-
-    if (storageResp.error) {
-      Alert.alert(
-        "Unable to retrieve signed upload URL: ",
-        storageResp.error.message,
-      );
-      return;
-    }
-
-    // Upload sheet represented as JSON
-    const fileContent = await FileSystem.readAsStringAsync(formFile.uri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    const wb = XLSX.read(fileContent, { type: "base64" });
-
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    const jsonObj = XLSX.utils.sheet_to_json(ws);
-
-    const uploadResp = await supabase.storage
-      .from("txcdr-sheets")
-      .uploadToSignedUrl(
-        storagePath,
-        storageResp.data.token,
-        JSON.stringify(jsonObj, null, 2),
-        {
-          contentType: "application/json",
-          upsert: true,
-        },
-      );
-
-    if (uploadResp.error) {
-      Alert.alert("Unable to upload file: ", uploadResp.error.message);
-      return;
-    }
-
-    console.log("Upload success");
-
     router.back();
     Alert.alert("Successfully created event!");
   };
@@ -178,29 +136,11 @@ export default function Page() {
     }
   };
 
-  const handleFormFileUpload = async () => {
-    const { assets, canceled }: DocumentPicker.DocumentPickerResult =
-      await DocumentPicker.getDocumentAsync();
-
-    if (!canceled) {
-      if (assets.length > 0) {
-        const asset: DocumentPicker.DocumentPickerAsset = assets[0];
-
-        if (
-          asset.mimeType ==
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        ) {
-          setFormFile(asset);
-          setFormFileError("");
-        } else {
-          setFormFileError("File must be of type .xlsx");
-        }
-      }
-    }
-  };
-
   return (
-    <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.topBar}>
         <DText style={{ fontWeight: "bold", fontSize: ms(24) }}>
           New Event
@@ -259,25 +199,15 @@ export default function Page() {
           </Pressable>
         </View>
         <View style={styles.field}>
-          <DText style={styles.fieldTitle}>
-            Disaster questions Excel sheet
+          <DText style={styles.fieldTitle}>Questions Google Form Link</DText>
+          <DTextInput
+            style={styles.input}
+            onChangeText={setFormLink}
+            placeholder='e.g. "https://docs.google.com/forms/..."'
+          />
+          <DText style={{ fontStyle: "italic", color: Zinc[400] }}>
+            Remember to make sure this is a shareable link!
           </DText>
-          <Pressable style={styles.uploadButton} onPress={handleFormFileUpload}>
-            <MaterialCommunityIcons
-              name="file-upload-outline"
-              color="#8C8C8C"
-              size={28}
-              style={{ marginRight: 16 }}
-            />
-            <DText style={{ fontSize: 14 }}>
-              {formFile == undefined ? "Upload file" : formFile.name}
-            </DText>
-          </Pressable>
-          {formFileError != "" && (
-            <DText style={{ ...styles.footer, color: "red" }}>
-              {formFileError}
-            </DText>
-          )}
         </View>
         <StyledButton onPress={onSubmit} style={{ marginVertical: ms(32) }}>
           <DText style={{ color: Zinc[100], fontWeight: "bold" }}>Submit</DText>
