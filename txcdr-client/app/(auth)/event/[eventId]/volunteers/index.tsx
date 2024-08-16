@@ -25,32 +25,34 @@ export default function Page() {
   const [numRequests, setNumRequests] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
+  const func = async () => {
+    setLoading(true);
+    const res = await supabase
+      .from("EventVolunteer")
+      .select("approved, User2 (id, email, name, organizations)")
+      .eq("eventId", eventId);
+
+    if (res.error) {
+      console.log(res.error);
+      return;
+    }
+
+    const approved: Volunteer[] = [];
+    let n = 0;
+    for (const v of res.data) {
+      if (v.approved) {
+        approved.push(v);
+      } else {
+        n++;
+      }
+    }
+
+    setApproved(approved);
+    setNumRequests(n);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const func = async () => {
-      const res = await supabase
-        .from("EventVolunteer")
-        .select("approved, User2 (id, email, name, organizations)")
-        .eq("eventId", eventId);
-
-      if (res.error) {
-        console.log(res.error);
-        return;
-      }
-
-      const approved: Volunteer[] = [];
-      let n = 0;
-      for (const v of res.data) {
-        if (v.approved) {
-          approved.push(v);
-        } else {
-          n++;
-        }
-      }
-
-      setApproved(approved);
-      setNumRequests(n);
-      setLoading(false);
-    };
     func();
   }, []);
 
@@ -77,6 +79,22 @@ export default function Page() {
                   eventId={eventId}
                   user={v.User2}
                   key={v.User2.id}
+                  onDelete={() => {
+                    supabase
+                      .from("EventVolunteer")
+                      .delete()
+                      .eq("volunteerId", v.User2!.id)
+                      .eq("eventId", Number(eventId))
+                      .then(
+                        (res) => {
+                          console.log("Volunteer removed from event");
+                          func();
+                        },
+                        (err) => {
+                          console.log(err);
+                        },
+                      );
+                  }}
                 />
               ),
           )

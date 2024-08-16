@@ -1,7 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { View, Pressable, Text, StyleSheet } from "react-native";
 import { PageProps } from ".";
-import { Blue, Zinc } from "../../../../utils/styles/colors";
+import { Blue, Red, Zinc } from "../../../../utils/styles/colors";
 import { ms, s } from "react-native-size-matters";
 import * as Linking from "expo-linking";
 import { WideButton } from "../../../../components/buttons/WideButton";
@@ -49,6 +49,23 @@ export function VolunteerSection({ event, eventCreator }: PageProps) {
     }
 
     setRegistration("APPLIED");
+  };
+
+  const onLeave = async () => {
+    if (!user) return;
+
+    const res = await supabase
+      .from("EventVolunteer")
+      .delete()
+      .eq("eventId", event?.id)
+      .eq("volunteerId", user.id);
+
+    if (res.error) {
+      console.log(res.error);
+      return;
+    }
+
+    setRegistration("NONE");
   };
 
   return (
@@ -100,6 +117,22 @@ export function VolunteerSection({ event, eventCreator }: PageProps) {
             : "Registered"}
         </Text>
       </WideButton>
+      {registration == "APPROVED" && (
+        <WideButton
+          style={{
+            backgroundColor: Red[600],
+          }}
+          onPress={() => {
+            onLeave();
+          }}
+        >
+          <Text
+            style={{ color: "white", fontWeight: "bold", fontSize: ms(18) }}
+          >
+            Leave
+          </Text>
+        </WideButton>
+      )}
     </View>
   );
 }
