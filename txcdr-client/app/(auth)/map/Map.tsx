@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { TextInput, Text, Pressable } from "react-native";
+import { TextInput, Text, Pressable, StyleSheet } from "react-native";
 import { View } from "react-native";
 import MapView, { Region, Marker } from "react-native-maps";
 import { EventMarker } from "../../../types/map";
 import { EventCallout } from "./EventCallout";
 import { Ionicons } from "@expo/vector-icons";
+import { FilterController } from "../../../components/FilterController";
+import { useFilterController } from "../../../utils/hooks/useFilterController";
+import { ms } from "react-native-size-matters";
 
 /**
  * MapView component with ZIP code searching, markers, and callouts
@@ -22,6 +25,13 @@ export function Map() {
 
   // Keep track of ZIP code input
   const [zipCode, setZipCode] = useState("77005");
+
+  const { controller, params, addresses } = useFilterController([
+    "blockId",
+    "event",
+    "status",
+    "zipCode",
+  ]);
 
   // Update the selected region when ZIP code state is changed
   useEffect(() => {
@@ -77,12 +87,12 @@ export function Map() {
           </Marker>
         ))}
       </MapView>
-      <View className="w-full top-7 absolute mx-auto px-8">
+      <View style={styles.topBar}>
         <TextInput
           placeholder="Enter a ZIP code"
           inputMode="numeric"
           style={{
-            width: "100%",
+            width: "90%",
             backgroundColor: "white",
             borderWidth: 2,
             borderRadius: 8,
@@ -90,19 +100,14 @@ export function Map() {
             paddingVertical: 12,
             fontSize: 16,
             fontWeight: "600",
-            textAlignVertical: "center", // Add this line
+            textAlignVertical: "center",
           }}
           onChangeText={(e) => onInputChange(e)}
           returnKeyType="done"
           defaultValue={zipCode}
           multiline={false}
         />
-        <Pressable className="bg-blue-500 px-3 py-2 my-2 self-start flex flex-row rounded-full">
-          <Ionicons name="add" color="white" size={18}></Ionicons>
-          <Text className="pl-1 text-white text-center self-center">
-            Filter
-          </Text>
-        </Pressable>
+        {controller}
       </View>
       <View className="absolute bottom-0 p-5 right-2">
         <Pressable className="bg-blue-500 px-4 py-2 my-2 self-start flex flex-row rounded-full">
@@ -115,3 +120,14 @@ export function Map() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  topBar: {
+    width: "100%",
+    top: ms(28),
+    position: "absolute",
+    marginHorizontal: "auto",
+    alignItems: "center",
+    gap: ms(10),
+  },
+});
