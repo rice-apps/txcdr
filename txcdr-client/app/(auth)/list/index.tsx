@@ -16,7 +16,7 @@ import {
   AddressQueryParams,
 } from "../../../components/FilterController";
 import { SearchBar } from "../../../components/input/SearchBar";
-import { addressToString } from "./helpers";
+import { addressToShortString } from "../../../utils/address-utils";
 import { useUser } from "../../../utils/hooks/useUser";
 import { useRole } from "../../../utils/hooks/useRole";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
@@ -58,7 +58,7 @@ export default function Page() {
                 if (params.blockId && a.blockId != params.blockId) return false;
                 if (
                   search &&
-                  !addressToString(a)
+                  !addressToShortString(a)
                     .toLowerCase()
                     .includes(search.toLowerCase())
                 )

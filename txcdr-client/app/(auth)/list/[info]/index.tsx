@@ -15,7 +15,7 @@ import { Tables } from "../../../../types/supabase";
 import { supabase } from "../../../../utils/supabase";
 import { ms } from "react-native-size-matters";
 import { Header } from "../../../../components/nav/Header";
-import { addressToString } from "../helpers";
+import { addressToShortString } from "../../../../utils/address-utils";
 import { WideButton } from "../../../../components/buttons/WideButton";
 import { DText } from "../../../../components/styled-rn/DText";
 import { useUser } from "../../../../utils/hooks/useUser";
@@ -92,7 +92,7 @@ export default function Page() {
                   color: "white",
                 }}
               >
-                {addressToString(address)}
+                {addressToShortString(address)}
               </Text>
             )}
           </View>

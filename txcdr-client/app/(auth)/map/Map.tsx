@@ -6,10 +6,39 @@ import MapView, { Region, Marker } from "react-native-maps";
 import { EventMarker } from "../../../types/map";
 import { EventCallout } from "./EventCallout";
 import { Ionicons } from "@expo/vector-icons";
-import { FilterController } from "../../../components/FilterController";
+import {
+  AddressQueryParams,
+  FilterController,
+} from "../../../components/FilterController";
 import { useFilterController } from "../../../utils/hooks/useFilterController";
 import { ms } from "react-native-size-matters";
+import {
+  addressToLongString,
+  addressToShortString,
+} from "../../../utils/address-utils";
+import { Tables } from "../../../types/supabase";
 
+function passedFilter(
+  address: Tables<"EventAddress">,
+  search: string,
+  params: Partial<Partial<AddressQueryParams>>,
+) {
+  if (params.zipCode && address.zipCode != params.zipCode) return false;
+  if (
+    params.claimed &&
+    ((!address.claimerId && params.claimed == "true") ||
+      (address.claimerId && params.claimed == "false"))
+  )
+    return false;
+  if (params.blockId && address.blockId != params.blockId) return false;
+  if (
+    search &&
+    !addressToShortString(address).toLowerCase().includes(search.toLowerCase())
+  )
+    return false;
+  if (params.eventId && address.eventId != +params.eventId) return false;
+  return true;
+}
 /**
  * MapView component with ZIP code searching, markers, and callouts
  * @returns MapView component
@@ -24,7 +53,8 @@ export function Map() {
   });
 
   // Keep track of ZIP code input
-  const [zipCode, setZipCode] = useState("77005");
+  const [search, setSearch] = useState("");
+  const [markers, setMarkers] = useState<EventMarker[]>([]);
 
   const { controller, params, addresses } = useFilterController([
     "blockId",
@@ -33,45 +63,68 @@ export function Map() {
     "zipCode",
   ]);
 
-  // Update the selected region when ZIP code state is changed
   useEffect(() => {
-    // Use Google Maps Geocoding API (https://developers.google.com/maps/documentation/geocoding/overview)
-    axios
-      .get(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=${process.env.EXPO_PUBLIC_MAPS_KEY}`,
-      )
-      .then((res) => {
-        const { lat, lng }: { lat: number; lng: number } =
-          res.data.results[0].geometry.location;
-        setRegion({
-          latitude: lat,
-          longitude: lng,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.1,
-        });
-      })
-      .catch(() => console.log("Invalid ZIP code provided"));
-  }, [zipCode]);
+    const func = async () => {
+      if (addresses) {
+        for (const a of addresses) {
+          if (!passedFilter(a, search, params)) continue;
+          const res = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
+              addressToLongString(a),
+            )}&key=${process.env.EXPO_PUBLIC_MAPS_KEY}`,
+          );
+          const data = await res.json();
+          const { lat, lng }: { lat: number; lng: number } =
+            data.results[0].geometry.location;
+          setMarkers((prev) => [
+            ...prev,
+            {
+              latlng: {
+                latitude: lat,
+                longitude: lng,
+              },
+              title: addressToShortString(a),
+              description: addressToLongString(a),
+            },
+          ]);
+        }
+      }
+    };
+    func().catch((e) => console.error(e));
+  }, [addresses, params]);
 
-  // ZIP code text input handler
-  const onInputChange = (code: string) => {
-    if (code.length == 5 && /^[0-9]+$/.test(code)) {
-      setZipCode(code);
-    }
-  };
+  // Update the selected region when ZIP code state is changed
+  // useEffect(() => {
+  //   // Use Google Maps Geocoding API (https://developers.google.com/maps/documentation/geocoding/overview)
+  //   axios
+  //     .get(
+  //       `https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=${process.env.EXPO_PUBLIC_MAPS_KEY}`,
+  //     )
+  //     .then((res) => {
+  //       const { lat, lng }: { lat: number; lng: number } =
+  //         res.data.results[0].geometry.location;
+  //       setRegion({
+  //         latitude: lat,
+  //         longitude: lng,
+  //         latitudeDelta: 0.1,
+  //         longitudeDelta: 0.1,
+  //       });
+  //     })
+  //     .catch(() => console.log("Invalid ZIP code provided"));
+  // }, [zipCode]);
 
   // Hard-coded markers (TODO: replace with actual data)
-  const markers: EventMarker[] = [
-    {
-      latlng: {
-        latitude: 29.717154,
-        longitude: -95.404182,
-      },
-      title: "Rice University",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    },
-  ];
+  // const markers: EventMarker[] = [
+  //   {
+  //     latlng: {
+  //       latitude: 29.717154,
+  //       longitude: -95.404182,
+  //     },
+  //     title: "Rice University",
+  //     description:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  //   },
+  // ];
 
   return (
     <View className="h-full">
@@ -102,9 +155,8 @@ export function Map() {
             fontWeight: "600",
             textAlignVertical: "center",
           }}
-          onChangeText={(e) => onInputChange(e)}
+          onChangeText={setSearch}
           returnKeyType="done"
-          defaultValue={zipCode}
           multiline={false}
         />
         {controller}

@@ -1,4 +1,4 @@
-import { Tables } from "../../../types/supabase";
+import { Tables } from "../types/supabase";
 
 export function abbreviateStreetType(type: string) {
   switch (type.toLowerCase()) {
@@ -27,8 +27,12 @@ export function abbreviateStreetType(type: string) {
   }
 }
 
-export function addressToString(address: Tables<"EventAddress">) {
+export function addressToShortString(address: Tables<"EventAddress">) {
   return `${address.number} ${address.street} ${abbreviateStreetType(
     address.type,
   )}`;
+}
+
+export function addressToLongString(address: Tables<"EventAddress">) {
+  return `${address.number} ${address.street} ${address.type} ${address.city}, ${address.state} ${address.zipCode}`;
 }
