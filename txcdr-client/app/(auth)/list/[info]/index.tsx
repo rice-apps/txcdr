@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { StatusName } from "../../map/EventCallout";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Tables } from "../../../../types/supabase";
 import { supabase } from "../../../../utils/supabase";
@@ -68,6 +68,7 @@ export default function Page() {
         return;
       }
       setClaimState("CLAIMED BY USER");
+      router.push(`/event-address/${addressId}/form`);
     }
   };
 

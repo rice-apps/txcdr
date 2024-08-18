@@ -49,6 +49,7 @@
     "react-native-svg": "15.2.0",
     "react-native-ui-datepicker": "^2.0.3",
     "react-native-url-polyfill": "^2.0.0",
+    "react-native-webview": "13.8.6",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
