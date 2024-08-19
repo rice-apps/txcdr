@@ -1,4 +1,4 @@
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { PostgrestSingleResponse, QueryData } from "@supabase/supabase-js";
 import { useGlobalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import { Alert } from "react-native";
@@ -12,9 +12,12 @@ import { supabase } from "../supabase";
 import { useRole } from "./useRole";
 import { useUser } from "./useUser";
 
+const addressQuery = supabase.from("EventAddress").select("*, Address(*)");
+type AddressData = QueryData<typeof addressQuery>;
+
 export function useFilterController(filters: Filter[]) {
   const params = useGlobalSearchParams<Partial<AddressQueryParams>>();
-  const [addresses, setAddresses] = useState<Tables<"EventAddress">[]>();
+  const [addresses, setAddresses] = useState<AddressData>();
   const [zipCodes, setZipCodes] = useState<string[]>([]);
   const [blockIds, setBlockIds] = useState<string[]>([]);
   const [eventIds, setEventIds] = useState<number[]>([]);
@@ -46,17 +49,9 @@ export function useFilterController(filters: Filter[]) {
   // Load addresses
   useEffect(() => {
     const func = async () => {
-      let res: PostgrestSingleResponse<Tables<"EventAddress">[]> | undefined;
-      if (role != "USER") {
-        // Admins can see all addresses
-        res = await supabase.from("EventAddress").select("*");
-      } else {
-        // Users can see only the addresses of events they are registered for
-        res = await supabase
-          .from("EventAddress")
-          .select("*")
-          .in("eventId", registeredEventIds!);
-      }
+      const res = await (role != "USER"
+        ? addressQuery
+        : addressQuery.in("eventId", registeredEventIds!));
       if (res) {
         if (res.error) {
           console.log(res.error);
@@ -70,8 +65,9 @@ export function useFilterController(filters: Filter[]) {
         const blockIds: Set<string> = new Set();
         const eventIds: Set<number> = new Set();
         for (const a of res.data) {
-          zipCodes.add(a.zipCode);
-          blockIds.add(a.blockId);
+          if (!a.Address) continue;
+          zipCodes.add(a.Address.zipCode);
+          blockIds.add(a.Address.blockId);
           eventIds.add(a.eventId);
         }
         setZipCodes(Array.from(zipCodes));

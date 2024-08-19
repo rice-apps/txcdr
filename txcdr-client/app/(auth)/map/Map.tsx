@@ -17,23 +17,30 @@ import {
   addressToShortString,
 } from "../../../utils/address-utils";
 import { Tables } from "../../../types/supabase";
+import { FullAddress } from "../../../types/event";
+import { supabase } from "../../../utils/supabase";
 
 function passedFilter(
-  address: Tables<"EventAddress">,
+  address: FullAddress,
   search: string,
   params: Partial<Partial<AddressQueryParams>>,
 ) {
-  if (params.zipCode && address.zipCode != params.zipCode) return false;
+  if (params.zipCode && address.Address?.zipCode != params.zipCode)
+    return false;
   if (
     params.claimed &&
     ((!address.claimerId && params.claimed == "true") ||
       (address.claimerId && params.claimed == "false"))
   )
     return false;
-  if (params.blockId && address.blockId != params.blockId) return false;
+  if (params.blockId && address.Address?.blockId != params.blockId)
+    return false;
   if (
     search &&
-    !addressToShortString(address).toLowerCase().includes(search.toLowerCase())
+    address.Address &&
+    !addressToShortString(address.Address)
+      .toLowerCase()
+      .includes(search.toLowerCase())
   )
     return false;
   if (params.eventId && address.eventId != +params.eventId) return false;
@@ -55,6 +62,7 @@ export function Map() {
   // Keep track of ZIP code input
   const [search, setSearch] = useState("");
   const [markers, setMarkers] = useState<EventMarker[]>([]);
+  console.log("render");
 
   const { controller, params, addresses } = useFilterController([
     "blockId",
@@ -67,15 +75,30 @@ export function Map() {
     const func = async () => {
       if (addresses) {
         for (const a of addresses) {
-          if (!passedFilter(a, search, params)) continue;
-          const res = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
-              addressToLongString(a),
-            )}&key=${process.env.EXPO_PUBLIC_MAPS_KEY}`,
-          );
-          const data = await res.json();
-          const { lat, lng }: { lat: number; lng: number } =
-            data.results[0].geometry.location;
+          if (!passedFilter(a, search, params) || !a.Address) continue;
+          let lat: number;
+          let lng: number;
+          if (!a.Address.lat || !a.Address.lng) {
+            const res = await fetch(
+              `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURI(
+                addressToLongString(a.Address),
+              )}&key=${process.env.EXPO_PUBLIC_MAPS_KEY}`,
+            );
+            const data = await res.json();
+            const coords: { lat: number; lng: number } =
+              data.results[0].geometry.location;
+            lat = coords.lat;
+            lng = coords.lng;
+            supabase
+              .from("Address")
+              .update({ lat, lng, updatedAt: null }) // let postgres handle the timestamp
+              .eq("id", a.Address.id)
+              .then();
+          } else {
+            lat = a.Address.lat;
+            lng = a.Address.lng;
+          }
+
           setMarkers((prev) => [
             ...prev,
             {
@@ -83,8 +106,8 @@ export function Map() {
                 latitude: lat,
                 longitude: lng,
               },
-              title: addressToShortString(a),
-              description: addressToLongString(a),
+              title: addressToShortString(a.Address!), // Already checked for null
+              description: addressToLongString(a.Address!),
             },
           ]);
         }

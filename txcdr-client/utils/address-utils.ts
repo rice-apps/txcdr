@@ -33,6 +33,6 @@ export function addressToShortString(address: Tables<"Address">) {
   )}`;
 }
 
-export function addressToLongString(address: Tables<"EventAddress">) {
+export function addressToLongString(address: Tables<"Address">) {
   return `${address.number} ${address.street} ${address.type} ${address.city}, ${address.state} ${address.zipCode}`;
 }

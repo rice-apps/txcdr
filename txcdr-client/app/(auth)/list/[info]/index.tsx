@@ -97,7 +97,7 @@ export default function Page() {
                   color: "white",
                 }}
               >
-                {addressToString(address.Address)}
+                {addressToShortString(address.Address)}
               </Text>
             )}
           </View>
