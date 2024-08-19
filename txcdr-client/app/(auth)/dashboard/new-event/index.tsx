@@ -16,6 +16,7 @@ import { Image } from "expo-image";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { parseAddressSheet } from "../../../../utils/parser";
 import { ms } from "react-native-size-matters";
+import { Tables } from "../../../../types/supabase";
 
 export default function Page() {
   const [name, setName] = useState("");
@@ -93,19 +94,52 @@ export default function Page() {
 
     console.log("Created event, ID: " + createResp.data.id);
 
-    // Inject event ID into address data and mass upload
-    addressParseResp.data.forEach((address) => {
-      address.eventId = createResp!.data!.id; // Non-null is guaranteed by the above checks
-    });
+    // // Inject event ID into address data and mass upload
+    // addressParseResp.data.forEach((address) => {
+    //   address.eventId = createResp!.data!.id; // Non-null is guaranteed by the above checks
+    // });
+
+    // const addressUploadResp = await supabase
+    //   .from("EventAddress")
+    //   .insert(addressParseResp.data);
+
+    // if (addressUploadResp.error) {
+    //   Alert.alert(
+    //     "Error uploading addresses: ",
+    //     addressUploadResp.error.message,
+    //   );
+    //   return;
+    // }
 
     const addressUploadResp = await supabase
-      .from("EventAddress")
-      .insert(addressParseResp.data);
+      .from("Address")
+      .upsert(addressParseResp.data, {
+        onConflict: "blockId, number, street, type, city, state, zipCode",
+      })
+      .select("*");
 
     if (addressUploadResp.error) {
       Alert.alert(
         "Error uploading addresses: ",
         addressUploadResp.error.message,
+      );
+      return;
+    }
+
+    addressUploadResp.data;
+
+    const eventAddresses = addressUploadResp.data!.map((a) => {
+      return { addressId: a.id, eventId: createResp!.data!.id };
+    });
+
+    const eventAddressUploadResp = await supabase
+      .from("EventAddress")
+      .insert(eventAddresses);
+
+    if (eventAddressUploadResp.error) {
+      Alert.alert(
+        "Error uploading event-address associations: ",
+        eventAddressUploadResp.error.message,
       );
       return;
     }

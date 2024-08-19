@@ -44,137 +44,48 @@ export type Database = {
       }
       Address: {
         Row: {
-          censusBlock: string
+          blockId: string
           city: string
+          createdAt: string
           id: number
+          lat: number | null
+          lng: number | null
           number: string
           state: string
           street: string
           type: string
+          updatedAt: string | null
           zipCode: string
         }
         Insert: {
-          censusBlock: string
+          blockId: string
           city: string
+          createdAt?: string
           id?: number
+          lat?: number | null
+          lng?: number | null
           number: string
           state: string
           street: string
           type: string
+          updatedAt?: string | null
           zipCode: string
         }
         Update: {
-          censusBlock?: string
+          blockId?: string
           city?: string
+          createdAt?: string
           id?: number
+          lat?: number | null
+          lng?: number | null
           number?: string
           state?: string
           street?: string
           type?: string
+          updatedAt?: string | null
           zipCode?: string
         }
         Relationships: []
-      }
-      DisasterFormAnswer: {
-        Row: {
-          answer: string
-          formQuestionId: number | null
-          formResponseId: number | null
-          id: number
-        }
-        Insert: {
-          answer: string
-          formQuestionId?: number | null
-          formResponseId?: number | null
-          id?: number
-        }
-        Update: {
-          answer?: string
-          formQuestionId?: number | null
-          formResponseId?: number | null
-          id?: number
-        }
-        Relationships: []
-      }
-      DisasterFormQuestion: {
-        Row: {
-          descriptionOne: string
-          descriptionTwo: string
-          eventId: number | null
-          field: string
-          id: number
-          options: string[] | null
-          questionType: number
-          require: boolean
-          sequence: number
-          validation: string
-        }
-        Insert: {
-          descriptionOne: string
-          descriptionTwo: string
-          eventId?: number | null
-          field: string
-          id?: number
-          options?: string[] | null
-          questionType: number
-          require: boolean
-          sequence: number
-          validation: string
-        }
-        Update: {
-          descriptionOne?: string
-          descriptionTwo?: string
-          eventId?: number | null
-          field?: string
-          id?: number
-          options?: string[] | null
-          questionType?: number
-          require?: boolean
-          sequence?: number
-          validation?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "DisasterFormQuestion_eventId_fkey"
-            columns: ["eventId"]
-            isOneToOne: false
-            referencedRelation: "Event"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      DisasterFormResponse: {
-        Row: {
-          eventOnAddressId: number | null
-          id: number
-          volunteerId: number | null
-        }
-        Insert: {
-          eventOnAddressId?: number | null
-          id?: number
-          volunteerId?: number | null
-        }
-        Update: {
-          eventOnAddressId?: number | null
-          id?: number
-          volunteerId?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "DisasterFormResponse_eventOnAddressId_fkey"
-            columns: ["eventOnAddressId"]
-            isOneToOne: false
-            referencedRelation: "EventsOnAddresses"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "DisasterFormResponse_volunteerId_fkey"
-            columns: ["volunteerId"]
-            isOneToOne: false
-            referencedRelation: "User"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       Event: {
         Row: {
@@ -225,45 +136,37 @@ export type Database = {
       }
       EventAddress: {
         Row: {
-          blockId: string
-          city: string
+          addressId: number
           claimerId: string | null
+          completed: boolean | null
           createdAt: string
           eventId: number
           id: number
-          number: string
-          state: string
-          street: string
-          type: string
-          zipCode: string
         }
         Insert: {
-          blockId: string
-          city: string
+          addressId: number
           claimerId?: string | null
+          completed?: boolean | null
           createdAt?: string
           eventId: number
           id?: number
-          number: string
-          state: string
-          street: string
-          type: string
-          zipCode: string
         }
         Update: {
-          blockId?: string
-          city?: string
+          addressId?: number
           claimerId?: string | null
+          completed?: boolean | null
           createdAt?: string
           eventId?: number
           id?: number
-          number?: string
-          state?: string
-          street?: string
-          type?: string
-          zipCode?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "EventAddress_addressId_fkey"
+            columns: ["addressId"]
+            isOneToOne: false
+            referencedRelation: "Address"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "EventAddress_claimerId_fkey"
             columns: ["claimerId"]
@@ -273,45 +176,6 @@ export type Database = {
           },
           {
             foreignKeyName: "EventAddress_eventId_fkey"
-            columns: ["eventId"]
-            isOneToOne: false
-            referencedRelation: "Event"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      EventsOnAddresses: {
-        Row: {
-          addressId: number | null
-          assignedAt: string
-          assignedBy: string
-          eventId: number | null
-          id: number
-        }
-        Insert: {
-          addressId?: number | null
-          assignedAt?: string
-          assignedBy: string
-          eventId?: number | null
-          id?: number
-        }
-        Update: {
-          addressId?: number | null
-          assignedAt?: string
-          assignedBy?: string
-          eventId?: number | null
-          id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "EventsOnAddresses_addressId_fkey"
-            columns: ["addressId"]
-            isOneToOne: false
-            referencedRelation: "Address"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "EventsOnAddresses_eventId_fkey"
             columns: ["eventId"]
             isOneToOne: false
             referencedRelation: "Event"
@@ -357,66 +221,6 @@ export type Database = {
             columns: ["volunteerId"]
             isOneToOne: false
             referencedRelation: "User2"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      Form: {
-        Row: {
-          ableToStayHome: boolean | null
-          eventId: number | null
-          floodWaterHeight: string | null
-          id: number
-          impacted: boolean | null
-          needHelp: boolean | null
-          primaryLanguage: string | null
-          residentEmail: string | null
-          residentName: string | null
-          residentPhone: string | null
-          roofDamaged: boolean | null
-          userId: number | null
-        }
-        Insert: {
-          ableToStayHome?: boolean | null
-          eventId?: number | null
-          floodWaterHeight?: string | null
-          id?: number
-          impacted?: boolean | null
-          needHelp?: boolean | null
-          primaryLanguage?: string | null
-          residentEmail?: string | null
-          residentName?: string | null
-          residentPhone?: string | null
-          roofDamaged?: boolean | null
-          userId?: number | null
-        }
-        Update: {
-          ableToStayHome?: boolean | null
-          eventId?: number | null
-          floodWaterHeight?: string | null
-          id?: number
-          impacted?: boolean | null
-          needHelp?: boolean | null
-          primaryLanguage?: string | null
-          residentEmail?: string | null
-          residentName?: string | null
-          residentPhone?: string | null
-          roofDamaged?: boolean | null
-          userId?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "Form_eventId_fkey"
-            columns: ["eventId"]
-            isOneToOne: false
-            referencedRelation: "Event"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "Form_userId_fkey"
-            columns: ["userId"]
-            isOneToOne: false
-            referencedRelation: "User"
             referencedColumns: ["id"]
           },
         ]
