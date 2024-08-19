@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { Tables } from "../../../types/supabase";
 import { supabase } from "../../../utils/supabase";
 import { AddressCard } from "./AddressCard";
 import { ms } from "react-native-size-matters";
@@ -19,12 +18,15 @@ import { SearchBar } from "../../../components/input/SearchBar";
 import { addressToString } from "./helpers";
 import { useUser } from "../../../utils/hooks/useUser";
 import { useRole } from "../../../utils/hooks/useRole";
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { QueryData } from "@supabase/supabase-js";
 import { DText } from "../../../components/styled-rn/DText";
+
+const addressQuery = supabase.from("EventAddress").select("*, Address(*)");
+type AddressData = QueryData<typeof addressQuery>;
 
 export default function Page() {
   const params = useGlobalSearchParams<Partial<AddressQueryParams>>();
-  const [addresses, setAddresses] = useState<Tables<"EventAddress">[]>();
+  const [addresses, setAddresses] = useState<AddressData>();
   const [zipCodes, setZipCodes] = useState<string[]>([]);
   const [blockIds, setBlockIds] = useState<string[]>([]);
   const [eventIds, setEventIds] = useState<number[]>([]);
@@ -57,17 +59,9 @@ export default function Page() {
   // Load addresses
   useEffect(() => {
     const func = async () => {
-      let res: PostgrestSingleResponse<Tables<"EventAddress">[]> | undefined;
-      if (role != "USER") {
-        // Admins can see all addresses
-        res = await supabase.from("EventAddress").select("*");
-      } else {
-        // Users can see only the addresses of events they are registered for
-        res = await supabase
-          .from("EventAddress")
-          .select("*")
-          .in("eventId", registeredEventIds!);
-      }
+      const res = await (role != "USER"
+        ? addressQuery
+        : addressQuery.in("eventId", registeredEventIds!));
       if (res) {
         if (res.error) {
           console.log(res.error);
@@ -81,8 +75,9 @@ export default function Page() {
         const blockIds: Set<string> = new Set();
         const eventIds: Set<number> = new Set();
         for (const a of res.data) {
-          zipCodes.add(a.zipCode);
-          blockIds.add(a.blockId);
+          if (!a.Address) continue;
+          zipCodes.add(a.Address.zipCode);
+          blockIds.add(a.Address.blockId);
           eventIds.add(a.eventId);
         }
         setZipCodes(Array.from(zipCodes));
@@ -121,17 +116,20 @@ export default function Page() {
           addresses.length > 0 ? (
             addresses
               .filter((a) => {
-                if (params.zipCode && a.zipCode != params.zipCode) return false;
+                if (params.zipCode && a.Address?.zipCode != params.zipCode)
+                  return false;
                 if (
                   params.claimed &&
                   ((!a.claimerId && params.claimed == "true") ||
                     (a.claimerId && params.claimed == "false"))
                 )
                   return false;
-                if (params.blockId && a.blockId != params.blockId) return false;
+                if (params.blockId && a.Address?.blockId != params.blockId)
+                  return false;
                 if (
                   search &&
-                  !addressToString(a)
+                  a.Address &&
+                  !addressToString(a.Address)
                     .toLowerCase()
                     .includes(search.toLowerCase())
                 )

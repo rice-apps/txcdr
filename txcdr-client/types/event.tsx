@@ -12,4 +12,4 @@ export interface EventDetails {
   registered: boolean;
 }
 
-export type Address = Omit<Tables<"EventAddress">, "id" | "createdAt">;
+export type Address = Omit<Tables<"Address">, "id" | "createdAt" | "updatedAt">;

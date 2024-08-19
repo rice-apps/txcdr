@@ -23,7 +23,10 @@ import { Blue } from "../../../../utils/styles/colors";
 import { Header } from "../../../../components/nav/Header";
 
 type EventCreator = Pick<Tables<"User2">, "id" | "name" | "email" | "phone">;
-type Address = Pick<Tables<"EventAddress">, "id" | "claimerId" | "blockId">;
+type Address = Pick<
+  Tables<"EventAddress"> & { Address: Pick<Tables<"Address">, "blockId"> },
+  "id" | "claimerId"
+>;
 
 export interface PageProps {
   event: Tables<"Event">;
@@ -56,7 +59,7 @@ export default function Page() {
           `
           *,
           User2 ( id, name, email, phone ),
-          EventAddress ( id, claimerId, blockId )`,
+          EventAddress ( id, claimerId, Address ( id, blockId ) )`,
         )
         .eq("id", parseInt(local.eventId as string))
         .single();

@@ -89,8 +89,8 @@ export async function parseAddressSheet(filepath: string, eventId: number) {
         city,
         state,
         zipCode,
-        claimerId: null,
-        eventId: eventId,
+        lat: null,
+        lng: null,
       };
 
       toUpload.push(address);
