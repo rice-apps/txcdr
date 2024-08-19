@@ -10,8 +10,6 @@ import { StyledButton } from "../../../../components/buttons/StyledButton";
 import CustomDateTimePicker from "react-native-ui-datepicker";
 import { supabase } from "../../../../utils/supabase";
 import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
-import * as XLSX from "xlsx";
 import { Image } from "expo-image";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { parseAddressSheet } from "../../../../utils/parser";
@@ -93,19 +91,35 @@ export default function Page() {
 
     console.log("Created event, ID: " + createResp.data.id);
 
-    // Inject event ID into address data and mass upload
-    addressParseResp.data.forEach((address) => {
-      address.eventId = createResp!.data!.id; // Non-null is guaranteed by the above checks
-    });
-
     const addressUploadResp = await supabase
-      .from("EventAddress")
-      .insert(addressParseResp.data);
+      .from("Address")
+      .upsert(addressParseResp.data, {
+        onConflict: "blockId, number, street, type, city, state, zipCode",
+      })
+      .select("*");
 
     if (addressUploadResp.error) {
       Alert.alert(
         "Error uploading addresses: ",
         addressUploadResp.error.message,
+      );
+      return;
+    }
+
+    addressUploadResp.data;
+
+    const eventAddresses = addressUploadResp.data!.map((a) => {
+      return { addressId: a.id, eventId: createResp!.data!.id };
+    });
+
+    const eventAddressUploadResp = await supabase
+      .from("EventAddress")
+      .insert(eventAddresses);
+
+    if (eventAddressUploadResp.error) {
+      Alert.alert(
+        "Error uploading event-address associations: ",
+        eventAddressUploadResp.error.message,
       );
       return;
     }

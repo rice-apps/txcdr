@@ -20,10 +20,18 @@ import { WideButton } from "../../../../components/buttons/WideButton";
 import { DText } from "../../../../components/styled-rn/DText";
 import { useUser } from "../../../../utils/hooks/useUser";
 import { Blue, Zinc } from "../../../../utils/styles/colors";
+import { QueryData } from "@supabase/supabase-js";
 
 export default function Page() {
   const addressId = useLocalSearchParams().info as string;
-  const [address, setAddress] = useState<Tables<"EventAddress">>();
+  const query = supabase
+    .from("EventAddress")
+    .select("*, Address (*)")
+    .eq("id", addressId)
+    .single();
+
+  type AddressData = QueryData<typeof query>;
+  const [address, setAddress] = useState<AddressData>();
   const [claimState, setClaimState] = useState<
     "CLAIMED BY ANOTHER" | "UNCLAIMED" | "CLAIMED BY USER"
   >("CLAIMED BY ANOTHER");
@@ -32,14 +40,10 @@ export default function Page() {
   useEffect(() => {
     const func = async () => {
       if (user) {
-        const res = await supabase
-          .from("EventAddress")
-          .select("*")
-          .eq("id", addressId)
-          .single();
-        if (res.error) {
+        const res = await query;
+        if (res.error || !res.data.Address) {
           console.log(res.error, addressId);
-          Alert.alert("Failed to fetch address", res.error.message);
+          Alert.alert("Failed to fetch address", res.error!.message);
           return;
         }
 
@@ -50,6 +54,7 @@ export default function Page() {
         } else {
           setClaimState("CLAIMED BY ANOTHER");
         }
+        res.data.Address.blockId;
         setAddress(res.data);
       }
     };
@@ -84,7 +89,7 @@ export default function Page() {
             {/* Home Icon */}
             <Ionicons name="home-outline" size={24} color="white" />
             {/* Address Name */}
-            {address && (
+            {address?.Address && (
               <Text
                 style={{
                   marginLeft: 8,
@@ -93,7 +98,7 @@ export default function Page() {
                   color: "white",
                 }}
               >
-                {addressToString(address)}
+                {addressToString(address.Address)}
               </Text>
             )}
           </View>
