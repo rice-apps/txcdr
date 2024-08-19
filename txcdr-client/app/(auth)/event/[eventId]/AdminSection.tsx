@@ -54,6 +54,12 @@ export function AdminSection({ event, numVolunteers, numApproved }: PageProps) {
       />
       <DText>{event.description}</DText>
       <WideButton
+        style={{ backgroundColor: Zinc[600] }}
+        onPress={() => router.push(`/dashboard/new-event/${event.id}`)}
+      >
+        <DText style={styles.buttonText}>Edit Event</DText>
+      </WideButton>
+      <WideButton
         style={{ backgroundColor: active ? "#ff0000" : Zinc[400] }}
         onPress={active ? onEndEvent : onReviveEvent}
       >
