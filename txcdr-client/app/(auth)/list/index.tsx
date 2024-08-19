@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { Tables } from "../../../types/supabase";
 import { supabase } from "../../../utils/supabase";
 import { AddressCard } from "./AddressCard";
 import { ms } from "react-native-size-matters";
@@ -19,7 +18,7 @@ import { SearchBar } from "../../../components/input/SearchBar";
 import { addressToString } from "./helpers";
 import { useUser } from "../../../utils/hooks/useUser";
 import { useRole } from "../../../utils/hooks/useRole";
-import { PostgrestSingleResponse, QueryData } from "@supabase/supabase-js";
+import { QueryData } from "@supabase/supabase-js";
 import { DText } from "../../../components/styled-rn/DText";
 
 const addressQuery = supabase.from("EventAddress").select("*, Address(*)");
