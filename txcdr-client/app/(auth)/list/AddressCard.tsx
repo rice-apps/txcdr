@@ -15,9 +15,13 @@ import {
   abbreviateStreetType,
   addressToShortString,
 } from "../../../utils/address-utils";
+import { QueryData } from "@supabase/supabase-js";
+import { supabase } from "../../../utils/supabase";
+
+const query = supabase.from("EventAddress").select("*, Address(*)").single();
 
 interface Props {
-  address: Tables<"EventAddress">;
+  address: QueryData<typeof query>;
 }
 
 export function AddressCard({ address }: Props) {
@@ -28,9 +32,10 @@ export function AddressCard({ address }: Props) {
     >
       <View style={styles.left}>
         <Octicons name="home" color="gray" size={32}></Octicons>
-        <DText style={styles.text}>{`${address.number} ${
-          address.street
-        } ${abbreviateStreetType(address.type)}`}</DText>
+        <DText style={styles.text}>{`${address.Address?.number} ${address
+          .Address?.street} ${abbreviateStreetType(
+          address.Address!.type,
+        )}`}</DText>
       </View>
       <View style={styles.right}>
         {address.claimerId ? (

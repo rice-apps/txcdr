@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { Tables } from "../../../types/supabase";
 import { supabase } from "../../../utils/supabase";
 import { AddressCard } from "./AddressCard";
 import { ms } from "react-native-size-matters";
@@ -19,9 +18,12 @@ import { SearchBar } from "../../../components/input/SearchBar";
 import { addressToShortString } from "../../../utils/address-utils";
 import { useUser } from "../../../utils/hooks/useUser";
 import { useRole } from "../../../utils/hooks/useRole";
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { QueryData } from "@supabase/supabase-js";
 import { DText } from "../../../components/styled-rn/DText";
 import { useFilterController } from "../../../utils/hooks/useFilterController";
+
+const addressQuery = supabase.from("EventAddress").select("*, Address(*)");
+type AddressData = QueryData<typeof addressQuery>;
 
 export default function Page() {
   const { addresses, controller, params } = useFilterController([
@@ -48,17 +50,20 @@ export default function Page() {
           addresses.length > 0 ? (
             addresses
               .filter((a) => {
-                if (params.zipCode && a.zipCode != params.zipCode) return false;
+                if (params.zipCode && a.Address?.zipCode != params.zipCode)
+                  return false;
                 if (
                   params.claimed &&
                   ((!a.claimerId && params.claimed == "true") ||
                     (a.claimerId && params.claimed == "false"))
                 )
                   return false;
-                if (params.blockId && a.blockId != params.blockId) return false;
+                if (params.blockId && a.Address?.blockId != params.blockId)
+                  return false;
                 if (
                   search &&
-                  !addressToShortString(a)
+                  a.Address &&
+                  !addressToShortString(a.Address)
                     .toLowerCase()
                     .includes(search.toLowerCase())
                 )

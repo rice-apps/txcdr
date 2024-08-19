@@ -27,7 +27,7 @@ export function abbreviateStreetType(type: string) {
   }
 }
 
-export function addressToShortString(address: Tables<"EventAddress">) {
+export function addressToShortString(address: Tables<"Address">) {
   return `${address.number} ${address.street} ${abbreviateStreetType(
     address.type,
   )}`;
