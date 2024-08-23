@@ -143,6 +143,7 @@ export default function Page({ eventId }: { eventId?: string }) {
     console.log("Created event, ID: " + resp.data.id);
 
     if (addressParseResp) {
+      console.log("updating addresses");
       const addressUploadResp = await supabase
         .from("Address")
         .upsert(addressParseResp.data, {
@@ -161,7 +162,7 @@ export default function Page({ eventId }: { eventId?: string }) {
       addressUploadResp.data;
 
       const eventAddresses = addressUploadResp.data!.map((a) => {
-        return { addressId: a.id, eventId: createResp!.data!.id };
+        return { addressId: a.id, eventId: resp!.data!.id };
       });
 
       const eventAddressUploadResp = await supabase
