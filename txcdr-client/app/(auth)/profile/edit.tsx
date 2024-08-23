@@ -13,8 +13,10 @@ var Buffer = require("buffer/").Buffer;
 // Edit page form for user profile, where users can update their information
 export default function Page() {
   const [user, setUser] = useState<Tables<"User2"> | null>(null);
-  const { control, handleSubmit, formState, getValues } = useForm({
+  const [oldImage, setOldImage] = useState<string | null>(null);
+  const { control, handleSubmit, formState, getValues, reset } = useForm({
     defaultValues: useMemo(() => {
+      console.log("user", user);
       return {
         name: user?.name,
         pronouns: user?.pronouns,
@@ -31,12 +33,35 @@ export default function Page() {
       // we should definitely be logged in
       let id = res.data.user!.id;
 
+      let imgUrl = supabase.storage
+        .from("images")
+        .getPublicUrl(`profiles/profile-${id}.jpg`).data.publicUrl;
+      try {
+        // check if we can access image by making request
+        fetch(imgUrl, {
+          method: "HEAD",
+        }).then((res) => {
+          if (res.ok) {
+            setOldImage(imgUrl);
+          }
+        });
+      } catch (e) {
+        console.error(e);
+      }
+
       supabase
         .from("User2")
         .select()
         .eq("id", id)
         .then((res) => {
           setUser(res.data![0]);
+          reset({
+            name: res.data![0].name,
+            pronouns: res.data![0].pronouns,
+            age: res.data![0].age,
+            languages: res.data![0].languages,
+            organizations: res.data![0].organizations,
+          });
         });
     });
   }, []);
@@ -76,7 +101,7 @@ export default function Page() {
           width={75}
           className="rounded-full"
           source={{
-            uri: image?.uri || "https://reactnative.dev/img/tiny_logo.png",
+            uri: image?.uri || oldImage || undefined,
           }}
         />
         <Pressable className="pt-3" onPress={onCameraSelect}>
