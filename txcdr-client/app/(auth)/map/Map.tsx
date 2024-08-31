@@ -52,16 +52,12 @@ function passedFilter(
  */
 export function Map() {
   // Keep track of selected region (based on ZIP code state)
-  const [region, setRegion] = useState<Region>({
-    latitude: 0,
-    longitude: 0,
-    latitudeDelta: 0,
-    longitudeDelta: 0,
-  });
+  const [region, setRegion] = useState<Region>();
 
   // Keep track of ZIP code input
   const [search, setSearch] = useState("");
   const [markers, setMarkers] = useState<EventMarker[]>([]);
+
   console.log("render");
 
   const { controller, params, addresses } = useFilterController([
@@ -74,8 +70,10 @@ export function Map() {
   useEffect(() => {
     const func = async () => {
       if (addresses) {
+        setMarkers([]);
         for (const a of addresses) {
           if (!passedFilter(a, search, params) || !a.Address) continue;
+
           let lat: number;
           let lng: number;
           if (!a.Address.lat || !a.Address.lng) {
@@ -97,6 +95,16 @@ export function Map() {
           } else {
             lat = a.Address.lat;
             lng = a.Address.lng;
+          }
+
+          if (!region) {
+            // Set initial region
+            setRegion({
+              latitude: lat,
+              longitude: lng,
+              latitudeDelta: 0.1,
+              longitudeDelta: 0.1,
+            });
           }
 
           setMarkers((prev) => [
