@@ -7,8 +7,8 @@ import {
   MapFilled,
   ListNormal,
   ListFilled,
-  ProfileNormal,
-  ProfileFilled,
+  SettingsNormal,
+  SettingsFilled,
 } from "../../assets/svgs/NavBarIcons";
 import { ms } from "react-native-size-matters";
 
@@ -38,10 +38,10 @@ export function NavBar() {
         label="LIST"
       />
       <NavBarButton
-        idleSvg={ProfileNormal}
-        activeSvg={ProfileFilled}
-        href="/profile"
-        label="PROFILE"
+        idleSvg={SettingsNormal}
+        activeSvg={SettingsFilled}
+        href="/settings"
+        label="SETTINGS"
       />
     </View>
   );
