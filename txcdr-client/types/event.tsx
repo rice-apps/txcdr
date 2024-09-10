@@ -1,3 +1,5 @@
+import { QueryData } from "@supabase/supabase-js";
+import { supabase } from "../utils/supabase";
 import { Tables } from "./supabase";
 
 export interface EventDetails {
@@ -13,3 +15,6 @@ export interface EventDetails {
 }
 
 export type Address = Omit<Tables<"Address">, "id" | "createdAt" | "updatedAt">;
+
+const query = supabase.from("EventAddress").select("*, Address(*)").single();
+export type FullAddress = QueryData<typeof query>;

@@ -29,7 +29,7 @@ export function useFilter(params: {
         <OpacityPressable
           style={[
             styles.buttonContainer,
-            { backgroundColor: props.suffix ? Blue[500] : "transparent" },
+            { backgroundColor: props.suffix ? Blue[500] : "white" },
           ]}
           onPress={toggleModal}
         >
