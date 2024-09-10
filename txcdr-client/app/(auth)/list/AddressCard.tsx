@@ -11,7 +11,10 @@ import { ms } from "react-native-size-matters";
 import { Blue, Zinc } from "../../../utils/styles/colors";
 import { OpacityPressable } from "../../../components/styled-rn/OpacityPressable";
 import { router } from "expo-router";
-import { abbreviateStreetType } from "./helpers";
+import {
+  abbreviateStreetType,
+  addressToShortString,
+} from "../../../utils/address-utils";
 import { QueryData } from "@supabase/supabase-js";
 import { supabase } from "../../../utils/supabase";
 

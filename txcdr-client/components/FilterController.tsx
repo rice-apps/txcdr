@@ -33,9 +33,11 @@ export interface AddressQueryParams {
   eventId: string;
 }
 
-interface Props {
+export type Filter = "status" | "zipCode" | "blockId" | "event";
+
+export interface FilterControllerProps {
   /** Filters to enable */
-  filters: ("status" | "zipCode" | "blockId" | "event")[];
+  filters: Filter[];
   /** Array of ZIP codes that the user can select from. This prop must be set if the ZIP code filter is enabled. */
   zipCodes?: string[];
   blockIds?: string[];
@@ -46,7 +48,7 @@ interface Props {
  * Provides UI for setting filters and updating the global search params. The available filters are predefined by the props.
  * @param props Pass in the filters you want to opt-in to. For example, if you want to enable the zip code filter, pass in `zipCode`.
  */
-export function FilterController(props: Props) {
+export function FilterController(props: FilterControllerProps) {
   const params = useGlobalSearchParams<Partial<AddressQueryParams>>();
   const [zipCode, setZipCode] = useState(params.zipCode);
   const [claimed, setClaimed] = useState(params.claimed ?? "false");
