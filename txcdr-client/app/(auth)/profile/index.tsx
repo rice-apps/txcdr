@@ -73,7 +73,7 @@ export default function Page() {
               width={50}
               className="rounded-full"
               source={{
-                uri: image || "https://reactnative.dev/img/tiny_logo.png",
+                uri: image || undefined,
               }}
             />
             <Text className="self-center text-2xl mr-auto">{user.name}</Text>
