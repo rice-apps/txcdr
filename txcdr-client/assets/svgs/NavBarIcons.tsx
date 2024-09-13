@@ -34,3 +34,11 @@ export const ProfileNormal = (props: ISvgProps) => (
 export const ProfileFilled = (props: ISvgProps) => (
   <Ionicons name="person" color="white" size={36} />
 );
+
+export const SettingsNormal = (props: ISvgProps) => (
+  <Ionicons name="settings-outline" color="white" size={36} />
+);
+
+export const SettingsFilled = (props: ISvgProps) => (
+  <Ionicons name="settings" color="white" size={36} />
+);
