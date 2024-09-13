@@ -18,12 +18,6 @@ export default function Page() {
       icon={<Ionicons name="person-outline" color="black" size={36} />}
       key={"/profile"}
     />,
-    <PageButton
-      href="/profile"
-      label="Profile"
-      icon={<Ionicons name="person-outline" color="black" size={36} />}
-      key={"/profilef"}
-    />,
   ]);
   const [role, loading] = useRole();
 
@@ -47,11 +41,10 @@ export default function Page() {
       style={styles.container}
       data={buttons}
       renderItem={(item) => item.item}
-      ItemSeparatorComponent={() => (
-        <Divider style={{ marginHorizontal: 20 }} />
-      )}
+      ItemSeparatorComponent={() => <Divider style={styles.itemSeparator} />}
       contentContainerStyle={styles.listContainer}
       ListHeaderComponent={<Header title="Settings" />}
+      ListHeaderComponentStyle={{ marginBottom: ms(20) }}
       ListFooterComponent={
         <WideButton
           style={styles.signOutButton}
@@ -81,9 +74,10 @@ const styles = StyleSheet.create({
     width: "95%",
     alignSelf: "center",
     marginTop: ms(20),
-    gap: ms(20),
     justifyContent: "center",
+    gap: ms(10),
   },
+  itemSeparator: { marginHorizontal: 20, marginTop: ms(10) },
   signOutButton: {
     alignSelf: "center",
     justifyContent: "center",
@@ -92,6 +86,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "transparent",
     opacity: 0.5,
+    marginTop: ms(20),
   },
   signOutText: {
     color: "#ff0000",
