@@ -11,7 +11,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Volunteer } from ".";
 import { supabase } from "../../../../../utils/supabase";
-import { VolunteerDetails } from "./VolunteerDetails";
+import { UserInfo } from "../../../../../components/UserInfo";
 import { ms } from "react-native-size-matters";
 import { VolunteerApproval } from "./VolunteerApproval";
 

@@ -1,15 +1,15 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import { ms } from "react-native-size-matters";
-import { Blue, Zinc } from "../../../../../utils/styles/colors";
-import { DText } from "../../../../../components/styled-rn/DText";
+import { Blue, Zinc } from "../utils/styles/colors";
+import { DText } from "./styled-rn/DText";
 
 interface Props {
   name: string | null | undefined;
   org: string | null | undefined;
 }
 
-export function VolunteerDetails(props: Props) {
+export function UserInfo(props: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.pfp} />

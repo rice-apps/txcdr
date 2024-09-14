@@ -21,6 +21,7 @@ import { HandledModal } from "../../../components/modals/HandledModal";
 import { DTextInput } from "../../../components/styled-rn/DTextInput";
 import { BORDER_RADIUS } from "../../../utils/styles/constants";
 import { WideButton } from "../../../components/buttons/WideButton";
+import { UserInfo } from "../../../components/UserInfo";
 
 export default function Page() {
   const user = useUser();
@@ -105,8 +106,11 @@ export default function Page() {
         <SearchBar placeholder="Search admins..." onChangeText={setQuery} />
         <FlatList
           data={admins}
+          contentContainerStyle={{ gap: 20 }}
           renderItem={(item) =>
-            filterAdmin(item.item) ? <DText>{item.item.email}</DText> : null
+            filterAdmin(item.item) ? (
+              <UserInfo name={item.item.name} org={item.item.organizations} />
+            ) : null
           }
         />
       </View>
@@ -171,6 +175,7 @@ const styles = StyleSheet.create({
   body: {
     padding: ms(20),
     flex: 1,
+    gap: ms(20),
   },
   buttonContainer: {
     flexDirection: "row",
