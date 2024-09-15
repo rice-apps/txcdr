@@ -13,7 +13,7 @@ interface Props {
 export function VolunteerAssignment({ user }: Props) {
   return (
     <View style={styles.container}>
-      <UserInfo name={user.name} org={user.organizations} />
+      <UserInfo name={user.name} subtext={user.organizations} />
       <Pressable style={[styles.button, { backgroundColor: Blue[500] }]}>
         <DText style={{ color: "white" }}>Assign block</DText>
       </Pressable>

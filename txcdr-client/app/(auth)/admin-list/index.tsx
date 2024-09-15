@@ -22,6 +22,8 @@ import { DTextInput } from "../../../components/styled-rn/DTextInput";
 import { BORDER_RADIUS } from "../../../utils/styles/constants";
 import { WideButton } from "../../../components/buttons/WideButton";
 import { UserInfo } from "../../../components/UserInfo";
+import { OpacityPressable } from "../../../components/styled-rn/OpacityPressable";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Page() {
   const user = useUser();
@@ -58,7 +60,7 @@ export default function Page() {
     setAddModalVisible(!addModalVisible);
   };
 
-  const addAdminSubmit = async () => {
+  const onAddAdminSubmit = async () => {
     if (addAdminEmail == "") {
       Alert.alert("Please provide an email to promote to admin.");
       return;
@@ -78,7 +80,31 @@ export default function Page() {
       console.log(error);
       return false;
     }
+    setAdmins([...admins, data]);
     return true;
+  };
+
+  const onAdminRemove = async (email: string) => {
+    Alert.alert("Are you sure?", `Remove admin ${email}?`, [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Remove",
+        onPress: async () => {
+          const { error } = await supabase
+            .from("User2")
+            .update({ role: "USER" })
+            .eq("email", email);
+          if (error) {
+            Alert.alert("Error", error.message);
+            console.error(error);
+          }
+          setAdmins(admins.filter((admin) => admin.email != email));
+        },
+      },
+    ]);
   };
 
   const filterAdmin = (admin: Tables<"User2">) => {
@@ -109,13 +135,33 @@ export default function Page() {
           contentContainerStyle={{ gap: 20 }}
           renderItem={(item) =>
             filterAdmin(item.item) ? (
-              <UserInfo name={item.item.name} org={item.item.organizations} />
+              <View style={styles.adminCard}>
+                <UserInfo
+                  name={item.item.name}
+                  subtext={
+                    (item.item.role?.charAt(0) ?? "") +
+                    item.item.role?.slice(1).toLowerCase()
+                  }
+                />
+                <OpacityPressable
+                  onPress={() => {
+                    console.log("Remove admin", item.item.email);
+                    onAdminRemove(item.item.email);
+                  }}
+                >
+                  <Ionicons
+                    name="remove-circle"
+                    size={ms(28)}
+                    color="#ee0000"
+                  />
+                </OpacityPressable>
+              </View>
             ) : null
           }
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable
+        <OpacityPressable
           onPress={toggleAddModal}
           style={{
             alignContent: "flex-end",
@@ -134,7 +180,7 @@ export default function Page() {
           >
             + Add admin
           </DText>
-        </Pressable>
+        </OpacityPressable>
       </View>
       <HandledModal
         isVisible={addModalVisible}
@@ -151,7 +197,7 @@ export default function Page() {
           <WideButton
             style={{ width: "100%", backgroundColor: Blue[500] }}
             onPress={async () => {
-              if (await addAdminSubmit()) {
+              if (await onAddAdminSubmit()) {
                 toggleAddModal();
               }
             }}
@@ -193,5 +239,10 @@ const styles = StyleSheet.create({
     borderColor: Zinc[400],
     borderWidth: 1,
     padding: ms(10),
+  },
+  adminCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });

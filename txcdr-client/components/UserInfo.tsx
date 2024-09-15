@@ -6,7 +6,7 @@ import { DText } from "./styled-rn/DText";
 
 interface Props {
   name: string | null | undefined;
-  org: string | null | undefined;
+  subtext: string | null | undefined;
 }
 
 export function UserInfo(props: Props) {
@@ -15,7 +15,7 @@ export function UserInfo(props: Props) {
       <View style={styles.pfp} />
       <View style={styles.infoColumn}>
         <DText style={styles.name}>{props.name ?? "No name given"}</DText>
-        <DText style={styles.org}>{props.org ?? "No organization"}</DText>
+        <DText style={styles.org}>{props.subtext ?? "No organization"}</DText>
       </View>
     </View>
   );

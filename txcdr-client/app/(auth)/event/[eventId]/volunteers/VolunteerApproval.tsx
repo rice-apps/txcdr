@@ -48,7 +48,7 @@ export function VolunteerApproval({ eventId, user }: Props) {
   return (
     !handled && (
       <View style={styles.container}>
-        <UserInfo name={user.name} org={user.organizations} />
+        <UserInfo name={user.name} subtext={user.organizations} />
         <View style={styles.buttonRow}>
           <Pressable
             onPress={onApprove}
