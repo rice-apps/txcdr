@@ -1,7 +1,7 @@
 import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { User } from ".";
 import { ms } from "react-native-size-matters";
-import { VolunteerDetails } from "./VolunteerDetails";
+import { UserInfo } from "../../../../../components/UserInfo";
 import { DText } from "../../../../../components/styled-rn/DText";
 import { Blue, Zinc } from "../../../../../utils/styles/colors";
 import { useState } from "react";
@@ -48,7 +48,7 @@ export function VolunteerApproval({ eventId, user }: Props) {
   return (
     !handled && (
       <View style={styles.container}>
-        <VolunteerDetails name={user.name} org={user.organizations} />
+        <UserInfo name={user.name} subtext={user.organizations} />
         <View style={styles.buttonRow}>
           <Pressable
             onPress={onApprove}
