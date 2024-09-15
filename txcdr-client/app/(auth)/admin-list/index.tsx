@@ -143,45 +143,49 @@ export default function Page() {
                     item.item.role?.slice(1).toLowerCase()
                   }
                 />
-                <OpacityPressable
-                  onPress={() => {
-                    console.log("Remove admin", item.item.email);
-                    onAdminRemove(item.item.email);
-                  }}
-                >
-                  <Ionicons
-                    name="remove-circle"
-                    size={ms(28)}
-                    color="#ee0000"
-                  />
-                </OpacityPressable>
+                {role == "SUPERADMIN" && (
+                  <OpacityPressable
+                    onPress={() => {
+                      console.log("Remove admin", item.item.email);
+                      onAdminRemove(item.item.email);
+                    }}
+                  >
+                    <Ionicons
+                      name="remove-circle"
+                      size={ms(28)}
+                      color="#ee0000"
+                    />
+                  </OpacityPressable>
+                )}
               </View>
             ) : null
           }
         />
       </View>
-      <View style={styles.buttonContainer}>
-        <OpacityPressable
-          onPress={toggleAddModal}
-          style={{
-            alignContent: "flex-end",
-            backgroundColor: Blue[500],
-            borderRadius: 20,
-            marginBottom: ms(20),
-            marginRight: ms(20),
-          }}
-        >
-          <DText
+      {role == "SUPERADMIN" && (
+        <View style={styles.buttonContainer}>
+          <OpacityPressable
+            onPress={toggleAddModal}
             style={{
-              color: "#ffffff",
-              paddingHorizontal: ms(20),
-              paddingVertical: ms(15),
+              alignContent: "flex-end",
+              backgroundColor: Blue[500],
+              borderRadius: 20,
+              marginBottom: ms(20),
+              marginRight: ms(20),
             }}
           >
-            + Add admin
-          </DText>
-        </OpacityPressable>
-      </View>
+            <DText
+              style={{
+                color: "#ffffff",
+                paddingHorizontal: ms(20),
+                paddingVertical: ms(15),
+              }}
+            >
+              + Add admin
+            </DText>
+          </OpacityPressable>
+        </View>
+      )}
       <HandledModal
         isVisible={addModalVisible}
         onBackdropPress={toggleAddModal}
