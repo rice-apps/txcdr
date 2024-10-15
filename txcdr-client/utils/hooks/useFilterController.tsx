@@ -80,7 +80,7 @@ export function useFilterController(filters: Filter[]) {
       addresses == undefined &&
       user &&
       role &&
-      registeredEventIds != undefined
+      (role == "USER" ? registeredEventIds != undefined : true)
     )
       func();
   }, [role, user, registeredEventIds, addresses]);
