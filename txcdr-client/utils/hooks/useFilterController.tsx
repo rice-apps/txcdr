@@ -28,7 +28,7 @@ export function useFilterController(filters: Filter[]) {
   // Load events the user is registered for
   useEffect(() => {
     const func = async () => {
-      if (user && role != "USER") {
+      if (user && role == "USER") {
         const res = await supabase
           .from("EventVolunteer")
           .select("eventId")
@@ -80,7 +80,7 @@ export function useFilterController(filters: Filter[]) {
       addresses == undefined &&
       user &&
       role &&
-      registeredEventIds != undefined
+      (role == "USER" ? registeredEventIds != undefined : true)
     )
       func();
   }, [role, user, registeredEventIds, addresses]);

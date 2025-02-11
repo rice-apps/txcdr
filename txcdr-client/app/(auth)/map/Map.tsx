@@ -116,6 +116,7 @@ export function Map() {
               },
               title: addressToShortString(a.Address!), // Already checked for null
               description: addressToLongString(a.Address!),
+              id: a.id,
             },
           ]);
         }
